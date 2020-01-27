@@ -11,6 +11,7 @@
 import numpy as np
 import cv2 as cv2
 import math
+import statistics
 from numpy import array
 
 # Globals #
@@ -48,7 +49,7 @@ def wide_Angle_Camera(sensitivityVal):
     # cap.release()
 
     # Locating of Screws (x, y) #
-    img = cv2.imread('NewPhotos/opencv_frame_9.png')  # testing, comment out if taking picture
+    img = cv2.imread('NewPhotos2/opencv_frame_0.png')  # testing, comment out if taking picture
     output = img.copy()
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # change to greyscale image
     gray = cv2.medianBlur(gray, 5)
@@ -110,7 +111,7 @@ def zoom_Camera(sensitivityVal):
 
     focalLength = ((referenceDiameter * 2) * measuredDepth) / screwDiameter  # determine focal length
 
-    img = cv2.imread('NewPhotos/opencv_frame_8.png')  # testing, comment out if taking picture
+    img = cv2.imread('NewPhotos/opencv_frame_11.png')  # testing, comment out if taking picture
     output = img.copy()
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # change to greyscale image
     gray = cv2.medianBlur(gray, 5)                 #apply blur to reduce false positives
@@ -144,7 +145,7 @@ def zoom_Camera(sensitivityVal):
     print(screwLocations)
     print('offset', offset)
 
-    #output a circle on only the screw closest to the center
+    # output a circle on only the screw closest to the center
     x,y,r = detected_circles[0, closestCenter]
     cv2.circle(output, (x, y), r, (0, 255, 0), 3)  # draw circles on detected screws
     print("Circle ", screwCount, "at", x, y, " with radius of", r, )  # testing
@@ -155,27 +156,80 @@ def zoom_Camera(sensitivityVal):
 
     #########################################
     crop_img = img[(y-r):(y+r),(x-r):(x+r)]
+    imageSize = r*2
     crop_copy = crop_img.copy()
     cv2.imshow('crop',crop_img)
 
     crop_gray = cv2.cvtColor(crop_img, cv2.COLOR_BGR2GRAY)  # change to greyscale image
     dst = cv2.Canny(crop_gray, 20, 80, None, 3)
+    '''
     cv2.imshow("dst",dst)
-    lines = cv2.HoughLines(dst, 1, np.pi / 180, 40, None, 0, 0)
+    lines = cv2.HoughLines(dst, 1, np.pi / 180, 50, None, 0, 0)
+    #print('lines')
+    #print(lines)
 
     if lines is not None:
         for i in range(0, len(lines)):
             rho = lines[i][0][0]
             theta = lines[i][0][1]
-            a = math.cos(theta)
-            b = math.sin(theta)
+            a = np.cos(theta)
+            b = np.sin(theta)
             x0 = a * rho
             y0 = b * rho
-            pt1 = (int(x0 + 1000 * (-b)), int(y0 + 1000 * (a)))
-            pt2 = (int(x0 - 1000 * (-b)), int(y0 - 1000 * (a)))
-            cv2.line(crop_copy, pt1, pt2, (0, 0, 255), 3, cv2.LINE_AA)
+            x1 = int(x0 + 1000 * (-b))
+            y1 = int(y0 + 1000 * (a))
+            x2 = int(x0 - 1000 * (-b))
+            y2 = int(y0 - 1000 * (a))
+            print(x1,x2,y1,y2)
+            if not ((x1 < 5 and x2 < 5) or (x1 > 100 and x2 > 100)):
+                cv2.line(crop_copy, (x1, y1), (x2, y2), (0, 0, 255), 2)
     cv2.imshow('lines', crop_copy)
     print(len(lines))
+    '''
+
+    linesP = cv2.HoughLinesP(dst, 1, np.pi / 180, 20, None, 20, 10)
+    imageCutOff = 20
+    angleAllowance = 5
+    similarAngles = []
+    similarAngle = []
+    mostSimilarAngles = 0
+    angles = []
+    if linesP is not None:
+        for i in range(0, len(linesP)):
+            if not ((linesP[i][0][0] < imageCutOff or linesP[i][0][2] < imageCutOff) or
+                    (linesP[i][0][0] > imageSize - imageCutOff or linesP[i][0][2] > imageSize - imageCutOff) or
+                    (linesP[i][0][1] > imageSize - imageCutOff or linesP[i][0][3] > imageSize - imageCutOff) or
+                    (linesP[i][0][1] < imageCutOff or linesP[i][0][3] < imageCutOff)):
+                l = linesP[i][0]
+                cv2.line(crop_copy, (l[0], l[1]), (l[2], l[3]), (0, 0, 255), 3, cv2.LINE_AA)
+
+                angle = math.atan2(linesP[i][0][2] - linesP[i][0][0], linesP[i][0][3] - linesP[i][0][1])
+                angles.append(math.degrees(angle))
+
+        cv2.imshow("Detected Lines (in red) - Probabilistic Line Transform", crop_copy)
+
+
+    # try to average out all angels and find angle of screw
+    for i in range(len(angles)):
+        if(angles[i] > 90):
+            angles[i] = angles[i] - 90
+
+    for i in range(len(angles)):
+        for j in range(len(angles)):
+            if abs(angles[i] - angles[j]) < angleAllowance:
+                similarAngle.append(angles[j])
+        similarAngles.append(similarAngle)
+        similarAngle = []
+
+    mostSimilarAngles = max(similarAngles,key=len)
+
+    print(statistics.mean(mostSimilarAngles))
+    print(len(mostSimilarAngles))
+    print(similarAngles)
+    print(angles)
+    #print(len(angles))
+    #print(len(linesP))
+    #print(linesP)
 
     ########################################
 

@@ -46,7 +46,7 @@ def wide_Angle_Camera(sensitivityVal):
     # cap.release()
 
     # Locating of Screws (x, y) #
-    img = cv2.imread('filter.jpg')  # testing, comment out if taking picture
+    img = cv2.imread('opencv_frame_0.png')  # testing, comment out if taking picture
     output = img.copy()
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # change to greyscale image
     gray = cv2.medianBlur(gray, 5)
@@ -84,5 +84,5 @@ def wide_Angle_Camera(sensitivityVal):
     cv2.destroyAllWindows()
 
 
-wide_Angle_Camera(30)  # testing
+wide_Angle_Camera(20)  # testing
 
