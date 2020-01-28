@@ -13,7 +13,7 @@ import cv2 as cv2
 from numpy import array
 
 # Globals #
-# g_tuningScrews;  ## need help getting this list to work  with arguments (screwNum, x, y, z, locatedFlag)
+screwLocationsGList = [] # (screwNum, x, y, z, locatedFlag)
 g_minDepth = 260  # the distance from the tallest tuning screw (mm)
 wideCamPort = 1  # COM port for the wide angle camera
 
@@ -27,6 +27,7 @@ wideCamPort = 1  # COM port for the wide angle camera
 ##############################################
 def wide_Angle_Camera(sensitivityVal):
     # Variable Initializations #
+    screwLocations = []  # will be appended to global screw positions list
     global g_minDepth
     convertFactor = 38  # number of pixels per cm, needs tuning
     dp = 1
@@ -37,7 +38,7 @@ def wide_Angle_Camera(sensitivityVal):
     screwCount = 0
     measuredDepth = 210  # units are mm
     screwDiameter = 10  # units are mm
-    referenceDiameter = 38  # units are pixels
+    referenceRadius = 38  # units are pixels
 
     # Take Picture With Wide Angle Camera #
     # cap = cv2.VideoCapture(wideCamPort);
@@ -54,7 +55,7 @@ def wide_Angle_Camera(sensitivityVal):
     detected_circles = np.uint16(np.around(circles))
 
     # Update Tuning Screw List #
-    focalLength = ((referenceDiameter * 2) * measuredDepth) / screwDiameter  # determine focal length
+    focalLength = ((referenceRadius * 2) * measuredDepth) / screwDiameter  # determine focal length
     for (x, y, r) in detected_circles[0, :]:
         # Find Depth of Current Screw #
         calculatedDepth = (screwDiameter * focalLength) / (r * 2)
@@ -63,20 +64,21 @@ def wide_Angle_Camera(sensitivityVal):
         if g_minDepth > calculatedDepth:
             g_minDepth = calculatedDepth
 
+        # Add Screw to Global Screw Locations List
+        screwLocations = [screwCount, (x / convertFactor), (y / convertFactor), calculatedDepth, 0]
+        screwLocationsGList.append(screwLocations)
+
         # Indicate Detected Screws on Output Image #
         cv2.circle(output, (x, y), r, (0, 255, 0), 3)  # draw circles on detected screws
         print("Circle ", screwCount, "at", (x / convertFactor), "cm,", (y / convertFactor), "cm with radius of", r, "pixels and a depth of", calculatedDepth, "mm")  # testing
         cv2.circle(output, (x, y), 2, (0, 255, 0), 3)  # draw dot on center of detected screws
         screwCount = screwCount + 1
 
-        # add line(s) for storing screw info (screwNum, x, y, z, locatedFlag) into global list/array
-        # use convertFactor to change the screw positions from pixels to cm before storing in global
-
     # Testing Outputs #
     print("Minimum Depth is", g_minDepth, "mm")  # testing
     print("There are", screwCount, "screws")  # testing
     print("Focal length is", focalLength, "mm")  # testing
-
+    print(screwLocationsGList)
     cv2.imshow('output', output)  # display output with screws identified, needs to be integrated into GUI
 
     # End of Function Clean-Up *
