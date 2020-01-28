@@ -2,7 +2,7 @@
 # Project: Microwave Filter Tuner
 # File: OpenCV.py
 # Date: January 18, 2020
-# Programmer(s): Braden Massé
+# Programmer(s): Braden Massé and Matthew Rostad
 # Sub-Systems: Visual Identification Sub-System
 # Version: 1.2
 ##############################################
@@ -89,61 +89,76 @@ def wide_Angle_Camera(sensitivityVal):
     cv2.waitKey(0)  # close image on pressing any key
     cv2.destroyAllWindows()
 
-
+##############################################
+# Function: wide_Angle_Camera()
+# Programmer(s): Matthew Rostad
+# Date: January 26,2020
+# Purpose: To identify all tuning screws and determine X, Y, and Z position and determine depth and screw angle
+# Arguments: sensitivityVal
+# Outputs: N/A
+##############################################
 def zoom_Camera(sensitivityVal):
-    ###values to be outputed###
+    # values to be outputed
     screwDepth = 0
-    screwAngle = 0
-    offset = [0, 0]
+    offsetPx = [0, 0]
     screwLocations = []
 
-    minDist = 100       #minimum distance between scerws
-    upCannyThres = 130  #sensitivity for detecting circles
-    centerThres = 35    #sensitivity for detecting circle centers
-    maxR = 120          #maximum screw radius
+    minDist = 100       # minimum distance between scerws
+    upCannyThreshold = 130  # sensitivity for detecting circles
+    centerThreshold = 35    # sensitivity for detecting circle centers
+    maxR = 120          # maximum screw radius
     screwCount = 0
     dp = 1
-    minDistCenter = 9999 #finds the screw the closest to the center
-    closestCenter = 0   #the screw that is the closest to the center
+    minDistCenter = 9999 # finds the screw the closest to the center
+    closestCenter = 0   # the screw that is the closest to the center
     measuredDepth = 210  # units are mm
     screwDiameter = 10  # units are mm
     referenceDiameter = 38  # units are pixels
+    offsetPxPermm = 1   #number of pixels per mm, used to caluculate offset
 
-    focalLength = ((referenceDiameter * 2) * measuredDepth) / screwDiameter  # determine focal length
 
-    img = cv2.imread('NewPhotos/opencv_frame_11.png')  # testing, comment out if taking picture
+
+    img = cv2.imread('NewPhotos/opencv_frame_8.png')  # testing, comment out if taking picture
     output = img.copy()
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # change to greyscale image
-    gray = cv2.medianBlur(gray, 5)                 #apply blur to reduce false positives
+    gray = cv2.medianBlur(gray, 5)                 # apply blur to reduce false positives
 
-    circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, dp, minDist, param1=upCannyThres, param2=centerThres, minRadius=sensitivityVal, maxRadius=maxR)
+    circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, dp, minDist, param1=upCannyThreshold, param2=centerThreshold,
+                               minRadius=sensitivityVal, maxRadius=maxR)
     detected_circles = np.uint16(np.around(circles))
 
-
     for (x, y, r) in detected_circles[0, :]:
-        #use only the screw in the center of the image
-        #find the center of the image
-        height, width = img.shape[:2]       #get the height and width of the image
+        # use only the screw in the center of the image
+        # find the center of the image
+        height, width = img.shape[:2]       # get the height and width of the image
         verticalCenter = height/2
         horizontalCenter = width/2
-        offset = [x - horizontalCenter, y - verticalCenter]
 
-        #determine the depth of the screw
-        calculatedDepth = (screwDiameter * focalLength) / (r * 2)
-
+        #################################
+        # determine which screw is closest to the center
         distCenter = abs(x - horizontalCenter) + abs(y - verticalCenter)
-        print(distCenter)
 
         if distCenter < minDistCenter:
             minDistCenter = distCenter
             closestCenter = screwCount
 
-        screwLocations.append([screwCount, x, y, calculatedDepth, 1])
         screwCount = screwCount + 1
+
+    ################################
+    # determine the offset from the center
+    x, y, r = detected_circles[0][closestCenter]
+
+    offsetPx = [x - horizontalCenter, y - verticalCenter]
+    offsetmm = [offsetPx[0] / offsetPxPermm, offsetPx[1] / offsetPxPermm]
+
+    #################################
+    # determine the depth of the screw
+    focalLength = ((referenceDiameter * 2) * measuredDepth) / screwDiameter  # determine focal length
+    screwDepth = (screwDiameter * focalLength) / (r * 2)
 
     print(closestCenter)
     print(screwLocations)
-    print('offset', offset)
+    print('offset', offsetPx)
 
     # output a circle on only the screw closest to the center
     x,y,r = detected_circles[0, closestCenter]
@@ -152,47 +167,22 @@ def zoom_Camera(sensitivityVal):
     cv2.circle(output, (x, y), 2, (0, 255, 0), 3)  # draw dot on center of detected screws
     cv2.imshow('output', output)  # display output with screws identified, needs to be integrated into GUI
 
-
-
     #########################################
-    crop_img = img[(y-r):(y+r),(x-r):(x+r)]
+    # find screw angle
+
+    cropImg = img[(y-r):(y+r), (x-r):(x+r)]
     imageSize = r*2
-    crop_copy = crop_img.copy()
-    cv2.imshow('crop',crop_img)
+    cropCopy = cropImg.copy()
+    cv2.imshow('crop', cropImg)
 
-    crop_gray = cv2.cvtColor(crop_img, cv2.COLOR_BGR2GRAY)  # change to greyscale image
-    dst = cv2.Canny(crop_gray, 20, 80, None, 3)
-    '''
-    cv2.imshow("dst",dst)
-    lines = cv2.HoughLines(dst, 1, np.pi / 180, 50, None, 0, 0)
-    #print('lines')
-    #print(lines)
+    crop_gray = cv2.cvtColor(cropImg, cv2.COLOR_BGR2GRAY)  # change to greyscale image
+    cannyEdges = cv2.Canny(crop_gray, 20, 80, None, 3)
 
-    if lines is not None:
-        for i in range(0, len(lines)):
-            rho = lines[i][0][0]
-            theta = lines[i][0][1]
-            a = np.cos(theta)
-            b = np.sin(theta)
-            x0 = a * rho
-            y0 = b * rho
-            x1 = int(x0 + 1000 * (-b))
-            y1 = int(y0 + 1000 * (a))
-            x2 = int(x0 - 1000 * (-b))
-            y2 = int(y0 - 1000 * (a))
-            print(x1,x2,y1,y2)
-            if not ((x1 < 5 and x2 < 5) or (x1 > 100 and x2 > 100)):
-                cv2.line(crop_copy, (x1, y1), (x2, y2), (0, 0, 255), 2)
-    cv2.imshow('lines', crop_copy)
-    print(len(lines))
-    '''
-
-    linesP = cv2.HoughLinesP(dst, 1, np.pi / 180, 20, None, 20, 10)
+    linesP = cv2.HoughLinesP(cannyEdges, 1, np.pi / 180, 20, None, 20, 10)
     imageCutOff = 20
     angleAllowance = 5
     similarAngles = []
     similarAngle = []
-    mostSimilarAngles = 0
     angles = []
     if linesP is not None:
         for i in range(0, len(linesP)):
@@ -201,17 +191,16 @@ def zoom_Camera(sensitivityVal):
                     (linesP[i][0][1] > imageSize - imageCutOff or linesP[i][0][3] > imageSize - imageCutOff) or
                     (linesP[i][0][1] < imageCutOff or linesP[i][0][3] < imageCutOff)):
                 l = linesP[i][0]
-                cv2.line(crop_copy, (l[0], l[1]), (l[2], l[3]), (0, 0, 255), 3, cv2.LINE_AA)
+                cv2.line(cropCopy, (l[0], l[1]), (l[2], l[3]), (0, 0, 255), 3, cv2.LINE_AA)
 
                 angle = math.atan2(linesP[i][0][2] - linesP[i][0][0], linesP[i][0][3] - linesP[i][0][1])
                 angles.append(math.degrees(angle))
 
-        cv2.imshow("Detected Lines (in red) - Probabilistic Line Transform", crop_copy)
-
+        cv2.imshow("Detected Lines (in red) - Probabilistic Line Transform", cropCopy)
 
     # try to average out all angels and find angle of screw
     for i in range(len(angles)):
-        if(angles[i] > 90):
+        if angles[i] > 90:
             angles[i] = angles[i] - 90
 
     for i in range(len(angles)):
@@ -222,28 +211,33 @@ def zoom_Camera(sensitivityVal):
         similarAngle = []
 
     mostSimilarAngles = max(similarAngles,key=len)
+    screwAngle = statistics.mean(mostSimilarAngles)
 
-    print(statistics.mean(mostSimilarAngles))
-    print(len(mostSimilarAngles))
-    print(similarAngles)
-    print(angles)
-    #print(len(angles))
-    #print(len(linesP))
-    #print(linesP)
-
-    ########################################
-
-
+    screwOutputs = [offsetmm, screwAngle, screwDepth]
 
     # End of Function Clean-Up *
     cv2.waitKey(0)  # close image on pressing any key
     cv2.destroyAllWindows()
 
-#global list
-#screw number, X pos, Y pos, Z pos, flag
-screwLocationsGList = []
+    return screwOutputs
 
-zoom_Camera(30)
+# global list
+# screw number, X pos, Y pos, Z pos, flag
+
+#screwLocationsGList = []
+
+
+zoomScrewOutputs = zoom_Camera(30)
+
+screwOffset = zoomScrewOutputs[0]
+screwAngle = zoomScrewOutputs[1]
+zoomScrewDepth = zoomScrewOutputs[2]
+
+print(screwOffset)
+print(screwAngle)
+print(zoomScrewDepth)
+
+
 #wide_Angle_Camera(30)  # testing
 #print(screwLocationsGList)
 
