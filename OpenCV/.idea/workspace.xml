@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2eb1c72a-8ae1-4342-9219-6cffbd99a83d" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/opencv_frame_0.png" beforeDir="false" afterPath="$PROJECT_DIR$/opencv_frame_0.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/opencv_frame_1.png" beforeDir="false" afterPath="$PROJECT_DIR$/opencv_frame_1.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../OpenCV_Zoom/OpenCVZoom.py" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenCV_Zoom/OpenCVZoom.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />

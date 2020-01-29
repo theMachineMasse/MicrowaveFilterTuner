@@ -90,7 +90,7 @@ def wide_Angle_Camera(sensitivityVal):
     cv2.destroyAllWindows()
 
 ##############################################
-# Function: wide_Angle_Camera()
+# Function: zoom_Camera()
 # Programmer(s): Matthew Rostad
 # Date: January 26,2020
 # Purpose: To identify all tuning screws and determine X, Y, and Z position and determine depth and screw angle
@@ -118,7 +118,7 @@ def zoom_Camera(sensitivityVal):
 
 
 
-    img = cv2.imread('NewPhotos/opencv_frame_8.png')  # testing, comment out if taking picture
+    img = cv2.imread('NewPhotos3/opencv_frame_2.png')  # testing, comment out if taking picture
     output = img.copy()
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # change to greyscale image
     gray = cv2.medianBlur(gray, 5)                 # apply blur to reduce false positives
