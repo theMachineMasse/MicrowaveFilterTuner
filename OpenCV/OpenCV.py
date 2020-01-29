@@ -10,10 +10,9 @@
 # Import Libraries #
 import numpy as np
 import cv2 as cv2
-from numpy import array
 
 # Globals #
-screwLocationsGList = [] # (screwNum, x, y, z, locatedFlag)
+screwLocationsGList = []  # (screwNum, x, y, z, locatedFlag)
 g_minDepth = 260  # the distance from the tallest tuning screw (mm)
 wideCamPort = 1  # COM port for the wide angle camera
 
@@ -31,10 +30,10 @@ def wide_Angle_Camera(sensitivityVal):
     global g_minDepth
     convertFactor = 38  # number of pixels per cm, needs tuning
     dp = 1
-    minDist = 20
-    upCannyThres = 70
-    centerThres = 30
-    maxR = 50
+    minDist = 100
+    upCannyThres = 50
+    centerThres = 25
+    maxR = 40
     screwCount = 0
     measuredDepth = 210  # units are mm
     screwDiameter = 10  # units are mm
@@ -51,6 +50,7 @@ def wide_Angle_Camera(sensitivityVal):
     output = img.copy()
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # change to greyscale image
     gray = cv2.medianBlur(gray, 5)
+
     circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, dp, minDist, param1=upCannyThres, param2=centerThres, minRadius=sensitivityVal, maxRadius=maxR)
     detected_circles = np.uint16(np.around(circles))
 
@@ -65,14 +65,15 @@ def wide_Angle_Camera(sensitivityVal):
             g_minDepth = calculatedDepth
 
         # Add Screw to Global Screw Locations List
-        screwLocations = [screwCount, (x / convertFactor), (y / convertFactor), calculatedDepth, 0]
-        screwLocationsGList.append(screwLocations)
+        if x > 50 and y > 50 and x < 1350 and y < 1350:  # currently just filtering other screws based size of filter, potential adjustment from user?
+            screwLocations = [screwCount, (x / convertFactor), (y / convertFactor), calculatedDepth, 0]
+            screwLocationsGList.append(screwLocations)
 
         # Indicate Detected Screws on Output Image #
-        cv2.circle(output, (x, y), r, (0, 255, 0), 3)  # draw circles on detected screws
-        print("Circle ", screwCount, "at", (x / convertFactor), "cm,", (y / convertFactor), "cm with radius of", r, "pixels and a depth of", calculatedDepth, "mm")  # testing
-        cv2.circle(output, (x, y), 2, (0, 255, 0), 3)  # draw dot on center of detected screws
-        screwCount = screwCount + 1
+            cv2.circle(output, (x, y), r, (0, 255, 0), 3)  # draw circles on detected screws
+            print("Circle ", screwCount, "at", (x / convertFactor), "cm,", (y / convertFactor), "cm with radius of", r, "pixels and a depth of", calculatedDepth, "mm")  # testing
+            cv2.circle(output, (x, y), 2, (0, 255, 0), 3)  # draw dot on center of detected screws
+            screwCount = screwCount + 1
 
     # Testing Outputs #
     print("Minimum Depth is", g_minDepth, "mm")  # testing
@@ -86,5 +87,4 @@ def wide_Angle_Camera(sensitivityVal):
     cv2.destroyAllWindows()
 
 
-wide_Angle_Camera(20)  # testing
-
+wide_Angle_Camera(30)  # testing
