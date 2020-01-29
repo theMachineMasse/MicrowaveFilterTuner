@@ -43,7 +43,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.OpenCVZoom">
+  <component name="RunManager" selected="Python.OpenCV">
     <configuration name="Demo1" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="OpenCV" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -109,8 +109,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.OpenCVZoom" />
         <item itemvalue="Python.OpenCV" />
+        <item itemvalue="Python.OpenCVZoom" />
         <item itemvalue="Python.Demo1" />
       </list>
     </recent_temporary>
