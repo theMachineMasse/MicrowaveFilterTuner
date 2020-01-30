@@ -25,7 +25,7 @@
   <component name="ProjectId" id="1WVTEUujwWsZgbNTtIriBA1L4WT" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../OpenCV_Zoom/OpenCVZoom.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -45,7 +45,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.OpenCVZoom">
+  <component name="RunManager" selected="Python.OpenCV">
     <configuration name="Demo1" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="OpenCV" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -111,8 +111,8 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.OpenCVZoom" />
         <item itemvalue="Python.OpenCV" />
+        <item itemvalue="Python.OpenCVZoom" />
         <item itemvalue="Python.Demo1" />
       </list>
     </recent_temporary>

@@ -11,7 +11,8 @@
 
 /* INCLUDES */
 #include "stm32f10x.h"
-
+#include <string.h>
+#include "VisualDisplaySubSystem.h"
 
 
 /*******************************************
@@ -24,7 +25,20 @@
 *	Return value: N/A
 *******************************************/
 void vds_Init(void) {
+	/* LCD Initialization */
+	GPIOC->CRL |= GPIO_CRL_MODE0 | GPIO_CRL_MODE1 | GPIO_CRL_MODE2 | GPIO_CRL_MODE3 | GPIO_CRL_MODE4 | GPIO_CRL_MODE5 | GPIO_CRL_MODE6 | GPIO_CRL_MODE7 ;
+	GPIOC->CRL &= ~GPIO_CRL_CNF0 & ~GPIO_CRL_CNF1 & ~GPIO_CRL_CNF2 & ~GPIO_CRL_CNF3 & ~GPIO_CRL_CNF4 & ~GPIO_CRL_CNF5 & ~GPIO_CRL_CNF6 & ~GPIO_CRL_CNF7 ;
 	
+	GPIOB->CRL |= GPIO_CRL_MODE0 | GPIO_CRL_MODE1 | GPIO_CRL_MODE5;
+	GPIOB->CRL &= ~GPIO_CRL_CNF0 & ~GPIO_CRL_CNF1 & ~GPIO_CRL_CNF5;
+	
+	command_To_LCD(0x38);
+  command_To_LCD(0x38);
+  command_To_LCD(0x38);
+	command_To_LCD(0x38);
+	command_To_LCD(0x0F);
+	command_To_LCD(0x01);
+	command_To_LCD(0x06);
 }
 
 
@@ -37,9 +51,12 @@ void vds_Init(void) {
 *	Return value: N/A
 *******************************************/
 void data_To_LCD (uint8_t data) {
-	
-	
-	
+	GPIOB->BSRR = LCD_DM_ENA; //RS high, E high
+	GPIOC->ODR &= 0xFF00; //GOOD: clears the low bits without affecting high bits
+	GPIOC->ODR |= data; //GOOD: only affects lowest 8 bits of Port C
+	delay(8000);
+	GPIOB->BSRR = LCD_DM_DIS; //RS high, E low
+	delay(80000);
 }
 
 
@@ -52,9 +69,12 @@ void data_To_LCD (uint8_t data) {
 *	Return value: N/A
 *******************************************/
 void command_To_LCD (uint8_t data) {
-	
-	
-	
+	GPIOB->BSRR = LCD_CM_ENA; //RS low, E high
+	GPIOC->ODR &= 0xFF00; //GOOD: clears the low bits without affecting high bits
+	GPIOC->ODR |= data; //GOOD: only affects lowest 8 bits of Port C
+	delay(8000);
+	GPIOB->BSRR = LCD_CM_DIS; //RS low, E low
+	delay(80000);
 }
 
 
@@ -67,9 +87,13 @@ void command_To_LCD (uint8_t data) {
 *	Return value: N/A
 *******************************************/
 void string_To_LCD (char * message) {
-	
-	
-	
+	int i=0;
+	uint16_t messageLength = strlen(message);
+	for (i=0; i<messageLength; ++i)
+	{
+		data_To_LCD(*message);
+		++message;
+	}
 }
 
 
@@ -83,7 +107,11 @@ void string_To_LCD (char * message) {
 *******************************************/
 void lcd_Display_Status (int statusCode) {
 	
-	
+	switch(statusCode) {
+		case 0: 
+			break;
+		
+	}	
 }
 
 
@@ -97,6 +125,25 @@ void lcd_Display_Status (int statusCode) {
 *******************************************/
 void lcd_Display_Error (int errorCode) {
 	
-	
+	switch(errorCode) {
+		case 0: 
+			break;
+		
+	}
 }
 
+/*******************************************
+*	Function: delay
+*	Programmer(s): Braden Massé
+*	Date: January 29, 2020
+*	Purpose: Produce a delay given a count
+*	Parameters: uint32_t count
+*	Return value: N/A
+*******************************************/
+void delay(uint32_t count)
+{
+    int i=0;
+    for(i=0; i < count; i++)
+    {
+    }
+}
