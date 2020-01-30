@@ -104,7 +104,7 @@ def zoom_Camera(sensitivityVal):
     screwLocations = []
 
     minDist = 100       # minimum distance between scerws
-    upCannyThreshold = 130  # sensitivity for detecting circles
+    upCannyThreshold = 75  # sensitivity for detecting circles
     centerThreshold = 35    # sensitivity for detecting circle centers
     maxR = 120          # maximum screw radius
     screwCount = 0
@@ -118,7 +118,7 @@ def zoom_Camera(sensitivityVal):
 
 
 
-    img = cv2.imread('NewPhotos3/opencv_frame_2.png')  # testing, comment out if taking picture
+    img = cv2.imread('NewPhotos4/opencv_frame_5.png')  # testing, comment out if taking picture
     output = img.copy()
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # change to greyscale image
     gray = cv2.medianBlur(gray, 5)                 # apply blur to reduce false positives
