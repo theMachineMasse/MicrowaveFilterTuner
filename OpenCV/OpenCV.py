@@ -4,7 +4,7 @@
 # Date: January 18, 2020
 # Programmer(s): Braden Massé
 # Sub-Systems: Visual Identification Sub-System
-# Version: 1.2
+# Version: 1.5
 ##############################################
 
 # Import Libraries #
@@ -31,13 +31,18 @@ def wide_Angle_Camera(sensitivityVal):
     convertFactor = 38  # number of pixels per cm, needs tuning
     dp = 1
     minDist = 100
-    upCannyThres = 50
-    centerThres = 25
+    upCannyThres = sensitivityVal * 2
+    centerThres = sensitivityVal
     maxR = 40
+    minR = 30
     screwCount = 0
     measuredDepth = 210  # units are mm
     screwDiameter = 10  # units are mm
     referenceRadius = 38  # units are pixels
+    xUpperFilterMargin = 500  # needs to change depending on GUI selection
+    yUpperFilterMargin = 500  # needs to change depending on GUI selection
+    xLowerFilterMargin = 500  # needs to change depending on GUI selection
+    yLowerFilterMargin = 300  # needs to change depending on GUI selection
 
     # Take Picture With Wide Angle Camera #
     # cap = cv2.VideoCapture(wideCamPort);
@@ -45,46 +50,61 @@ def wide_Angle_Camera(sensitivityVal):
     # cv2.imshow('Wide Angle Camera Capture', img)  # testing
     # cap.release()
 
+    # Open Image #
+    img = cv2.imread('opencv_frame_10.png')  # testing, comment out if taking picture
+
+    # Get Image Dimensions #
+    xWidth = img.shape[1]
+    yWidth = img.shape[0]
+
     # Locating of Screws (x, y) #
-    img = cv2.imread('opencv_frame_0.png')  # testing, comment out if taking picture
     output = img.copy()
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # change to greyscale image
     gray = cv2.medianBlur(gray, 5)
+    circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, dp, minDist, param1=upCannyThres, param2=centerThres, minRadius=minR, maxRadius=maxR)
 
-    circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, dp, minDist, param1=upCannyThres, param2=centerThres, minRadius=sensitivityVal, maxRadius=maxR)
-    detected_circles = np.uint16(np.around(circles))
+    # No Screws Located #
+    if not circles.any() :
+        screwLocations = [-1, -1, -1, -1, -1]
+        screwLocationsGList.append(screwLocations)
 
-    # Update Tuning Screw List #
-    focalLength = ((referenceRadius * 2) * measuredDepth) / screwDiameter  # determine focal length
-    for (x, y, r) in detected_circles[0, :]:
-        # Find Depth of Current Screw #
-        calculatedDepth = (screwDiameter * focalLength) / (r * 2)
+    # Screws Located *
+    else:
+        detected_circles = np.uint16(np.around(circles))
 
-        # Find Tallest Tuning Screw's Depth #
-        if g_minDepth > calculatedDepth:
-            g_minDepth = calculatedDepth
+        # Update Tuning Screw List #
+        focalLength = ((referenceRadius * 2) * measuredDepth) / screwDiameter  # determine focal length
+        for (x, y, r) in detected_circles[0, :]:
+            # Find Depth of Current Screw #
+            calculatedDepth = (screwDiameter * focalLength) / (r * 2)
 
-        # Add Screw to Global Screw Locations List
-        if x > 50 and y > 50 and x < 1350 and y < 1350:  # currently just filtering other screws based size of filter, potential adjustment from user?
-            screwLocations = [screwCount, (x / convertFactor), (y / convertFactor), calculatedDepth, 0]
-            screwLocationsGList.append(screwLocations)
+            # Find Tallest Tuning Screw's Depth #
+            if g_minDepth > calculatedDepth:
+                g_minDepth = calculatedDepth
 
-        # Indicate Detected Screws on Output Image #
-            cv2.circle(output, (x, y), r, (0, 255, 0), 3)  # draw circles on detected screws
-            print("Circle ", screwCount, "at", (x / convertFactor), "cm,", (y / convertFactor), "cm with radius of", r, "pixels and a depth of", calculatedDepth, "mm")  # testing
-            cv2.circle(output, (x, y), 2, (0, 255, 0), 3)  # draw dot on center of detected screws
-            screwCount = screwCount + 1
+            # Add Screw to Global Screw Locations List #
+            # Filtering Based On Filter Size #
+            if xLowerFilterMargin < x < (xWidth - xUpperFilterMargin) and yLowerFilterMargin < y < (yWidth - yUpperFilterMargin):  # currently just filtering other screws based size of filter, potential adjustment from user?
+                screwLocations = [screwCount, (x / convertFactor), (y / convertFactor), calculatedDepth, 0]
+                screwLocationsGList.append(screwLocations)
 
-    # Testing Outputs #
-    print("Minimum Depth is", g_minDepth, "mm")  # testing
-    print("There are", screwCount, "screws")  # testing
-    print("Focal length is", focalLength, "mm")  # testing
-    print(screwLocationsGList)
-    cv2.imshow('output', output)  # display output with screws identified, needs to be integrated into GUI
+            # Indicate Detected Screws on Output Image #
+                cv2.circle(output, (x, y), r, (0, 255, 0), 3)  # draw circles on detected screws
+                print("Circle ", screwCount, "at", (x / convertFactor), "cm,", (y / convertFactor), "cm with radius of", r, "pixels and a depth of", calculatedDepth, "mm")  # testing
+                cv2.circle(output, (x, y), 2, (0, 255, 0), 3)  # draw dot on center of detected screws
+                screwCount = screwCount + 1
+
+        # Testing Outputs #
+        print("Minimum Depth is", g_minDepth, "mm")  # testing
+        print("There are", screwCount, "screws")  # testing
+        print("Focal length is", focalLength, "mm")  # testing
+        print(screwLocationsGList)
+        cv2.imwrite('output.png', output)  # use for displaying image on GUI
+        cv2.imshow('output', output)  # display output with screws identified, needs to be integrated into GUI
 
     # End of Function Clean-Up *
     cv2.waitKey(0)  # close image on pressing any key
     cv2.destroyAllWindows()
 
 
-wide_Angle_Camera(30)  # testing
+wide_Angle_Camera(25)  # testing
