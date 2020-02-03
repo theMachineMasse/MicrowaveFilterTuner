@@ -5,7 +5,7 @@
 *	Programmer(s): Braden Massé
 * Sub-System: Visual Display Sub-System
 *	Description: Function declarations for all functions related tp the Visual Display Sub-System (VDS)
-* Version: 1.0
+* Version: 1.2
 *	
 ********************************************/
 

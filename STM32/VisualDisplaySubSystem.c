@@ -5,7 +5,7 @@
 *	Programmer(s): Braden Massé
 * Sub-System: Visual Display Sub-System
 *	Description: Contains all the functions to modify, update, and change the LCD and the LEDs
-* Version: 1.0
+* Version: 1.2
 *	
 ********************************************/
 
@@ -141,7 +141,7 @@ void lcd_Display_Status (int statusCode) {
 			string_To_LCD("Status: Moving Z");
 			break;
 		case 8: 
-			string_To_LCD("Status: Moving S");
+			string_To_LCD("Status: Moving Phi");
 			break;
 		default: 
 			string_To_LCD("Status: Unknown");
@@ -193,7 +193,7 @@ void lcd_Display_Error (int errorCode) {
 			string_To_LCD("Error: 2-5 L X hit");
 			break;
 		case 26: 
-			string_To_LCD("Error: 2-6 R Y hit");
+			string_To_LCD("Error: 2-6 R X hit");
 			break;
 		case 27: 
 			string_To_LCD("Error: 2-7 U Z hit");
