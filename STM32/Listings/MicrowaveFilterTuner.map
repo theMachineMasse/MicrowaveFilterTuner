@@ -135,17 +135,17 @@ Removing Unused input sections from the image.
     Removing visualdisplaysubsystem.o(i.command_To_LCD), (72 bytes).
     Removing visualdisplaysubsystem.o(i.data_To_LCD), (72 bytes).
     Removing visualdisplaysubsystem.o(i.delay), (14 bytes).
-    Removing visualdisplaysubsystem.o(i.lcd_Display_Error), (460 bytes).
-    Removing visualdisplaysubsystem.o(i.lcd_Display_Status), (308 bytes).
+    Removing visualdisplaysubsystem.o(i.lcd_Display_Error), (740 bytes).
+    Removing visualdisplaysubsystem.o(i.lcd_Display_Status), (432 bytes).
     Removing visualdisplaysubsystem.o(i.string_To_LCD), (34 bytes).
-    Removing visualdisplaysubsystem.o(i.vds_Init), (180 bytes).
+    Removing visualdisplaysubsystem.o(i.vds_Init), (264 bytes).
     Removing system_stm32f10x.o(.rev16_text), (4 bytes).
     Removing system_stm32f10x.o(.revsh_text), (4 bytes).
     Removing system_stm32f10x.o(.rrx_text), (6 bytes).
     Removing system_stm32f10x.o(i.SystemCoreClockUpdate), (160 bytes).
     Removing system_stm32f10x.o(.data), (20 bytes).
 
-15 unused section(s) (total 1348 bytes) removed from the image.
+15 unused section(s) (total 1836 bytes) removed from the image.
 
 ==============================================================================
 
