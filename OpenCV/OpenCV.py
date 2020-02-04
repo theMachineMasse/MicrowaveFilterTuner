@@ -4,7 +4,7 @@
 # Date: January 18, 2020
 # Programmer(s): Braden Massé
 # Sub-Systems: Visual Identification Sub-System
-# Version: 1.5
+# Version: 1.6
 ##############################################
 
 # Import Libraries #
@@ -51,25 +51,28 @@ def wide_Angle_Camera(sensitivityVal):
     # cap.release()
 
     # Open Image #
-    img = cv2.imread('opencv_frame_10.png')  # testing, comment out if taking picture
-
-    # Get Image Dimensions #
-    xWidth = img.shape[1]
-    yWidth = img.shape[0]
+    img = cv2.imread('negative_test.jpg')  # no screw testing, comment out if taking picture
+    #img = cv2.imread('opencv_frame_0.png')  # no screw testing, comment out if taking picture
 
     # Locating of Screws (x, y) #
     output = img.copy()
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # change to greyscale image
     gray = cv2.medianBlur(gray, 5)
+    circles = []
     circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, dp, minDist, param1=upCannyThres, param2=centerThres, minRadius=minR, maxRadius=maxR)
 
     # No Screws Located #
-    if not circles.any() :
+    if circles is None:
         screwLocations = [-1, -1, -1, -1, -1]
         screwLocationsGList.append(screwLocations)
+        print("No screws detected")  # testing, will need message to appear on GUI
 
     # Screws Located *
     else:
+        # Get Image Dimensions #
+        xWidth = img.shape[1]
+        yWidth = img.shape[0]
+
         detected_circles = np.uint16(np.around(circles))
 
         # Update Tuning Screw List #
@@ -105,6 +108,5 @@ def wide_Angle_Camera(sensitivityVal):
     # End of Function Clean-Up *
     cv2.waitKey(0)  # close image on pressing any key
     cv2.destroyAllWindows()
-
 
 wide_Angle_Camera(25)  # testing
