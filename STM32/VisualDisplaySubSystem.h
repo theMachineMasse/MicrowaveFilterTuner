@@ -5,7 +5,7 @@
 *	Programmer(s): Braden Massé
 * Sub-System: Visual Display Sub-System
 *	Description: Function declarations for all functions related tp the Visual Display Sub-System (VDS)
-* Version: 1.2
+* Version: 1.4
 *	
 ********************************************/
 
@@ -18,6 +18,11 @@
 #define LCD_CM_DIS 0x00230000 
 #define LCD_DM_ENA 0x00200003 
 #define LCD_DM_DIS 0x00220001 
+
+#define LCD_CM_1L  0x80
+#define LCD_CM_2L  0xC0
+#define LCD_CM_3L  0x14
+#define LCD_CM_4L  0x54
 
 #define LCD_8B2L 0x38 // Enable 8 bit data, 2 display lines
 #define LCD_DCB 0x0F //  Enable Display, Cursor, Blink

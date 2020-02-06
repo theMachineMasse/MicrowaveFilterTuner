@@ -1,11 +1,11 @@
 /********************************************
 *	Project: Microwave Filter Tuner
 * File: VisualDisplaySubSystem.c
-*	Date: January 27, 2020
+*	Date: February 5, 2020
 *	Programmer(s): Braden Massé
 * Sub-System: Visual Display Sub-System
 *	Description: Contains all the functions to modify, update, and change the LCD and the LEDs
-* Version: 1.3
+* Version: 1.4
 *	
 ********************************************/
 
@@ -44,19 +44,20 @@ void vds_Init(void) {
 	GPIOC->BSRR |= GPIO_BSRR_BS13; // turn off RED LED, need to double check
 	
 	/* Start-up Commands */
-	command_To_LCD(0x38); //NO MAGIC NUMBERS
-  command_To_LCD(0x38); //NO MAGIC NUMBERS
-  command_To_LCD(0x38); //NO MAGIC NUMBERS
-	command_To_LCD(0x38); //NO MAGIC NUMBERS
-	command_To_LCD(0x0F); //NO MAGIC NUMBERS
-	command_To_LCD(0x01); //NO MAGIC NUMBERS
-	command_To_LCD(0x06); //NO MAGIC NUMBERS
+	command_To_LCD(LCD_8B2L);
+  command_To_LCD(LCD_8B2L);
+  command_To_LCD(LCD_8B2L);
+	command_To_LCD(LCD_8B2L);
+	command_To_LCD(LCD_DCB);
+	command_To_LCD(LCD_CLR);
+	command_To_LCD(LCD_MCR);
 	
 	/* Branding */
+	command_To_LCD(LCD_CM_1L);
 	string_To_LCD("University of Regina");
-	command_To_LCD(0xC0);
+	command_To_LCD(LCD_CM_2L);
 	string_To_LCD("MFT v1.0");
-	//add code to set to line 3
+	command_To_LCD(LCD_CM_3L);
 	string_To_LCD("Status: ");
 }
 
@@ -71,7 +72,7 @@ void vds_Init(void) {
 *******************************************/
 void data_To_LCD (uint8_t data) {
 	GPIOB->BSRR = LCD_DM_ENA; //RS high, E high
-	GPIOC->ODR &= 0xFF00; //NO MAGIC NUMBERS
+	GPIOC->ODR &= 0xFF00;
 	GPIOC->ODR |= data; 
 	delay(8000);
 	GPIOB->BSRR = LCD_DM_DIS; //RS high, E low
@@ -89,7 +90,7 @@ void data_To_LCD (uint8_t data) {
 *******************************************/
 void command_To_LCD (uint8_t data) {
 	GPIOB->BSRR = LCD_CM_ENA; //RS low, E high
-	GPIOC->ODR &= 0xFF00; //NO MAGIC NUMBERS
+	GPIOC->ODR &= 0xFF00;
 	GPIOC->ODR |= data; 
 	delay(8000);
 	GPIOB->BSRR = LCD_CM_DIS; //RS low, E low
@@ -126,6 +127,8 @@ void string_To_LCD (char * message) {
 *******************************************/
 void lcd_Display_Status (int statusCode) {
 
+	command_To_LCD(LCD_CM_3L);
+	
 	switch(statusCode) {
 		case 0: 
 			string_To_LCD("Status: Disconnected");
@@ -180,7 +183,8 @@ void lcd_Display_Status (int statusCode) {
 *	Return value: N/A
 *******************************************/
 void lcd_Display_Error (int errorCode) {
-//add code to set cursor to line 4
+
+	command_To_LCD(LCD_CM_4L);
 	
 	switch(errorCode) {
 		case 11: 
@@ -249,7 +253,6 @@ void lcd_Display_Error (int errorCode) {
 			GPIOB->BSRR |= GPIO_BSRR_BR15; // turn on YELLOW LED, need to double check
 			break;
 	}
-//add code to set cursor back to line 3
 }
 
 /*******************************************
