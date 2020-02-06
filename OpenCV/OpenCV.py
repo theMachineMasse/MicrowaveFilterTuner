@@ -4,7 +4,7 @@
 # Date: January 18, 2020
 # Programmer(s): Braden Massé
 # Sub-Systems: Visual Identification Sub-System
-# Version: 1.7
+# Version: 1.8
 ##############################################
 
 # Import Libraries #
@@ -28,9 +28,9 @@ g_screwCount = 0  # number of screws detected
 ##############################################
 def wide_Angle_Camera(sensitivityVal):
     # Variable Initializations #
-    screwLocations = []  # will be appended to global screw positions list
     global g_minDepth
     global g_screwCount
+    screwLocations = []  # will be appended to global screw positions list
     convertFactor = 38  # number of pixels per cm, needs tuning
     dp = 1
     minDist = 100
@@ -128,18 +128,28 @@ def click_event(event, x, y, flags, param):
     convertFactor = 38  # number of pixels per cm, needs tuning
     fontScale = 1
     fontThickness = 2
+
+    # Open Image #
     img2 = cv2.imread('output.png')
+
+    # Left Click Event #
     if event == cv2.EVENT_LBUTTONDOWN:
-        #for (screwCount, assignedNum, x1, y1, calculatedDepth, r, locatedFlag) in screwLocationsGList[0:]:
         for i in range(len(screwLocationsGList)):
+
+            # Find Needed Values from List #
             x1 = screwLocationsGList[i][2]*convertFactor
             r1 = screwLocationsGList[i][5]
             y1 = screwLocationsGList[i][3]*convertFactor
-            if (x1 - r1) < x < (x1 + r1) and (y1 - r1) < y < (y1 + r1):
+            assignedNum = screwLocationsGList[i][1]
+
+            # Check Click Location Is Within A Screw #
+            if (x1 - r1) < x < (x1 + r1) and (y1 - r1) < y < (y1 + r1) and assignedNum == -1:
                 screwLocationsGList[i][1] = g_screwNum
-                print("Proper screw identified, screw = ", i)
+                # print("Screw identified, screw = ", i)  # testing
                 validFlag = 1
                 break
+
+        # If Valid Screw Clicked, Add Screw Number To Image #
         if validFlag == 1:
             strXY = str(g_screwNum)
             # strXY = str(x) + ", " + str(y) # testing
@@ -147,7 +157,7 @@ def click_event(event, x, y, flags, param):
             cv2.putText(img2, strXY, (x, y), font, fontScale, (255, 255, 0), fontThickness)
             cv2.imshow('Screw Assignment', img2)
             cv2.imwrite('output.png', img2)  # use for displaying image on GUI
-            print(screwLocationsGList)
+            # print(screwLocationsGList)  # testing
 
 ##############################################
 # Function: screw_Assignment()
@@ -158,12 +168,32 @@ def click_event(event, x, y, flags, param):
 # Outputs: N/A
 ##############################################
 def screw_Assignment():
+    # Variable Initializations #
+    global screwLocationsGList
+    tempScrewLocationsList = []
+
+    # Open & Display Image #
     img = cv2.imread('output.png')
     cv2.imshow('Screw Assignment', img)
+
+    # Mouse Event Function Call #
     cv2.setMouseCallback('Screw Assignment', click_event)
 
+    # Close Window #
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
-wide_Angle_Camera(25) # testing
+    # Check If Any Screws Not Selected; Copy Any With Assigned Numbers #
+    for i in range(len(screwLocationsGList)):
+        assignedNum = screwLocationsGList[i][1]
+        if assignedNum != -1:
+            tempScrewLocationsList.append(screwLocationsGList[i])
+
+    # Make Global List Only Contain Assigned Screws #
+    screwLocationsGList = tempScrewLocationsList.copy()
+    print(screwLocationsGList)  # testing
+    print("New List Length is", len(screwLocationsGList))  # testing
+
+
+wide_Angle_Camera(25)  # testing
 screw_Assignment()  # testing
