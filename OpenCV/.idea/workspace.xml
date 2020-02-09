@@ -2,8 +2,30 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2eb1c72a-8ae1-4342-9219-6cffbd99a83d" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/OpenCV.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/OpenCV.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/negative_test.jpg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/opencv_frame_5.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/output.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/temp.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Test Code/lcd.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Test Code/lcd.h" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Test Code/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OpenCV.py" beforeDir="false" afterPath="$PROJECT_DIR$/OpenCV.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../STM32/Listings/MicrowaveFilterTuner.map" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/Listings/MicrowaveFilterTuner.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../STM32/MicrowaveFilterTuner.uvguix.bmass" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/MicrowaveFilterTuner.uvguix.bmass" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../STM32/Objects/MicrowaveFilterTuner.axf" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/Objects/MicrowaveFilterTuner.axf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../STM32/Objects/MicrowaveFilterTuner.build_log.htm" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/Objects/MicrowaveFilterTuner.build_log.htm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../STM32/Objects/MicrowaveFilterTuner.htm" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/Objects/MicrowaveFilterTuner.htm" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../STM32/Objects/MicrowaveFilterTuner_Target 1.dep" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/Objects/MicrowaveFilterTuner_Target 1.dep" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../STM32/Objects/communications.o" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/Objects/communications.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../STM32/Objects/main.o" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/Objects/main.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../STM32/Objects/motorcontrolsubsystem.o" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/Objects/motorcontrolsubsystem.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../STM32/Objects/system_stm32f10x.o" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/Objects/system_stm32f10x.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../STM32/Objects/visualdisplaysubsystem.crf" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/Objects/visualdisplaysubsystem.crf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../STM32/Objects/visualdisplaysubsystem.o" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/Objects/visualdisplaysubsystem.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../STM32/Objects/visualidentificationsubsystem.o" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/Objects/visualidentificationsubsystem.o" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../STM32/VisualDisplaySubSystem.c" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/VisualDisplaySubSystem.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../STM32/VisualDisplaySubSystem.h" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/VisualDisplaySubSystem.h" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
