@@ -30,14 +30,17 @@ def wide_Angle_Camera(sensitivityVal):
     global g_minDepth
     convertFactor = 38  # number of pixels per cm, needs tuning
     dp = 1
-    minDist = 100
-    upCannyThres = 50
-    centerThres = 25
+    minDist = 50
+    upCannyThres = 40
+    centerThres = 20
     maxR = 40
     screwCount = 0
     measuredDepth = 210  # units are mm
     screwDiameter = 10  # units are mm
     referenceRadius = 38  # units are pixels
+    frameWidth = 2592
+    frameHeight = 1944
+    cutoffVal = 2
 
     # Take Picture With Wide Angle Camera #
     # cap = cv2.VideoCapture(wideCamPort);
@@ -46,7 +49,7 @@ def wide_Angle_Camera(sensitivityVal):
     # cap.release()
 
     # Locating of Screws (x, y) #
-    img = cv2.imread('opencv_frame_0.png')  # testing, comment out if taking picture
+    img = cv2.imread('NewPhotos1/opencv_frame_12.png')  # testing, comment out if taking picture
     output = img.copy()
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # change to greyscale image
     gray = cv2.medianBlur(gray, 5)
@@ -65,7 +68,8 @@ def wide_Angle_Camera(sensitivityVal):
             g_minDepth = calculatedDepth
 
         # Add Screw to Global Screw Locations List
-        if x > 50 and y > 50 and x < 1350 and y < 1350:  # currently just filtering other screws based size of filter, potential adjustment from user?
+
+        if x > cutoffVal and y > cutoffVal and x < (frameWidth - cutoffVal) and y < (frameHeight - cutoffVal):  # currently just filtering other screws based size of filter, potential adjustment from user?
             screwLocations = [screwCount, (x / convertFactor), (y / convertFactor), calculatedDepth, 0]
             screwLocationsGList.append(screwLocations)
 

@@ -118,7 +118,7 @@ def zoom_Camera(sensitivityVal):
 
 
 
-    img = cv2.imread('NewPhotos4/opencv_frame_5.png')  # testing, comment out if taking picture
+    img = cv2.imread('NewPhotos5/opencv_frame_4.png')  # testing, comment out if taking picture
     output = img.copy()
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # change to greyscale image
     gray = cv2.medianBlur(gray, 5)                 # apply blur to reduce false positives
