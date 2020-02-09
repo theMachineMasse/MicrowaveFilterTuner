@@ -4,7 +4,7 @@
 # Date: January 18, 2020
 # Programmer(s): Braden Massé
 # Sub-Systems: Visual Identification Sub-System
-# Version: 1.9
+# Version: 1.10
 ##############################################
 
 # Import Libraries #
@@ -14,24 +14,22 @@ import cv2 as cv2
 # Globals #
 screwLocationsGList = []  # (screwNum, assignedNum, x, y, z, r, locatedFlag)
 g_minDepth = 260  # the distance from the tallest tuning screw (mm)
-wideCamPort = 1  # COM port for the wide angle camera
+g_wideCamPort = 1  # COM port for the wide angle camera
 g_screwNum = 0  # counter for screw assignment
-#g_screwCount = 0  # number of screws detected
-screwsDetected = 0  # flag that is set if any screws detected
+g_screwsDetected = 0  # flag that is set if any screws detected
 
 ##############################################
 # Function: wide_Angle_Camera()
 # Programmer(s): Braden Massé
 # Date: January 18,2020
 # Purpose: To identify all tuning screws and determine X, Y, and Z position
-# Arguments: sensitivityVal
+# Arguments: sensitivityVal, cropArea
 # Outputs: N/A
 ##############################################
-def wide_Angle_Camera(sensitivityVal):
+def wide_Angle_Camera(sensitivityVal, cropArea):
     # Globals #
     global g_minDepth
-    global g_screwCount
-    global screwsDetected
+    global g_screwsDetected
 
     # Variable Initializations #
     convertFactor = 38  # number of pixels per cm, needs tuning
@@ -45,14 +43,32 @@ def wide_Angle_Camera(sensitivityVal):
     measuredDepth = 210  # units are mm, used for calibrating depth
     screwDiameter = 10  # units are mm, used for calibrating depth
     referenceRadius = 38  # units are pixels, used for calibrating depth
-    xUpperFilterMargin = 500  # needs to change depending on GUI selection
-    yUpperFilterMargin = 500  # needs to change depending on GUI selection
-    xLowerFilterMargin = 500  # needs to change depending on GUI selection
-    yLowerFilterMargin = 300  # needs to change depending on GUI selection
     assignedNum = -1  # number assigned to each screw based on user input later
 
+    # Crop Area Functionality, May Not Be Necessary #
+    # If Area Is Roughly 10" x 10" #
+    if cropArea == 0:
+        xUpperFilterMargin = 0  # needs to change depending on GUI selection
+        yUpperFilterMargin = 0  # needs to change depending on GUI selection
+        xLowerFilterMargin = 0  # needs to change depending on GUI selection
+        yLowerFilterMargin = 0  # needs to change depending on GUI selection
+
+    # If Area Is Roughly 6" x 6" #
+    if cropArea == 1:
+        xUpperFilterMargin = 500  # needs to change depending on GUI selection
+        yUpperFilterMargin = 500  # needs to change depending on GUI selection
+        xLowerFilterMargin = 500  # needs to change depending on GUI selection
+        yLowerFilterMargin = 300  # needs to change depending on GUI selection
+
+    # If Area Is Roughly 3" x 3" #
+    if cropArea == 2:
+        xUpperFilterMargin = 500  # needs to change depending on GUI selection
+        yUpperFilterMargin = 500  # needs to change depending on GUI selection
+        xLowerFilterMargin = 500  # needs to change depending on GUI selection
+        yLowerFilterMargin = 300  # needs to change depending on GUI selection
+
     # Take Picture With Wide Angle Camera #
-    # cap = cv2.VideoCapture(wideCamPort);
+    # cap = cv2.VideoCapture(g_wideCamPort);
     # ret, img = cap.read()
     # cv2.imshow('Wide Angle Camera Capture', img)  # testing
     # cap.release()
@@ -83,7 +99,7 @@ def wide_Angle_Camera(sensitivityVal):
 
     # No Screws Located #
     if circles is None:
-        screwsDetected = 0  # set flag to false if no screws detected
+        g_screwsDetected = 0  # set flag to false if no screws detected
         screwLocations = [-1, -1, -1, -1, -1, -1, -1]
         screwLocationsGList.append(screwLocations)
         print("No screws detected")  # testing, will need message to appear on GUI
@@ -91,7 +107,7 @@ def wide_Angle_Camera(sensitivityVal):
     # Screws Located *
     else:
         detected_circles = np.uint16(np.around(circles))
-        screwsDetected = 1  # set flag to true if screws detected
+        g_screwsDetected = 1  # set flag to true if screws detected
 
         # Update Tuning Screw List #
         focalLength = ((referenceRadius * 2) * measuredDepth) / screwDiameter  # determine focal length
@@ -115,8 +131,6 @@ def wide_Angle_Camera(sensitivityVal):
                 print("Circle ", screwCount, "at", (x / convertFactor), "cm,", (y / convertFactor), "cm with radius of", r, "pixels and a depth of", calculatedDepth, "mm")  # testing
                 cv2.circle(output, (x, y), 2, (0, 255, 0), 3)  # draw dot on center of detected screws
                 screwCount = screwCount + 1
-
-        #g_screwCount = screwCount
 
         # Testing Outputs #
         print("Minimum Depth is", g_minDepth, "mm")  # testing
@@ -146,7 +160,6 @@ def wide_Angle_Camera(sensitivityVal):
 def click_event(event, x, y, flags, param):
     global g_screwNum
     font = cv2.FONT_HERSHEY_COMPLEX
-    validFlag = 0
     convertFactor = 38  # number of pixels per cm, needs tuning
     fontScale = 0.9
     fontThickness = 2
@@ -207,9 +220,11 @@ def screw_Assignment():
     # Mouse Event Function Call #
     cv2.setMouseCallback('Screw Assignment', click_event)
 
-    # Close Window #
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # Close Window If 'Enter' Pressed #
+    while 1:
+        if cv2.waitKey(33) == 13:
+            cv2.destroyAllWindows()
+            break
 
     # Check If Any Screws Not Selected; Copy Any With Assigned Numbers #
     for i in range(len(screwLocationsGList)):
@@ -232,8 +247,8 @@ def screw_Assignment():
     cv2.destroyAllWindows()
 
 
-wide_Angle_Camera(25)  # testing
+wide_Angle_Camera(25, 0)  # testing
 
 # To Be Incorporated Into The GUI #
-if screwsDetected != 0:
+if g_screwsDetected != 0:
     screw_Assignment()  # testing
