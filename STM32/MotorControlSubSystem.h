@@ -1,6 +1,10 @@
+void motorInit(void);
 void moveX(int);
 void moveY(int);
 void moveZ(int);
 void moveXSlow(int);
 void moveYSlow(int);
 void moveZSlow(int);
+void moveMotor(int,int);
+//void TIM3_IRQHandler(void);
+void delayUs(int uS);
