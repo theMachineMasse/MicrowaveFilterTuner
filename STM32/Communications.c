@@ -13,6 +13,7 @@
 #include "stm32f10x.h"
 #include "Communications.h"
 #include "MotorControlSubSystem.h"
+#include "VisualIdentificationSubSystem.h"
 
 /*******************************************
 *	Function: clockInit
@@ -378,10 +379,7 @@ void commandM42(void){
 		}
 	}
 	
-	sendbyte(' ');
-	printHex(pin);
-	sendbyte(' ');
-	printHex(value);
+	lightsToggle(pin, value);
 
 	
 }
@@ -395,7 +393,7 @@ void commandM42(void){
 *	Return value: N/A
 *******************************************/
 void commandM17(void){
-	sendbyte('n');
+	enableMotors();
 	
 }
 
@@ -408,6 +406,6 @@ void commandM17(void){
 *	Return value: N/A
 *******************************************/
 void commandM18(void){
-	sendbyte('o');
+	disableMotors();
 	
 }

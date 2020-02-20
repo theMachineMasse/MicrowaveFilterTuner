@@ -11,11 +11,13 @@
 #include "Communications.h"
 #include "MotorControlSubSystem.h"
 #include "stm32f10x.h"
+#include "VisualIdentificationSubSystem.h"
 
 int main(void) {
 	clockInit();
 	serial_open();
 	motorInit();
+	lightsInit();
 	
 	command();
 	//sendbyte(getbyte());

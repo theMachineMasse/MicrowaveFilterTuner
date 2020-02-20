@@ -26,10 +26,6 @@ const int minSpeed = 200;
 
 
 void motorInit(void){	
-	//motor clock init
-  RCC->APB2ENR |=  RCC_APB2ENR_IOPBEN| RCC_APB2ENR_IOPAEN ;
-	
-	
 	
 	
 	//motor GPIO init
@@ -143,6 +139,8 @@ void moveMotor(int axis, int moveAmount){
 		moveAmount = moveAmount * -1;
 	}
 	printHex(moveAmount);
+	sendbyte(' ');
+	sendbyte(' ');
 	
 	
 	if(moveAmount >= rampSize*2){
@@ -197,14 +195,60 @@ void moveMotor(int axis, int moveAmount){
 	}
 	
 	else{
-		sendbyte('b');
+		int speedAccel;
+		int delayTime;
+		int maxSpeedReached;
+		
+		//accel
+		int accelRate = (maxSpeed - minSpeed) / rampSize;
+		for(int i = 0; i < moveAmount/2; i++){
+			speedAccel = minSpeed + accelRate*(i);
+			maxSpeedReached = speedAccel;
+			delayTime = (1000000/speedAccel)/2;
+			
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS9;
+			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BS12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			delayUs(delayTime);
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR9;
+			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BR12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			delayUs(delayTime);
+		}
+		
+		
+		//decel
+		for(int i = 0; i < moveAmount/2; i++){
+			speedAccel = maxSpeedReached -  accelRate*(i);
+			delayTime = (1000000/speedAccel)/2;
+			
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS9;
+			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BS12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			delayUs(delayTime);
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR9;
+			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BR12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			delayUs(delayTime);
+		}
+		
 	}
 	
 	
 	
 }
 
+void enableMotors(void){
+	GPIOA->BSRR |= GPIO_BSRR_BR7;
+	GPIOA->BSRR |= GPIO_BSRR_BR10;
+	GPIOA->BSRR |= GPIO_BSRR_BR13;
+}
 
+void disableMotors(void){
+	GPIOA->BSRR |= GPIO_BSRR_BS7;
+	GPIOA->BSRR |= GPIO_BSRR_BS10;
+	GPIOA->BSRR |= GPIO_BSRR_BS13;
+}
 
 
 /*
