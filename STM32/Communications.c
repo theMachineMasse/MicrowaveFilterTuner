@@ -15,6 +15,11 @@
 #include "MotorControlSubSystem.h"
 #include "VisualIdentificationSubSystem.h"
 
+//Globals
+char get[30];				//CLI character buffer
+char input;				//temp value to store input value
+
+
 /*******************************************
 *	Function: clockInit
 *	Date: February 8, 2020
@@ -50,78 +55,6 @@ void clockInit(void)
 	//enable UART clock
 	RCC->APB1ENR |= RCC_APB1ENR_USART3EN;
 		
-}
-
-/*******************************************
-*	Function: command
-*	Date: February 8, 2020
-*	Purpose: Logic to interperate input from Gcode commands
-*	Parameters: N/A
-*	Return value: N/A
-*******************************************/
-char get[30];				//CLI character buffer
-	char input;				//temp value to store input value
-	int i = 0;				//counter to know where in character array buffer
-void command(void){
-	clearBuffer();
-	while(1){
-		input = getbyte();		//get the current byte
-		get[i] = input;				//set the temperary char to the current byte
-		
-		if((input == 0xD) || (i >= 29)){	//if the input is an enter command check the byte
-			checkCommand(get);	//check to see if command matches an input command
-			
-			clearBuffer();			//clear the character buffer
-			i = 0;							//reset the character counter to zero
-		}
-		else{
-			sendbyte(input);
-			i++;
-		}
-		
-	}
-}
-
-
-/*******************************************
-*	Function: checkCommand
-*	Date: October 7, 2019
-*	Purpose: Determines which command is to be ran
-*	Parameters: input[]
-*	Return value: N/A
-*******************************************/
-void checkCommand(char input[30]){
-	
-	if ((get[0] == 'G' || get[0] == 'g') && (get[1] == '0')){
-		commandG0();
-	}
-	
-	else if ((get[0] == 'G'|| get[0] == 'g') && (get[1] == '1')){
-		commandG1();
-	}
-	
-	else if ((get[0] == 'G'|| get[0] == 'g') && (get[1] == '2') && (get[2] == '8')){
-		commandG28();
-	}
-	
-	else if ((get[0] == 'M'|| get[0] == 'm') && (get[1] == '4') && (get[2] == '2')){
-		commandM42();
-	}
-	
-	else if ((get[0] == 'M'|| get[0] == 'm') && (get[1] == '1') && (get[2] == '7')){
-		commandM17();
-	}
-	
-	else if ((get[0] == 'M'|| get[0] == 'm') && (get[1] == '1') && (get[2] == '8')){
-		commandM18();
-	}
-
-	
-	
-	
-	
-	
-	
 }
 
 /*******************************************
@@ -196,6 +129,80 @@ void clearBuffer(void) {
 		get[i] = '\0';
 	}
 }
+
+/*******************************************
+*	Function: command
+*	Date: February 8, 2020
+*	Purpose: Logic to interperate input from Gcode commands
+*	Parameters: N/A
+*	Return value: N/A
+*******************************************/
+
+
+int i = 0;				//counter to know where in character array buffer
+void command(void){
+	clearBuffer();
+	while(1){
+		input = getbyte();		//get the current byte
+		get[i] = input;				//set the temperary char to the current byte
+		
+		if((input == 0xD) || (i >= 29)){	//if the input is an enter command check the byte
+			checkCommand(get);	//check to see if command matches an input command
+			
+			clearBuffer();			//clear the character buffer
+			i = 0;							//reset the character counter to zero
+		}
+		else{
+			sendbyte(input);
+			i++;
+		}
+		
+	}
+}
+
+
+/*******************************************
+*	Function: checkCommand
+*	Date: October 7, 2019
+*	Purpose: Determines which command is to be ran
+*	Parameters: input[]
+*	Return value: N/A
+*******************************************/
+void checkCommand(char input[30]){
+	
+	if ((get[0] == 'G' || get[0] == 'g') && (get[1] == '0')){
+		commandG0();
+	}
+	
+	else if ((get[0] == 'G'|| get[0] == 'g') && (get[1] == '1')){
+		commandG1();
+	}
+	
+	else if ((get[0] == 'G'|| get[0] == 'g') && (get[1] == '2') && (get[2] == '8')){
+		commandG28();
+	}
+	
+	else if ((get[0] == 'M'|| get[0] == 'm') && (get[1] == '4') && (get[2] == '2')){
+		commandM42();
+	}
+	
+	else if ((get[0] == 'M'|| get[0] == 'm') && (get[1] == '1') && (get[2] == '7')){
+		commandM17();
+	}
+	
+	else if ((get[0] == 'M'|| get[0] == 'm') && (get[1] == '1') && (get[2] == '8')){
+		commandM18();
+	}
+
+	
+	
+	
+	
+	
+	
+}
+
+
 
 
 /*******************************************
