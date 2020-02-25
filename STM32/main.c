@@ -20,20 +20,7 @@ int main(void) {
 	lightsInit();
 	
 	command();
-	//sendbyte(getbyte());
 
-/*
-	int freq = 4000;
-	int delay = (1000000/freq)/2;
-	
-	while(1){
-		GPIOA->BSRR |= GPIO_BSRR_BS7;
-	delayUs(delay);
-		GPIOA->BSRR |= GPIO_BSRR_BR7;
-	delayUs(delay);
-   
-
-	}*/
 	
 	return 0;
 }

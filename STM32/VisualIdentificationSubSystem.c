@@ -15,7 +15,13 @@
 #include "Communications.h"
 
 
-
+/*******************************************
+*	Function: lightsInit
+*	Date: February 20, 2020
+*	Purpose: Initializes the GPIO pins for lighting system
+*	Parameters: N/A
+*	Return value: N/A
+*******************************************/
 void lightsInit(void){	
 	GPIOC->CRH |= GPIO_CRH_MODE11 | GPIO_CRH_MODE12;
 	GPIOC->CRH &= ~GPIO_CRH_CNF11 & ~GPIO_CRH_CNF12;
@@ -24,7 +30,13 @@ void lightsInit(void){
 	GPIOC->BSRR |= GPIO_BSRR_BR12;
 }
 
-
+/*******************************************
+*	Function: lightsToggle
+*	Date: February 20, 2020
+*	Purpose: Turns the desired light on or off
+*	Parameters: int pin, int state
+*	Return value: N/A
+*******************************************/
 void lightsToggle(int pin, int state){
 		
 	sendbyte(' ');
