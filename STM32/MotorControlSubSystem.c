@@ -40,8 +40,8 @@ void motorInit(void){
 	//motor GPIO init
 	GPIOA->CRL |= GPIO_CRL_MODE7 ;
 	GPIOA->CRL &= ~GPIO_CRL_CNF7 ;
-	GPIOA->CRH |= GPIO_CRH_MODE8 | GPIO_CRH_MODE9 | GPIO_CRH_MODE10 | GPIO_CRH_MODE11 | GPIO_CRH_MODE12 | GPIO_CRH_MODE13 | GPIO_CRH_MODE14 | GPIO_CRH_MODE14 | GPIO_CRH_MODE15;
-	GPIOA->CRH &= ~GPIO_CRH_CNF8 & ~GPIO_CRH_CNF9 & ~GPIO_CRH_CNF10 & ~GPIO_CRH_CNF11 & ~GPIO_CRH_CNF12 & ~GPIO_CRH_CNF13 & ~GPIO_CRH_CNF14 & ~GPIO_CRH_CNF14 & ~GPIO_CRH_CNF15;
+	GPIOA->CRH |= GPIO_CRH_MODE8 | GPIO_CRH_MODE9 | GPIO_CRH_MODE10 | GPIO_CRH_MODE11 | GPIO_CRH_MODE12 | GPIO_CRH_MODE13 | GPIO_CRH_MODE14 | GPIO_CRH_MODE15;
+	GPIOA->CRH &= ~GPIO_CRH_CNF8 & ~GPIO_CRH_CNF9 & ~GPIO_CRH_CNF10 & ~GPIO_CRH_CNF11 & ~GPIO_CRH_CNF12 & ~GPIO_CRH_CNF13 & ~GPIO_CRH_CNF14 & ~GPIO_CRH_CNF15;
 	
 	GPIOB->CRL |= GPIO_CRL_MODE6 | GPIO_CRL_MODE7;
 	GPIOB->CRL &= ~GPIO_CRL_MODE6 & ~GPIO_CRL_MODE7;
@@ -49,9 +49,10 @@ void motorInit(void){
 	GPIOB->CRH &= ~GPIO_CRH_CNF8;
 	
 	//disable steppers by defualt
-	GPIOA->BSRR |= GPIO_BSRR_BS7;
+	GPIOA->BSRR |= GPIO_BSRR_BS7;				//use this one 
 	GPIOA->BSRR |= GPIO_BSRR_BS10;
 	GPIOA->BSRR |= GPIO_BSRR_BS13;
+	GPIOB->BSRR |= GPIO_BSRR_BS6;
 	
 }
 
@@ -196,14 +197,14 @@ void moveMotor(int axis, int moveAmount){
 	moveAmount = (moveAmount * stepsPerMM) / 10;				//convert move amount from milimeters to steps
 	
 	if(moveAmount > 0){																	//if move direction is positive set direction outputs high
-		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS8;
-		else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BS11;
-		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS14;
+		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS14;
+		else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS7;
+		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
 	}
 	else{																								//if move direction is negative set direction outputs low
-		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR8;
-		else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BR11;
-		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR14;
+		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR14;
+		else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR7;
+		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 		moveAmount = moveAmount * -1;											//if move direction is negative take the absolute value
 	}
 	printHex(moveAmount);
@@ -221,13 +222,13 @@ void moveMotor(int axis, int moveAmount){
 			speedAccel = minSpeed + accelRate*(i);
 			delayTime = (1000000/speedAccel)/2;
 			
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS9;
-			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BS12;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS12;
 			delayUs(delayTime);
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR9;
-			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BR12;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR12;
 			delayUs(delayTime);
 		}
 		
@@ -235,13 +236,13 @@ void moveMotor(int axis, int moveAmount){
 		int coastSteps = moveAmount - rampSize*2;
 		delayTime = (1000000/maxSpeed)/2;
 		for(int i = 0; i < coastSteps; i++){
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS9;
-			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BS12;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS12;
 			delayUs(delayTime);
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR9;
-			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BR12;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR12;
 			delayUs(delayTime);
 			
 		}
@@ -251,13 +252,13 @@ void moveMotor(int axis, int moveAmount){
 			speedAccel = maxSpeed -  accelRate*(i);
 			delayTime = (1000000/speedAccel)/2;
 			
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS9;
-			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BS12;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS12;
 			delayUs(delayTime);
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR9;
-			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BR12;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR12;
 			delayUs(delayTime);
 		}
 	}
@@ -274,13 +275,13 @@ void moveMotor(int axis, int moveAmount){
 			maxSpeedReached = speedAccel;
 			delayTime = (1000000/speedAccel)/2;
 			
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS9;
-			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BS12;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS12;
 			delayUs(delayTime);
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR9;
-			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BR12;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR12;
 			delayUs(delayTime);
 		}
 		
@@ -290,13 +291,13 @@ void moveMotor(int axis, int moveAmount){
 			speedAccel = maxSpeedReached -  accelRate*(i);
 			delayTime = (1000000/speedAccel)/2;
 			
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS9;
-			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BS12;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS12;
 			delayUs(delayTime);
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR9;
-			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BR12;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR12;
 			delayUs(delayTime);
 		}
 		
@@ -316,14 +317,14 @@ void moveMotorSlow(int axis, int moveAmount){
 	moveAmount = (moveAmount * stepsPerMM) / 10;				//convert move amount from milimeters to steps
 	
 	if(moveAmount > 0){																	//if move direction is positive set direction outputs high
-		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS8;
-		else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BS11;
-		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS14;
+		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS14;
+		else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS7;
+		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
 	}
 	else{																								//if move direction is negative set direction outputs low
-		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR8;
-		else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BR11;
-		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR14;
+		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR14;
+		else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR7;
+		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 		moveAmount = moveAmount * -1;											//if move direction is negative take the absolute value
 	}
 	printHex(moveAmount);
@@ -341,13 +342,13 @@ void moveMotorSlow(int axis, int moveAmount){
 			speedAccel = slowMinSpeed + accelRate*(i);
 			delayTime = (1000000/speedAccel)/2;
 			
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS9;
-			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BS12;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS12;
 			delayUs(delayTime);
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR9;
-			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BR12;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR12;
 			delayUs(delayTime);
 		}
 		
@@ -355,13 +356,13 @@ void moveMotorSlow(int axis, int moveAmount){
 		int coastSteps = moveAmount - slowRampSize*2;
 		delayTime = (1000000/slowMaxSpeed)/2;
 		for(int i = 0; i < coastSteps; i++){
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS9;
-			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BS12;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS12;
 			delayUs(delayTime);
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR9;
-			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BR12;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR12;
 			delayUs(delayTime);
 			
 		}
@@ -371,13 +372,13 @@ void moveMotorSlow(int axis, int moveAmount){
 			speedAccel = slowMaxSpeed -  accelRate*(i);
 			delayTime = (1000000/speedAccel)/2;
 			
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS9;
-			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BS12;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS12;
 			delayUs(delayTime);
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR9;
-			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BR12;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR12;
 			delayUs(delayTime);
 		}
 	}
@@ -394,13 +395,13 @@ void moveMotorSlow(int axis, int moveAmount){
 			maxSpeedReached = speedAccel;
 			delayTime = (1000000/speedAccel)/2;
 			
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS9;
-			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BS12;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS12;
 			delayUs(delayTime);
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR9;
-			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BR12;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR12;
 			delayUs(delayTime);
 		}
 		
@@ -410,13 +411,13 @@ void moveMotorSlow(int axis, int moveAmount){
 			speedAccel = maxSpeedReached -  accelRate*(i);
 			delayTime = (1000000/speedAccel)/2;
 			
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS9;
-			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BS12;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS12;
 			delayUs(delayTime);
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR9;
-			else if(axis == 2) GPIOA->BSRR |= GPIO_BSRR_BR12;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR12;
 			delayUs(delayTime);
 		}
 		
@@ -436,6 +437,7 @@ void enableMotors(void){
 	GPIOA->BSRR |= GPIO_BSRR_BR7;
 	GPIOA->BSRR |= GPIO_BSRR_BR10;
 	GPIOA->BSRR |= GPIO_BSRR_BR13;
+	GPIOB->BSRR |= GPIO_BSRR_BR6;
 }
 
 /*******************************************
@@ -449,6 +451,7 @@ void disableMotors(void){
 	GPIOA->BSRR |= GPIO_BSRR_BS7;
 	GPIOA->BSRR |= GPIO_BSRR_BS10;
 	GPIOA->BSRR |= GPIO_BSRR_BS13;
+	GPIOB->BSRR |= GPIO_BSRR_BS6;
 }
 
 
