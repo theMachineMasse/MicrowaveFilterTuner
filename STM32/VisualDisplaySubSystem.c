@@ -5,7 +5,7 @@
 *	Programmer(s): Braden Massé
 * Sub-System: Visual Display Sub-System
 *	Description: Contains all the functions to modify, update, and change the LCD and the LEDs
-* Version: 1.4
+* Version: 1.5
 *	
 ********************************************/
 
@@ -39,9 +39,9 @@ void vds_Init(void) {
 	GPIOC->CRH |= GPIO_CRH_MODE13; //Red LED
 	GPIOC->CRH &= ~GPIO_CRH_CNF13; //Red LED
 	
-	GPIOB->BSRR |= GPIO_BSRR_BS14; // turn off GREEN LED, need to double check
-	GPIOB->BSRR |= GPIO_BSRR_BS15; // turn off YELLOW LED, need to double check
-	GPIOC->BSRR |= GPIO_BSRR_BS13; // turn off RED LED, need to double check
+	GPIOB->BSRR |= GPIO_BSRR_BR15; // turn off GREEN LED
+	GPIOB->BSRR |= GPIO_BSRR_BR14; // turn off YELLOW LED
+	GPIOC->BSRR |= GPIO_BSRR_BR13; // turn off RED LED
 	
 	/* Start-up Commands */
 	command_To_LCD(LCD_8B2L);
@@ -53,12 +53,13 @@ void vds_Init(void) {
 	command_To_LCD(LCD_MCR);
 	
 	/* Branding */
-	command_To_LCD(LCD_CM_1L);
+	command_To_LCD(LCD_CM_1L); // move to line 1
 	string_To_LCD("University of Regina");
-	command_To_LCD(LCD_CM_2L);
-	string_To_LCD("MFT v1.0");
-	command_To_LCD(LCD_CM_3L);
-	string_To_LCD("Status: ");
+	command_To_LCD(LCD_CM_2L); // move to line 2 
+	string_To_LCD("MFT v1.5"); 
+	command_To_LCD(0x80 | 0x14); // move to line 3
+	lcd_Display_Status(0); // initial status of disconnected
+	command_To_LCD(0xC); // turn off blinking cursor and underline
 }
 
 
@@ -127,48 +128,48 @@ void string_To_LCD (char * message) {
 *******************************************/
 void lcd_Display_Status (int statusCode) {
 
-	command_To_LCD(LCD_CM_3L);
+	command_To_LCD(0x80 | 0x14);
 	
 	switch(statusCode) {
 		case 0: 
 			string_To_LCD("Status: Disconnected");
-			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn off GREEN LED, need to double check
+			GPIOB->BSRR |= GPIO_BSRR_BR15; // turn off GREEN LED
 			break;
 		case 1: 
 			string_To_LCD("Status: Initializing");
-			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn off GREEN LED, need to double check
+			GPIOB->BSRR |= GPIO_BSRR_BR15; // turn off GREEN LED
 			break;
 		case 2: 
-			string_To_LCD("Status: Ready");
-			GPIOB->BSRR |= GPIO_BSRR_BR14; // turn on GREEN LED, need to double check
+			string_To_LCD("Status: Ready       ");
+			GPIOB->BSRR |= GPIO_BSRR_BS15; // turn on GREEN LED
 			break;
 		case 3: 
-			string_To_LCD("Status: Homing X,Y");
-			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn off GREEN LED, need to double check
+			string_To_LCD("Status: Homing X,Y  ");
+			GPIOB->BSRR |= GPIO_BSRR_BR15; // turn off GREEN LED
 			break;
 		case 4: 
-			string_To_LCD("Status: Homing Phi");
-			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn off GREEN LED, need to double check
+			string_To_LCD("Status: Homing Phi  ");
+			GPIOB->BSRR |= GPIO_BSRR_BR15; // turn off GREEN LED
 			break;
 		case 5: 
-			string_To_LCD("Status: Moving X");
-			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn off GREEN LED, need to double check
+			string_To_LCD("Status: Moving X    ");
+			GPIOB->BSRR |= GPIO_BSRR_BR15; // turn off GREEN LED
 			break;
 		case 6: 
-			string_To_LCD("Status: Moving Y");
-			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn off GREEN LED, need to double check
+			string_To_LCD("Status: Moving Y    ");
+			GPIOB->BSRR |= GPIO_BSRR_BR15; // turn off GREEN LED
 			break;
 		case 7: 
-			string_To_LCD("Status: Moving Z");
-			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn off GREEN LED, need to double check
+			string_To_LCD("Status: Moving Z    ");
+			GPIOB->BSRR |= GPIO_BSRR_BR15; // turn off GREEN LED
 			break;
 		case 8: 
-			string_To_LCD("Status: Moving Phi");
-			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn off GREEN LED, need to double check
+			string_To_LCD("Status: Moving Phi  ");
+			GPIOB->BSRR |= GPIO_BSRR_BR15; // turn off GREEN LED
 			break;
 		default: 
-			string_To_LCD("Status: Unknown");
-			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn off GREEN LED, need to double check
+			string_To_LCD("Status: Unknown     ");
+			GPIOB->BSRR |= GPIO_BSRR_BR15; // turn off GREEN LED
 			break;
 	}	
 }
@@ -184,73 +185,73 @@ void lcd_Display_Status (int statusCode) {
 *******************************************/
 void lcd_Display_Error (int errorCode) {
 
-	command_To_LCD(LCD_CM_4L);
+	command_To_LCD(0x80 | 0x54);
 	
 	switch(errorCode) {
 		case 11: 
-			string_To_LCD("Error: 1-1 g_code");
-			GPIOC->BSRR |= GPIO_BSRR_BR13; // turn on RED LED, need to double check
+			string_To_LCD("Error: 1-1 g_code   ");
+			GPIOC->BSRR |= GPIO_BSRR_BS13; // turn on RED LED
 			break;
 		case 12: 
-			string_To_LCD("Error: 1-2 no screw");
-			GPIOC->BSRR |= GPIO_BSRR_BR13; // turn on RED LED, need to double check
+			string_To_LCD("Error: 1-2 no screw ");
+			GPIOC->BSRR |= GPIO_BSRR_BS13; // turn on RED LED
 			break;
 		case 13: 
-			string_To_LCD("Error: 1-3 encoder");
-			GPIOC->BSRR |= GPIO_BSRR_BR13; // turn on RED LED, need to double check
+			string_To_LCD("Error: 1-3 encoder  ");
+			GPIOC->BSRR |= GPIO_BSRR_BS13; // turn on RED LED
 			break;
 		case 14: 
-			string_To_LCD("Error: 1-4 X home");
-			GPIOC->BSRR |= GPIO_BSRR_BR13; // turn on RED LED, need to double check
+			string_To_LCD("Error: 1-4 X home   ");
+			GPIOC->BSRR |= GPIO_BSRR_BS13; // turn on RED LED
 			break;
 		case 15: 
-			string_To_LCD("Error: 1-5 Y home");
-			GPIOC->BSRR |= GPIO_BSRR_BR13; // turn on RED LED, need to double check
+			string_To_LCD("Error: 1-5 Y home   ");
+			GPIOC->BSRR |= GPIO_BSRR_BS13; // turn on RED LED
 			break;
 		case 21: 
-			string_To_LCD("Error: 2-1 no resp");
-			GPIOB->BSRR |= GPIO_BSRR_BR15; // turn on YELLOW LED, need to double check
+			string_To_LCD("Error: 2-1 no resp  ");
+			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn on YELLOW LED
 			break;
 		case 22: 
-			string_To_LCD("Error: 2-2 no screw");
-			GPIOB->BSRR |= GPIO_BSRR_BR15; // turn on YELLOW LED, need to double check
+			string_To_LCD("Error: 2-2 no screw ");
+			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn on YELLOW LED
 			break;
 		case 23: 
-			string_To_LCD("Error: 2-3 F Y hit");
-			GPIOB->BSRR |= GPIO_BSRR_BR15; // turn on YELLOW LED, need to double check
+			string_To_LCD("Error: 2-3 F Y hit  ");
+			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn on YELLOW LED
 			break;
 		case 24: 
-			string_To_LCD("Error: 2-4 B Y hit");
-			GPIOB->BSRR |= GPIO_BSRR_BR15; // turn on YELLOW LED, need to double check
+			string_To_LCD("Error: 2-4 B Y hit  ");
+			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn on YELLOW LED
 			break;
 		case 25: 
-			string_To_LCD("Error: 2-5 L X hit");
-			GPIOB->BSRR |= GPIO_BSRR_BR15; // turn on YELLOW LED, need to double check
+			string_To_LCD("Error: 2-5 L X hit  ");
+			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn on YELLOW LED
 			break;
 		case 26: 
-			string_To_LCD("Error: 2-6 R X hit");
-			GPIOB->BSRR |= GPIO_BSRR_BR15; // turn on YELLOW LED, need to double check
+			string_To_LCD("Error: 2-6 R X hit  ");
+			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn on YELLOW LED
 			break;
 		case 27: 
-			string_To_LCD("Error: 2-7 U Z hit");
-			GPIOB->BSRR |= GPIO_BSRR_BR15; // turn on YELLOW LED, need to double check
+			string_To_LCD("Error: 2-7 U Z hit  ");
+			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn on YELLOW LED
 			break;
 		case 28: 
-			string_To_LCD("Error: 2-8 L Z hit");
-			GPIOB->BSRR |= GPIO_BSRR_BR15; // turn on YELLOW LED, need to double check
+			string_To_LCD("Error: 2-8 L Z hit  ");
+			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn on YELLOW LED
 			break;
 		case 31: 
-			string_To_LCD("Error: 3-1 g_code");
-			GPIOB->BSRR |= GPIO_BSRR_BR15; // turn on YELLOW LED, need to double check
+			string_To_LCD("Error: 3-1 g_code   ");
+			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn on YELLOW LED
 			break;
 		case 99: 
-			string_To_LCD("                 ");
-			GPIOB->BSRR |= GPIO_BSRR_BS15; // turn off YELLOW LED, need to double check
-			GPIOC->BSRR |= GPIO_BSRR_BS13; // turn off RED LED, need to double check
+			string_To_LCD("                    ");
+			GPIOB->BSRR |= GPIO_BSRR_BR14; // turn off YELLOW LED
+			GPIOC->BSRR |= GPIO_BSRR_BR13; // turn off RED LED
 			break;
 		default: 
-			string_To_LCD("Error: Unknown");
-			GPIOB->BSRR |= GPIO_BSRR_BR15; // turn on YELLOW LED, need to double check
+			string_To_LCD("Error: Unknown      ");
+			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn on YELLOW LED
 			break;
 	}
 }
