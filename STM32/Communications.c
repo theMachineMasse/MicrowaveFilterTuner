@@ -174,12 +174,18 @@ void checkCommand(char input[30]){
 		commandG0();
 	}
 	
-	else if ((get[0] == 'G'|| get[0] == 'g') && (get[1] == '1')){
+	else if ((get[0] == 'G'|| get[0] == 'g') && (get[1] == '1') && (get[2] == ' ')){
 		commandG1();
 	}
 	
 	else if ((get[0] == 'G'|| get[0] == 'g') && (get[1] == '2') && (get[2] == '8')){
 		commandG28();
+	}
+	
+		
+	else if ((get[0] == 'G'|| get[0] == 'g') && (get[1] == '1') && (get[2] == '6')){
+		sendbyte('q');
+		commandG16();
 	}
 	
 	else if ((get[0] == 'M'|| get[0] == 'm') && (get[1] == '4') && (get[2] == '2')){
@@ -259,6 +265,27 @@ void commandG1(void){
 
 
 /*******************************************
+*	Function: commandG16
+*	Date: February 25, 2020
+*	Purpose: interprets the G16 command to move the machine phi axis at full speed
+*	Parameters: N/A
+*	Return value: N/A
+*******************************************/
+void commandG16(void){
+	  sendbyte('P');
+		for(int i=2; i<30; i++){
+		if(get[i] == ' '){
+		}
+		else if(get[i] == 'P' || get[i] == 'p'){
+			moveP(getNum(i+1));
+			}
+		else{
+		}
+	}
+}
+
+
+/*******************************************
 *	Function: printHex
 *	Date: February 8, 2020
 *	Purpose: converts hex to ascii code and prints to screen
@@ -309,6 +336,7 @@ int getNum(int i){
 	int decimal = 0;
 	int moveAmount = 0;
 	int multiplyFactor = 1;
+	int negative = 1;
 	for(int j = 0; j<6; j++){
 		if(get[j+i] == ' '){ 	//if character is a space the number is over. Exit the loop
 			j = 7;							//exit the for loop
@@ -317,7 +345,11 @@ int getNum(int i){
 		else if(get[j+i] == '\0'){	//if character is a space the number is over. Exit the loop
 			j = 7;										//exit the for loop
 		}
-
+		
+		else if(get[j+1] == '-'){
+			negative = -1;
+		}
+		
 		else{
 			moveNum[j] = get[j+i];
 			length = j;
@@ -351,6 +383,8 @@ int getNum(int i){
 		}
 	}
 	
+	moveAmount = moveAmount*negative;
+	
 	return moveAmount;
 }
 
@@ -364,6 +398,7 @@ int getNum(int i){
 *******************************************/
 void commandG28(void){
 	sendbyte('H');
+	homeMotors();
 }
 
 

@@ -13,18 +13,30 @@
 #include "MotorControlSubSystem.h"
 #include "Communications.h"
 #include "stm32f10x.h"
+#include "VisualDisplaySubSystem.h"
 
 //Globals
 int xPosG = 0;
 int yPosG = 0;
 int zPosG = 0;
-const int stepsPerMM = 400;
+const int stepsPerMM = 100;
 const int rampSize = 1900;
 const int maxSpeed = 4000;
 const int minSpeed = 200;
 const int slowRampSize = 190;
 const int slowMaxSpeed = 400;
 const int slowMinSpeed = 40;
+
+int pDegG = 0;
+//bool encFlag = false;
+int encFlag = 0;
+const int stepsPerDeg = 9;
+const int rampSizeDeg = 1900;
+const int maxSpeedDeg = 4000;
+const int minSpeedDeg = 200;
+const int slowRampSizeDeg = 190;
+const int slowMaxSpeedDeg = 400;
+const int slowMinSpeedDeg = 40;
 
 
 /*******************************************
@@ -37,22 +49,33 @@ const int slowMinSpeed = 40;
 void motorInit(void){	
 	
 	
+	//remap pins
+	RCC->APB2ENR |= RCC_APB2ENR_AFIOEN;
+	AFIO->MAPR |= AFIO_MAPR_SWJ_CFG_JTAGDISABLE;
+	
 	//motor GPIO init
 	GPIOA->CRL |= GPIO_CRL_MODE7 ;
 	GPIOA->CRL &= ~GPIO_CRL_CNF7 ;
-	GPIOA->CRH |= GPIO_CRH_MODE8 | GPIO_CRH_MODE9 | GPIO_CRH_MODE10 | GPIO_CRH_MODE11 | GPIO_CRH_MODE12 | GPIO_CRH_MODE13 | GPIO_CRH_MODE14 | GPIO_CRH_MODE15;
-	GPIOA->CRH &= ~GPIO_CRH_CNF8 & ~GPIO_CRH_CNF9 & ~GPIO_CRH_CNF10 & ~GPIO_CRH_CNF11 & ~GPIO_CRH_CNF12 & ~GPIO_CRH_CNF13 & ~GPIO_CRH_CNF14 & ~GPIO_CRH_CNF15;
+	GPIOA->CRH |= GPIO_CRH_MODE8 | GPIO_CRH_MODE9 | GPIO_CRH_MODE10 | GPIO_CRH_MODE11 | GPIO_CRH_MODE12 | GPIO_CRH_MODE15;
+	GPIOA->CRH &= ~GPIO_CRH_CNF8 & ~GPIO_CRH_CNF9 & ~GPIO_CRH_CNF10 & ~GPIO_CRH_CNF11 & ~GPIO_CRH_CNF12 & ~GPIO_CRH_CNF15;
 	
 	GPIOB->CRL |= GPIO_CRL_MODE6 | GPIO_CRL_MODE7;
-	GPIOB->CRL &= ~GPIO_CRL_MODE6 & ~GPIO_CRL_MODE7;
+	GPIOB->CRL &= ~GPIO_CRL_CNF6 & ~GPIO_CRL_CNF7;
 	GPIOB->CRH |= GPIO_CRH_MODE8;
 	GPIOB->CRH &= ~GPIO_CRH_CNF8;
 	
+	
 	//disable steppers by defualt
 	GPIOA->BSRR |= GPIO_BSRR_BS7;				//use this one 
+	GPIOA->BSRR |= GPIO_BSRR_BS8;
+	GPIOA->BSRR |= GPIO_BSRR_BS9;
 	GPIOA->BSRR |= GPIO_BSRR_BS10;
-	GPIOA->BSRR |= GPIO_BSRR_BS13;
+	GPIOA->BSRR |= GPIO_BSRR_BS11;
+	GPIOA->BSRR |= GPIO_BSRR_BS12;
+	GPIOA->BSRR |= GPIO_BSRR_BS15;
 	GPIOB->BSRR |= GPIO_BSRR_BS6;
+	GPIOB->BSRR |= GPIO_BSRR_BS7;
+	GPIOB->BSRR |= GPIO_BSRR_BS8;
 	
 }
 
@@ -69,6 +92,7 @@ void moveX(int movePosition){
 	sendbyte('X');
 	printHex(movePosition);
 	sendbyte(' ');
+	lcd_Display_Status(5);
 	int moveAmount = movePosition - xPosG;			//amount to move based off desired position minus current position 
 	xPosG = movePosition;												//update the current position
 	
@@ -88,8 +112,9 @@ void moveY(int movePosition){
 	sendbyte('Y');
 	printHex(movePosition);
 	sendbyte(' ');
-	int moveAmount = movePosition - xPosG;			//amount to move based off desired position minus current position 
-	xPosG = movePosition;												//update the current position
+	lcd_Display_Status(6);
+	int moveAmount = movePosition - yPosG;			//amount to move based off desired position minus current position 
+	yPosG = movePosition;												//update the current position
 	
 	moveMotor(2,moveAmount);
 }
@@ -106,8 +131,9 @@ void moveZ(int movePosition){
 	sendbyte('Z');
 	printHex(movePosition);
 	sendbyte(' ');
-	int moveAmount = movePosition - xPosG;			//amount to move based off desired position minus current position 
-	xPosG = movePosition;												//update the current position
+	lcd_Display_Status(7);
+	int moveAmount = movePosition - zPosG;			//amount to move based off desired position minus current position 
+	zPosG = movePosition;												//update the current position
 	
 	moveMotor(3,moveAmount);
 }
@@ -125,6 +151,7 @@ void moveXSlow(int movePosition){
 	sendbyte('S');
 	printHex(movePosition);
 	sendbyte(' ');
+	lcd_Display_Status(5);
 	int moveAmount = movePosition - xPosG;			//amount to move based off desired position minus current position 
 	xPosG = movePosition;												//update the current position
 	
@@ -144,8 +171,9 @@ void moveYSlow(int movePosition){
 	sendbyte('S');
 	printHex(movePosition);
 	sendbyte(' ');
-	int moveAmount = movePosition - xPosG;			//amount to move based off desired position minus current position 
-	xPosG = movePosition;												//update the current position
+	lcd_Display_Status(6);
+	int moveAmount = movePosition - yPosG;			//amount to move based off desired position minus current position 
+	yPosG = movePosition;												//update the current position
 	
 	moveMotorSlow(2,moveAmount);
 }
@@ -163,11 +191,32 @@ void moveZSlow(int movePosition){
 	sendbyte('S');
 	printHex(movePosition);
 	sendbyte(' ');
-	int moveAmount = movePosition - xPosG;			//amount to move based off desired position minus current position 
-	xPosG = movePosition;												//update the current position
+	lcd_Display_Status(7);
+	int moveAmount = movePosition - zPosG;			//amount to move based off desired position minus current position 
+	zPosG = movePosition;												//update the current position
 	
 	moveMotorSlow(3,moveAmount);
 }
+
+
+/*******************************************
+*	Function: moveP
+*	Date: February 25, 2020
+*	Purpose: Rotates the Phi axis the desired amount in degrees
+*	Parameters: int movePosition
+*	Return value: N/A
+*******************************************/
+void moveP(int movePosition){
+	sendbyte(' ');
+	sendbyte('P');
+	printHex(movePosition);
+	sendbyte(' '); 
+	pDegG = movePosition;												//update the current position
+	
+	moveMotorDeg(movePosition);
+	
+}
+
 
 /*******************************************
 *	Function: delayUs
@@ -197,14 +246,14 @@ void moveMotor(int axis, int moveAmount){
 	moveAmount = (moveAmount * stepsPerMM) / 10;				//convert move amount from milimeters to steps
 	
 	if(moveAmount > 0){																	//if move direction is positive set direction outputs high
-		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS14;
+		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS12;
 		else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS7;
-		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
+		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS10;
 	}
 	else{																								//if move direction is negative set direction outputs low
-		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR14;
+		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR12;
 		else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR7;
-		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
+		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR10;
 		moveAmount = moveAmount * -1;											//if move direction is negative take the absolute value
 	}
 	printHex(moveAmount);
@@ -224,12 +273,19 @@ void moveMotor(int axis, int moveAmount){
 			
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
 			delayUs(delayTime);
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
+			//check for limit switch hit
+			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcd_Display_Error(26); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcd_Display_Error(25); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcd_Display_Error(24); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcd_Display_Error(23); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcd_Display_Error(27); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcd_Display_Error(28); break;}
 		}
 		
 		//coast
@@ -238,13 +294,19 @@ void moveMotor(int axis, int moveAmount){
 		for(int i = 0; i < coastSteps; i++){
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
 			delayUs(delayTime);
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
-			
+			//check for limit switch hit
+			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcd_Display_Error(26); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcd_Display_Error(25); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcd_Display_Error(24); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcd_Display_Error(23); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcd_Display_Error(27); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcd_Display_Error(28); break;}
 		}
 		
 		//decel
@@ -254,12 +316,19 @@ void moveMotor(int axis, int moveAmount){
 			
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
 			delayUs(delayTime);
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
+			//check for limit switch hit
+			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcd_Display_Error(26); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcd_Display_Error(25); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcd_Display_Error(24); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcd_Display_Error(23); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcd_Display_Error(27); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcd_Display_Error(28); break;}
 		}
 	}
 	
@@ -277,12 +346,19 @@ void moveMotor(int axis, int moveAmount){
 			
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
 			delayUs(delayTime);
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
+			//check for limit switch hit
+			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcd_Display_Error(26); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcd_Display_Error(25); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcd_Display_Error(24); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcd_Display_Error(23); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcd_Display_Error(27); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcd_Display_Error(28); break;}
 		}
 		
 		
@@ -293,12 +369,19 @@ void moveMotor(int axis, int moveAmount){
 			
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
 			delayUs(delayTime);
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
+			//check for limit switch hit
+			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcd_Display_Error(26); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcd_Display_Error(25); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcd_Display_Error(24); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcd_Display_Error(23); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcd_Display_Error(27); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcd_Display_Error(28); break;}
 		}
 		
 	}
@@ -317,14 +400,14 @@ void moveMotorSlow(int axis, int moveAmount){
 	moveAmount = (moveAmount * stepsPerMM) / 10;				//convert move amount from milimeters to steps
 	
 	if(moveAmount > 0){																	//if move direction is positive set direction outputs high
-		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS14;
+		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS12;
 		else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS7;
-		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
+		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS10;
 	}
 	else{																								//if move direction is negative set direction outputs low
-		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR14;
+		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR12;
 		else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR7;
-		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
+		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR10;
 		moveAmount = moveAmount * -1;											//if move direction is negative take the absolute value
 	}
 	printHex(moveAmount);
@@ -344,12 +427,19 @@ void moveMotorSlow(int axis, int moveAmount){
 			
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
 			delayUs(delayTime);
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
+			//check for limit switch hit
+			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcd_Display_Error(26); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcd_Display_Error(25); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcd_Display_Error(24); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcd_Display_Error(23); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcd_Display_Error(27); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcd_Display_Error(28); break;}
 		}
 		
 		//coast
@@ -358,13 +448,19 @@ void moveMotorSlow(int axis, int moveAmount){
 		for(int i = 0; i < coastSteps; i++){
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
 			delayUs(delayTime);
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
-			
+			//check for limit switch hit
+			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcd_Display_Error(26); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcd_Display_Error(25); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcd_Display_Error(24); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcd_Display_Error(23); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcd_Display_Error(27); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcd_Display_Error(28); break;}
 		}
 		
 		//decel
@@ -374,15 +470,24 @@ void moveMotorSlow(int axis, int moveAmount){
 			
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
 			delayUs(delayTime);
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
+			//check for limit switch hit
+			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcd_Display_Error(26); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcd_Display_Error(25); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcd_Display_Error(24); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcd_Display_Error(23); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcd_Display_Error(27); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcd_Display_Error(28); break;}
 		}
 	}
 	
+	
+
 	else{																									//if short move use accel, decel ramp
 		int speedAccel;
 		int delayTime;
@@ -397,12 +502,19 @@ void moveMotorSlow(int axis, int moveAmount){
 			
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
 			delayUs(delayTime);
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
+			//check for limit switch hit
+			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcd_Display_Error(26); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcd_Display_Error(25); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcd_Display_Error(24); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcd_Display_Error(23); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcd_Display_Error(27); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcd_Display_Error(28); break;}
 		}
 		
 		
@@ -413,12 +525,19 @@ void moveMotorSlow(int axis, int moveAmount){
 			
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
 			delayUs(delayTime);
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR12;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
+			//check for limit switch hit
+			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcd_Display_Error(26); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcd_Display_Error(25); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcd_Display_Error(24); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcd_Display_Error(23); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcd_Display_Error(27); break;}
+			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcd_Display_Error(28); break;}
 		}
 		
 	}
@@ -435,8 +554,6 @@ void moveMotorSlow(int axis, int moveAmount){
 *******************************************/
 void enableMotors(void){
 	GPIOA->BSRR |= GPIO_BSRR_BR7;
-	GPIOA->BSRR |= GPIO_BSRR_BR10;
-	GPIOA->BSRR |= GPIO_BSRR_BR13;
 	GPIOB->BSRR |= GPIO_BSRR_BR6;
 }
 
@@ -449,12 +566,454 @@ void enableMotors(void){
 *******************************************/
 void disableMotors(void){
 	GPIOA->BSRR |= GPIO_BSRR_BS7;
-	GPIOA->BSRR |= GPIO_BSRR_BS10;
-	GPIOA->BSRR |= GPIO_BSRR_BS13;
 	GPIOB->BSRR |= GPIO_BSRR_BS6;
 }
 
 
+/*******************************************
+*	Function: homeMotors
+*	Date: February 29, 2020
+*	Purpose: Home X, Y and Z motors
+*	Parameters: N/A
+*	Return value: N/A
+*******************************************/
+void homeMotors(void){
+	int delayTime;
+	int speedAccel;
+	int homeTimeout = 100000;
+	int timeoutCounter = 0;
+	
+	
+	for(int axis = 1; axis < 4; axis++){
+		timeoutCounter = 0;
+		//accel
+		//move axis towards home
+		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS12;
+		else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS7;
+		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS10;
+		int accelRate = (maxSpeed - minSpeed) / rampSize;
+		for(int i = 0; i < rampSize; i++){
+			speedAccel = minSpeed + accelRate*(i);
+			delayTime = (1000000/speedAccel)/2;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
+			delayUs(delayTime);
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
+			delayUs(delayTime);
+			
+			if(((GPIOA->IDR & GPIO_IDR_IDR1) != GPIO_IDR_IDR1) && ((GPIOA->IDR & GPIO_IDR_IDR3) != GPIO_IDR_IDR3) && ((GPIOA->IDR & GPIO_IDR_IDR5) != GPIO_IDR_IDR5)){
+				break;
+			}
+			}
+		
+		//coast
+		delayTime = (1000000/maxSpeed)/2;
+		while(((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1) || ((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3) || ((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5)){
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
+			delayUs(delayTime);
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
+			delayUs(delayTime);
+			timeoutCounter ++;
+			if(timeoutCounter > homeTimeout){
+				if     (axis == 1) lcd_Display_Error(14);
+				else if(axis == 2) lcd_Display_Error(15);
+				else if(axis == 3) lcd_Display_Error(16);
+				break;
+				}
+		}
+		
+		//slowly move away from the limit switch
+		//move axis away from home
+		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR12;
+		else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR7;
+		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR10;
+		
+		delayTime = (1000000/slowMaxSpeed)/2;
+		for(int i = 0; i < 400; i++){
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
+			delayUs(delayTime);
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
+			delayUs(delayTime);
+		}
+		
+		//slowly move towards limit switch until contact
+		//move axis towards home
+		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS12;
+		else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS7;
+		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS10;
+		delayTime = (1000000/slowMaxSpeed)/2;
+		while(((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1) || ((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3) || ((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5)){
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
+			delayUs(delayTime);
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
+			delayUs(delayTime);
+		}
+		
+		//slowly move away from the limit switch
+		//move axis away from home
+		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR12;
+		else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR7;
+		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR10;
+		
+		delayTime = (1000000/slowMaxSpeed)/2;
+		for(int i = 0; i < 100; i++){
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
+			delayUs(delayTime);
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
+			delayUs(delayTime);
+		}
+}
+}
+
+/*******************************************
+*	Function: moveMotorDeg
+*	Date: February 20, 2020
+*	Purpose: Moves the motor the desired amount in degrees
+*	Parameters: int axis, int movePosition
+*	Return value: N/A
+*******************************************/
+void moveMotorDeg(int moveAmount){
+	sendbyte('v');
+	moveAmount = (moveAmount * stepsPerDeg) / 10;				//convert move amount from degrees to steps
+	
+	if(moveAmount > 0){																	//if move direction is positive set direction outputs high
+		GPIOA->BSRR |= GPIO_BSRR_BS8;
+	}
+	else{																								//if move direction is negative set direction outputs low
+		GPIOA->BSRR |= GPIO_BSRR_BR8;
+		moveAmount = moveAmount * -1;											//if move direction is negative take the absolute value
+	}
+	printHex(moveAmount);
+	sendbyte(' ');
+	sendbyte(' ');
+	
+	
+	if(moveAmount >= rampSizeDeg*2){												//if long move distance use accel, coast, devel ramp
+		int speedAccel;
+		int delayTime;
+		
+		//accel
+		int accelRate = (maxSpeedDeg - minSpeedDeg) / rampSizeDeg;
+		for(int i = 0; i < rampSizeDeg; i++){
+			speedAccel = minSpeedDeg + accelRate*(i);
+			delayTime = (1000000/speedAccel)/2;
+			
+			GPIOA->BSRR |= GPIO_BSRR_BS9;
+			delayUs(delayTime);
+			GPIOA->BSRR |= GPIO_BSRR_BR9;
+			delayUs(delayTime);
+		}
+		
+		//coast
+		int coastSteps = moveAmount - rampSizeDeg*2;
+		delayTime = (1000000/maxSpeedDeg)/2;
+		for(int i = 0; i < coastSteps; i++){
+			GPIOA->BSRR |= GPIO_BSRR_BS9;
+			delayUs(delayTime);
+			GPIOA->BSRR |= GPIO_BSRR_BR9;
+			delayUs(delayTime);
+			
+		}
+		
+		//decel
+		for(int i = 0; i < rampSizeDeg; i++){
+			speedAccel = maxSpeedDeg -  accelRate*(i);
+			delayTime = (1000000/speedAccel)/2;
+			
+			GPIOA->BSRR |= GPIO_BSRR_BS9;
+			delayUs(delayTime);
+			GPIOA->BSRR |= GPIO_BSRR_BR9;
+			delayUs(delayTime);
+		}
+	}
+	
+	else{																									//if short move use accel, decel ramp
+		int speedAccel;
+		int delayTime;
+		int maxSpeedReached;
+		
+		//accel
+		int accelRate = (maxSpeedDeg - minSpeedDeg) / rampSizeDeg;
+		for(int i = 0; i < moveAmount/2; i++){
+			speedAccel = minSpeedDeg + accelRate*(i);
+			maxSpeedReached = speedAccel;
+			delayTime = (1000000/speedAccel)/2;
+			
+			GPIOA->BSRR |= GPIO_BSRR_BS9;
+			delayUs(delayTime);
+			GPIOA->BSRR |= GPIO_BSRR_BR9;
+			delayUs(delayTime);
+		}
+		
+		
+		//decel
+		for(int i = 0; i < moveAmount/2; i++){
+			speedAccel = maxSpeedReached -  accelRate*(i);
+			delayTime = (1000000/speedAccel)/2;
+			
+			GPIOA->BSRR |= GPIO_BSRR_BS9;
+			delayUs(delayTime);
+			GPIOA->BSRR |= GPIO_BSRR_BR9;
+			delayUs(delayTime);
+		}
+	}
+}
+
+/*******************************************
+*	Function: phiHome
+*	Date: February 29, 2020
+*	Purpose: Moves the motor the desired amount in degrees
+*	Parameters: int axis, int movePosition
+*	Return value: N/A
+*******************************************/
+void phiHome(){
+	
+	int moveAmount = 360; 															//move one full rotation
+	int timeoutValue = 324;															//(moveAmount * stepsPerDeg) / 10
+	int timeoutCount = 0;																//timeout counter
+		
+	
+	moveAmount = (moveAmount * stepsPerDeg) / 10;				//convert move amount from degrees to steps
+	
+	if(moveAmount > 0){																	//if move direction is positive set direction outputs high
+		GPIOA->BSRR |= GPIO_BSRR_BS8;
+	}
+	else{																								//if move direction is negative set direction outputs low
+		GPIOA->BSRR |= GPIO_BSRR_BR8;
+		moveAmount = moveAmount * -1;											//if move direction is negative take the absolute value
+	}
+	
+	printHex(moveAmount);
+	sendbyte(' ');
+	sendbyte(' ');
+	
+	lcd_Display_Status(4);															//status: homing phi
+	
+	if(moveAmount >= rampSizeDeg*2){										//if long move distance use accel, coast, devel ramp
+		int speedAccel;
+		int delayTime;
+		
+		//accel
+		int accelRate = (maxSpeedDeg - minSpeedDeg) / rampSizeDeg;
+		for(int i = 0; i < rampSizeDeg; i++){
+			speedAccel = minSpeedDeg + accelRate*(i);
+			delayTime = (1000000/speedAccel)/2;
+			
+			if ((GPIOB->IDR & GPIO_IDR_IDR9) == 0){
+			
+				GPIOA->BSRR |= GPIO_BSRR_BS9;
+				
+				timeoutCount++;
+	
+				if(timeoutCount >= timeoutValue){
+					lcd_Display_Error(13);
+				}
+								
+				delayUs(delayTime);
+				
+				if ((GPIOB->IDR & GPIO_IDR_IDR9) == 0){
+					
+					GPIOA->BSRR |= GPIO_BSRR_BR9;
+					
+					timeoutCount++;
+	
+					if(timeoutCount >= timeoutValue){
+						lcd_Display_Error(13);
+					}
+					
+					delayUs(delayTime);
+				}
+				else{
+					i = rampSizeDeg;
+				}
+			}
+			else{
+				i = rampSizeDeg;
+			}
+		}
+		
+		//coast
+		int coastSteps = moveAmount - rampSizeDeg*2;
+		delayTime = (1000000/maxSpeedDeg)/2;
+		for(int i = 0; i < coastSteps; i++){
+			
+			if ((GPIOB->IDR & GPIO_IDR_IDR9) == 0){
+				
+				GPIOA->BSRR |= GPIO_BSRR_BS9;
+				
+				timeoutCount++;
+	
+				if(timeoutCount >= timeoutValue){
+					lcd_Display_Error(13);
+				}
+					
+				delayUs(delayTime);
+				
+				if ((GPIOB->IDR & GPIO_IDR_IDR9) == 0){
+					
+					GPIOA->BSRR |= GPIO_BSRR_BR9;
+					
+					timeoutCount++;
+	
+					if(timeoutCount >= timeoutValue){
+						lcd_Display_Error(13);
+					}
+					
+					delayUs(delayTime);
+				}
+				else{
+					i = coastSteps;
+				}
+			}
+			else{
+				i = coastSteps;
+			}
+		}
+		
+		//decel
+		for(int i = 0; i < rampSizeDeg; i++){
+			speedAccel = maxSpeedDeg -  accelRate*(i);
+			delayTime = (1000000/speedAccel)/2;
+			
+			if ((GPIOB->IDR & GPIO_IDR_IDR9) == 0){
+				
+				GPIOA->BSRR |= GPIO_BSRR_BS9;
+				
+				timeoutCount++;
+	
+				if(timeoutCount >= timeoutValue){
+					lcd_Display_Error(13);
+				}
+					
+				delayUs(delayTime);
+				
+				if ((GPIOB->IDR & GPIO_IDR_IDR9) == 0){
+				
+					GPIOA->BSRR |= GPIO_BSRR_BR9;
+					
+					timeoutCount++;
+	
+					if(timeoutCount >= timeoutValue){
+						lcd_Display_Error(13);
+					}
+					
+					delayUs(delayTime);
+				}
+				else{
+					i = rampSizeDeg;
+				}
+			}
+			else{
+				i = rampSizeDeg;
+			}
+		}
+	}
+	
+	else{																									//if short move use accel, decel ramp
+		int speedAccel;
+		int delayTime;
+		int maxSpeedReached;
+		
+		//accel
+		int accelRate = (maxSpeedDeg - minSpeedDeg) / rampSizeDeg;
+		for(int i = 0; i < moveAmount/2; i++){
+			speedAccel = minSpeedDeg + accelRate*(i);
+			maxSpeedReached = speedAccel;
+			delayTime = (1000000/speedAccel)/2;
+			
+			if ((GPIOB->IDR & GPIO_IDR_IDR9) == 0){
+				
+				GPIOA->BSRR |= GPIO_BSRR_BS9;
+				
+				timeoutCount++;
+	
+				if(timeoutCount >= timeoutValue){
+					lcd_Display_Error(13);
+				}
+					
+				delayUs(delayTime);
+				
+				if ((GPIOB->IDR & GPIO_IDR_IDR9) == 0){
+					
+					GPIOA->BSRR |= GPIO_BSRR_BR9;
+					timeoutCount++;
+	
+					if(timeoutCount >= timeoutValue){
+						lcd_Display_Error(13);
+					}
+					
+					delayUs(delayTime);
+				}
+				else{
+					i = moveAmount/2;
+				}
+			}
+			else{
+			i = moveAmount/2;
+			}			
+		}
+		
+		//decel
+		for(int i = 0; i < moveAmount/2; i++){
+			speedAccel = maxSpeedReached -  accelRate*(i);
+			delayTime = (1000000/speedAccel)/2;
+			
+			if ((GPIOB->IDR & GPIO_IDR_IDR9) == 0){
+				
+				GPIOA->BSRR |= GPIO_BSRR_BS9;
+				
+				timeoutCount++;
+	
+				if(timeoutCount >= timeoutValue){
+					lcd_Display_Error(13);
+				}
+					
+				delayUs(delayTime);
+				
+				if ((GPIOB->IDR & GPIO_IDR_IDR9) == 0){
+					
+					GPIOA->BSRR |= GPIO_BSRR_BR9;
+					
+					timeoutCount++;
+	
+					if(timeoutCount >= timeoutValue){
+						lcd_Display_Error(13);
+					}
+					
+					delayUs(delayTime);
+				}
+				else{
+					i = moveAmount/2;
+				}
+			}
+			else{
+				i = moveAmount/2;
+			}			
+		}
+	}
+	
+	lcd_Display_Status(2);																//status: ready
+	
+}
 /*
 void delayUs(int uS){
 	TIM3->CR1 |= TIM_CR1_CEN;

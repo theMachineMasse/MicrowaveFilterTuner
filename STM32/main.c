@@ -19,6 +19,8 @@ int main(void) {
 	motorInit();
 	lightsInit();
 	
+	homeMotors();
+	
 	command();
 
 	
