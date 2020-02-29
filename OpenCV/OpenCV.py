@@ -51,6 +51,9 @@ def wide_Angle_Camera(sensitivityVal):
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1944)
     ret, img = cap.read()
     cap.release()
+   # cv2.imshow("test", img)
+    #cv2.waitKey(0)  # close image on pressing any key
+    #cv2.destroyAllWindows()
 
     # No Image Taken #
     if not ret:
@@ -61,7 +64,7 @@ def wide_Angle_Camera(sensitivityVal):
 
     # Open Image #
     # img = cv2.imread('negative_test.jpg')  # no screw testing, comment out if taking picture
-    #img = cv2.imread('opencv_frame_0.png')  # no screw testing, comment out if taking picture
+    # img = cv2.imread('opencv_frame_0.png')  # no screw testing, comment out if taking picture
 
     # Locating of Screws (x, y) #
     output = img.copy()
@@ -130,8 +133,7 @@ def wide_Angle_Camera(sensitivityVal):
         # cv2.imshow('output', output)  # display output with screws identified, needs to be integrated into GUI
 
     # End of Function Clean-Up *
-    cv2.waitKey(0)  # close image on pressing any key
-    cv2.destroyAllWindows()
+
 
 ##############################################
 # Function: click_event()

@@ -12,18 +12,19 @@
 #include "MotorControlSubSystem.h"
 #include "stm32f10x.h"
 #include "VisualIdentificationSubSystem.h"
+#include "VisualDisplaySubSystem.h"
 
 int main(void) {
 	clockInit();
 	serial_open();
 	motorInit();
 	lightsInit();
-	
-	homeMotors();
-	
+	vds_Init();
+
+
+
 	command();
 
 	
 	return 0;
 }
-
