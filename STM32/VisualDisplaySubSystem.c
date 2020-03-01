@@ -144,7 +144,7 @@ void lcd_Display_Status (int statusCode) {
 			GPIOB->BSRR |= GPIO_BSRR_BS15; // turn on GREEN LED
 			break;
 		case 3: 
-			string_To_LCD("Status: Homing X,Y  ");
+			string_To_LCD("Status: Homing X,Y,Z");
 			GPIOB->BSRR |= GPIO_BSRR_BR15; // turn off GREEN LED
 			break;
 		case 4: 
@@ -206,6 +206,10 @@ void lcd_Display_Error (int errorCode) {
 			break;
 		case 15: 
 			string_To_LCD("Error: 1-5 Y home   ");
+			GPIOC->BSRR |= GPIO_BSRR_BS13; // turn on RED LED
+			break;
+		case 16: 
+			string_To_LCD("Error: 1-6 Z home   ");
 			GPIOC->BSRR |= GPIO_BSRR_BS13; // turn on RED LED
 			break;
 		case 21: 
