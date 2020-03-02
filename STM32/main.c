@@ -20,8 +20,7 @@ int main(void) {
 	motorInit();
 	lightsInit();
 	vds_Init();
-
-
+	
 
 	command();
 

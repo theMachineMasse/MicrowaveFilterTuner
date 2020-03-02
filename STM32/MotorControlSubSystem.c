@@ -81,6 +81,22 @@ void motorInit(void){
 
 
 /*******************************************
+*	Function: encoderInit
+*	Date: February 25, 2020
+*	Purpose: Initializes necessary encoder GPIO pins
+*	Parameters: N/A
+*	Return value: N/A
+*******************************************/
+
+void encoderInit(void){	
+	
+	// encoder GPIO init
+	GPIOB->CRH |= GPIO_CRH_CNF8_0;
+	GPIOB->CRH &= ~GPIO_CRH_MODE8 & ~GPIO_CRH_CNF8_1;  
+	
+}
+
+/*******************************************
 *	Function: moveX
 *	Date: February 20, 2020
 *	Purpose: Moves the X axis the desired amount
@@ -553,8 +569,10 @@ void moveMotorSlow(int axis, int moveAmount){
 *	Return value: N/A
 *******************************************/
 void enableMotors(void){
-	GPIOA->BSRR |= GPIO_BSRR_BR7;
 	GPIOB->BSRR |= GPIO_BSRR_BR6;
+	GPIOA->BSRR |= GPIO_BSRR_BR7;
+	GPIOA->BSRR |= GPIO_BSRR_BR10;
+	GPIOA->BSRR |= GPIO_BSRR_BR13;
 }
 
 /*******************************************
@@ -565,8 +583,10 @@ void enableMotors(void){
 *	Return value: N/A
 *******************************************/
 void disableMotors(void){
-	GPIOA->BSRR |= GPIO_BSRR_BS7;
 	GPIOB->BSRR |= GPIO_BSRR_BS6;
+	GPIOA->BSRR |= GPIO_BSRR_BS7;
+	GPIOA->BSRR |= GPIO_BSRR_BS10;
+	GPIOA->BSRR |= GPIO_BSRR_BS13;
 }
 
 
@@ -580,17 +600,17 @@ void disableMotors(void){
 void homeMotors(void){
 	int delayTime;
 	int speedAccel;
-	int homeTimeout = 100000;
+	int homeTimeout = 1000000;
 	int timeoutCounter = 0;
 	
-	
+
 	for(int axis = 1; axis < 4; axis++){
 		timeoutCounter = 0;
 		//accel
 		//move axis towards home
-		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS12;
-		else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS7;
-		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS10;
+		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR12;
+		else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR7;
+		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR10;
 		int accelRate = (maxSpeed - minSpeed) / rampSize;
 		for(int i = 0; i < rampSize; i++){
 			speedAccel = minSpeed + accelRate*(i);
@@ -599,26 +619,27 @@ void homeMotors(void){
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
 			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
 			delayUs(delayTime);
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
-			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
 			
-			if(((GPIOA->IDR & GPIO_IDR_IDR1) != GPIO_IDR_IDR1) && ((GPIOA->IDR & GPIO_IDR_IDR3) != GPIO_IDR_IDR3) && ((GPIOA->IDR & GPIO_IDR_IDR5) != GPIO_IDR_IDR5)){
+			//if(((GPIOA->IDR & GPIO_IDR_IDR1) != GPIO_IDR_IDR1) && ((GPIOA->IDR & GPIO_IDR_IDR3) != GPIO_IDR_IDR3) && ((GPIOA->IDR & GPIO_IDR_IDR5) != GPIO_IDR_IDR5)){
+			if(((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1) || ((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3) || ((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5)){
 				break;
 			}
 			}
 		
 		//coast
 		delayTime = (1000000/maxSpeed)/2;
-		while(((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1) || ((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3) || ((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5)){
+		while(((GPIOA->IDR & GPIO_IDR_IDR1) != GPIO_IDR_IDR1) && ((GPIOA->IDR & GPIO_IDR_IDR3) != GPIO_IDR_IDR3) && ((GPIOA->IDR & GPIO_IDR_IDR5) != GPIO_IDR_IDR5)){
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
 			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
 			delayUs(delayTime);
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
-			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
 			timeoutCounter ++;
 			if(timeoutCounter > homeTimeout){
@@ -631,56 +652,59 @@ void homeMotors(void){
 		
 		//slowly move away from the limit switch
 		//move axis away from home
-		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR12;
-		else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR7;
-		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR10;
+		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS12;
+		else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS7;
+		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS10;
 		
 		delayTime = (1000000/slowMaxSpeed)/2;
-		for(int i = 0; i < 400; i++){
+		for(int i = 0; i < 500; i++){
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
 			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
 			delayUs(delayTime);
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
-			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
 		}
 		
 		//slowly move towards limit switch until contact
 		//move axis towards home
-		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS12;
-		else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS7;
-		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS10;
+		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR12;
+		else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR7;
+		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR10;
 		delayTime = (1000000/slowMaxSpeed)/2;
-		while(((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1) || ((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3) || ((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5)){
+		while(((GPIOA->IDR & GPIO_IDR_IDR1) != GPIO_IDR_IDR1) && ((GPIOA->IDR & GPIO_IDR_IDR3) != GPIO_IDR_IDR3) && ((GPIOA->IDR & GPIO_IDR_IDR5) != GPIO_IDR_IDR5)){
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
 			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
 			delayUs(delayTime);
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
-			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
 		}
 		
 		//slowly move away from the limit switch
 		//move axis away from home
-		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR12;
-		else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR7;
-		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR10;
+		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS12;
+		else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS7;
+		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS10;
 		
 		delayTime = (1000000/slowMaxSpeed)/2;
-		for(int i = 0; i < 100; i++){
+		for(int i = 0; i < 250; i++){
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
 			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
 			delayUs(delayTime);
-			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
-			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
-			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BS11;
+			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR15;
+			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR8;
+			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
 		}
+		if     (axis == 1) xPosG = 0;
+		else if(axis == 2) yPosG = 0;
+		else if(axis == 3) zPosG = 0;
 }
 }
 
