@@ -13,5 +13,5 @@ void disableMotors(void);
 void homeMotors(void);
 void phiHome(void);
 void moveMotorDeg(int);
-//void TIM3_IRQHandler(void);
+void nonRecoverableError(void);
 void delayUs(int uS);
