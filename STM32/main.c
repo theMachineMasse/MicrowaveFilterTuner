@@ -3,7 +3,7 @@
 * File: main.c
 *	Date: January 27, 2020
 *	Programmer(s): Braden Massé, Matthew Rostad
-* Sub-System: N/A
+* Sub-System: N/A	
 *	Description: Main file
 * Version: 1.0
 *	
@@ -20,8 +20,9 @@ int main(void) {
 	motorInit();
 	lightsInit();
 	vds_Init();
-	
-
+	//enableMotors();
+	//phiHome();
+	//moveP(50);
 	command();
 
 	

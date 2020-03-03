@@ -279,6 +279,9 @@ void commandG16(void){
 		else if(get[i] == 'P' || get[i] == 'p'){
 			moveP(getNum(i+1));
 			}
+		else if(get[i] == 'N' || get[i] == 'n'){
+			moveN(getNum(i+1));
+			}
 		else{
 		}
 	}
@@ -346,10 +349,6 @@ int getNum(int i){
 			j = 7;										//exit the for loop
 		}
 		
-		else if(get[j+1] == '-'){
-			negative = -1;
-		}
-		
 		else{
 			moveNum[j] = get[j+i];
 			length = j;
@@ -383,7 +382,9 @@ int getNum(int i){
 		}
 	}
 	
+	printHex(moveAmount);
 	moveAmount = moveAmount*negative;
+	printHex(moveAmount);
 	
 	return moveAmount;
 }

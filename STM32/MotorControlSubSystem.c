@@ -24,7 +24,7 @@ const int rampSize = 1900;
 const int maxSpeed = 4000;
 const int minSpeed = 200;
 const int slowRampSize = 190;
-const int slowMaxSpeed = 400;
+const int slowMaxSpeed = 800;
 const int slowMinSpeed = 40;
 
 int pDegG = 0;
@@ -33,7 +33,7 @@ int encFlag = 0;
 const int stepsPerDeg = 9;
 const int rampSizeDeg = 1900;
 const int maxSpeedDeg = 4000;
-const int minSpeedDeg = 200;
+const int minSpeedDeg = 2000;
 const int slowRampSizeDeg = 190;
 const int slowMaxSpeedDeg = 400;
 const int slowMinSpeedDeg = 40;
@@ -227,6 +227,26 @@ void moveP(int movePosition){
 	sendbyte('P');
 	printHex(movePosition);
 	sendbyte(' '); 
+	pDegG = movePosition;												//update the current position
+	
+	moveMotorDeg(movePosition);
+	
+}
+
+
+/*******************************************
+*	Function: moveP
+*	Date: February 25, 2020
+*	Purpose: Rotates the Phi axis the desired amount in degrees
+*	Parameters: int movePosition
+*	Return value: N/A
+*******************************************/
+void moveN(int movePosition){
+	sendbyte(' ');
+	sendbyte('P');
+	printHex(movePosition);
+	sendbyte(' '); 
+	movePosition = movePosition * -1;
 	pDegG = movePosition;												//update the current position
 	
 	moveMotorDeg(movePosition);
@@ -604,7 +624,7 @@ void homeMotors(void){
 	int timeoutCounter = 0;
 	
 
-	for(int axis = 1; axis < 4; axis++){
+	for(int axis = 4; axis < 1; axis--){
 		timeoutCounter = 0;
 		//accel
 		//move axis towards home
@@ -717,15 +737,18 @@ void homeMotors(void){
 *******************************************/
 void moveMotorDeg(int moveAmount){
 	sendbyte('v');
-	moveAmount = (moveAmount * stepsPerDeg) / 10;				//convert move amount from degrees to steps
 	
 	if(moveAmount > 0){																	//if move direction is positive set direction outputs high
-		GPIOA->BSRR |= GPIO_BSRR_BS8;
+		GPIOA->BSRR |= GPIO_BSRR_BR8;
 	}
 	else{																								//if move direction is negative set direction outputs low
-		GPIOA->BSRR |= GPIO_BSRR_BR8;
+		GPIOA->BSRR |= GPIO_BSRR_BS8;
 		moveAmount = moveAmount * -1;											//if move direction is negative take the absolute value
 	}
+	
+	moveAmount = (moveAmount * stepsPerDeg) / 10;				//convert move amount from degrees to steps
+	
+
 	printHex(moveAmount);
 	sendbyte(' ');
 	sendbyte(' ');
@@ -812,11 +835,9 @@ void moveMotorDeg(int moveAmount){
 void phiHome(){
 	
 	int moveAmount = 360; 															//move one full rotation
-	int timeoutValue = 324;															//(moveAmount * stepsPerDeg) / 10
+	int timeoutValue = 3240;															//(moveAmount * stepsPerDeg) / 10
 	int timeoutCount = 0;																//timeout counter
 		
-	
-	moveAmount = (moveAmount * stepsPerDeg) / 10;				//convert move amount from degrees to steps
 	
 	if(moveAmount > 0){																	//if move direction is positive set direction outputs high
 		GPIOA->BSRR |= GPIO_BSRR_BS8;
@@ -826,13 +847,17 @@ void phiHome(){
 		moveAmount = moveAmount * -1;											//if move direction is negative take the absolute value
 	}
 	
+	moveAmount = (moveAmount * stepsPerDeg) / 10;				//convert move amount from degrees to steps
+	
+
+	
 	printHex(moveAmount);
 	sendbyte(' ');
 	sendbyte(' ');
 	
 	lcd_Display_Status(4);															//status: homing phi
 	
-	if(moveAmount >= rampSizeDeg*2){										//if long move distance use accel, coast, devel ramp
+	if(moveAmount <= rampSizeDeg*2){										//if long move distance use accel, coast, devel ramp
 		int speedAccel;
 		int delayTime;
 		
