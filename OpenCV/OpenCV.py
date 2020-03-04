@@ -4,7 +4,7 @@
 # Date: January 18, 2020
 # Programmer(s): Braden Massé
 # Sub-Systems: Visual Identification Sub-System
-# Version: 1.10
+# Version: 1.13
 ##############################################
 
 # Import Libraries #
@@ -23,26 +23,29 @@ g_screwsDetected = 0  # flag that is set if any screws detected
 # Programmer(s): Braden Massé
 # Date: January 18,2020
 # Purpose: To identify all tuning screws and determine X, Y, and Z position
-# Arguments: sensitivityVal, cropArea
+# Arguments: sensitivityVal
 # Outputs: N/A
 ##############################################
 def wide_Angle_Camera(sensitivityVal):
+
     # Globals #
     global g_minDepth
     global g_screwsDetected
 
     # Variable Initializations #
     convertFactor = 38  # number of pixels per cm, needs tuning
+    xOffset = 2  # number of cms that the camera sees in the x direction but isn't inside the work space, needs tuning
+    yOffset = 3  # number of cms that the camera sees in the y direction but isn't inside the work space, needs tuning
     dp = 1
     minDist = 100  # allowable distance between screws
     upCannyThres = sensitivityVal * 2  # updated based on passed parameter
     centerThres = sensitivityVal  # updated based on passed parameter
-    maxR = 40  # max radius of screw, update based on GUI selection
-    minR = 30  # min radius of screw, update based on GUI selection
+    maxR = 40  # max radius of screw, update based on GUI selection, needs to depend on screw selected
+    minR = 30  # min radius of screw, update based on GUI selection, needs to depend on screw selected
     screwCount = 0  # counter for number of screws detected
-    measuredDepth = 210  # units are mm, used for calibrating depth
-    screwDiameter = 10  # units are mm, used for calibrating depth
-    referenceRadius = 38  # units are pixels, used for calibrating depth
+    measuredDepth = 210  # units are mm, used for calibrating depth, needs tuning
+    screwDiameter = 10  # units are mm, used for calibrating depth, needs to depend on screw selected
+    referenceRadius = 38  # units are pixels, used for calibrating depth, needs to depend on screw selected, needs tuning
     assignedNum = -1  # number assigned to each screw based on user input later
 
     # Take Picture With Wide Angle Camera #
@@ -51,9 +54,9 @@ def wide_Angle_Camera(sensitivityVal):
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1944)
     ret, img = cap.read()
     cap.release()
-   # cv2.imshow("test", img)
-    #cv2.waitKey(0)  # close image on pressing any key
-    #cv2.destroyAllWindows()
+    # cv2.imshow("test", img)
+    # cv2.waitKey(0)  # close image on pressing any key
+    # cv2.destroyAllWindows()
 
     # No Image Taken #
     if not ret:
@@ -62,7 +65,7 @@ def wide_Angle_Camera(sensitivityVal):
         screwLocationsGList.append(screwLocations)
         print("No image taken")  # testing, will need message to appear on GUI
 
-    # Open Image #
+    # Open Image (OBSOLETE) #
     # img = cv2.imread('negative_test.jpg')  # no screw testing, comment out if taking picture
     # img = cv2.imread('opencv_frame_0.png')  # no screw testing, comment out if taking picture
 
@@ -115,7 +118,7 @@ def wide_Angle_Camera(sensitivityVal):
 
             # Indicate Detected Screws on Output Image #
             cv2.circle(output, (x, y), r, (0, 255, 0), 3)  # draw circles on detected screws
-            print("Circle ", screwCount, "at", (x / convertFactor), "cm,", (y / convertFactor), "cm with radius of", r, "pixels and a depth of", calculatedDepth, "mm")  # testing
+            print("Circle ", screwCount, "at", ((x / convertFactor) - xOffset), "cm,", ((y / convertFactor) - yOffset), "cm with radius of", r, "pixels and a depth of", calculatedDepth, "mm")  # testing
             cv2.circle(output, (x, y), 2, (0, 255, 0), 3)  # draw dot on center of detected screws
             screwCount = screwCount + 1
 
@@ -144,9 +147,13 @@ def wide_Angle_Camera(sensitivityVal):
 # Outputs: N/A
 ##############################################
 def click_event(event, x, y, flags, param):
+
+    # Globals #
     global g_screwNum
+
+    # Variable Initializations #
     font = cv2.FONT_HERSHEY_COMPLEX
-    convertFactor = 38  # number of pixels per cm, needs tuning
+    convertFactor = 38  # number of pixels per cm, needs to depend on screw selected, needs tuning
     fontScale = 0.9
     fontThickness = 2
 
@@ -192,6 +199,7 @@ def click_event(event, x, y, flags, param):
 # Outputs: N/A
 ##############################################
 def screw_Assignment():
+
     # Globals #
     global screwLocationsGList
     global g_screwNum
@@ -224,7 +232,7 @@ def screw_Assignment():
     print(screwLocationsGList)  # testing
     print("New List Length is", len(screwLocationsGList))  # testing
 
-    temp = cv2.imread('temp.png')  # testing
+    temp = cv2.imread('temp.png')
     cv2.imwrite('output.png', temp)  # use for displaying image on GUI
     cv2.imshow('Screw Assignment', temp)  # testing
 
@@ -233,8 +241,8 @@ def screw_Assignment():
     cv2.destroyAllWindows()
 
 
+# To Be Incorporated Into The GUI #
 wide_Angle_Camera(25)  # testing
 
-# To Be Incorporated Into The GUI #
 if g_screwsDetected != 0:
     screw_Assignment()  # testing
