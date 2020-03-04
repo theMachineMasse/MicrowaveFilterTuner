@@ -108,7 +108,7 @@ void moveX(int movePosition){
 	sendbyte('X');
 	printHex(movePosition);
 	sendbyte(' ');
-	lcd_Display_Status(5);
+	lcdDisplayStatus(5);
 	int moveAmount = movePosition - xPosG;			//amount to move based off desired position minus current position 
 	xPosG = movePosition;												//update the current position
 	
@@ -128,7 +128,7 @@ void moveY(int movePosition){
 	sendbyte('Y');
 	printHex(movePosition);
 	sendbyte(' ');
-	lcd_Display_Status(6);
+	lcdDisplayStatus(6);
 	int moveAmount = movePosition - yPosG;			//amount to move based off desired position minus current position 
 	yPosG = movePosition;												//update the current position
 	
@@ -147,7 +147,7 @@ void moveZ(int movePosition){
 	sendbyte('Z');
 	printHex(movePosition);
 	sendbyte(' ');
-	lcd_Display_Status(7);
+	lcdDisplayStatus(7);
 	int moveAmount = movePosition - zPosG;			//amount to move based off desired position minus current position 
 	zPosG = movePosition;												//update the current position
 	
@@ -167,7 +167,7 @@ void moveXSlow(int movePosition){
 	sendbyte('S');
 	printHex(movePosition);
 	sendbyte(' ');
-	lcd_Display_Status(5);
+	lcdDisplayStatus(5);
 	int moveAmount = movePosition - xPosG;			//amount to move based off desired position minus current position 
 	xPosG = movePosition;												//update the current position
 	
@@ -187,7 +187,7 @@ void moveYSlow(int movePosition){
 	sendbyte('S');
 	printHex(movePosition);
 	sendbyte(' ');
-	lcd_Display_Status(6);
+	lcdDisplayStatus(6);
 	int moveAmount = movePosition - yPosG;			//amount to move based off desired position minus current position 
 	yPosG = movePosition;												//update the current position
 	
@@ -207,7 +207,7 @@ void moveZSlow(int movePosition){
 	sendbyte('S');
 	printHex(movePosition);
 	sendbyte(' ');
-	lcd_Display_Status(7);
+	lcdDisplayStatus(7);
 	int moveAmount = movePosition - zPosG;			//amount to move based off desired position minus current position 
 	zPosG = movePosition;												//update the current position
 	
@@ -316,12 +316,12 @@ void moveMotor(int axis, int moveAmount){
 			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
 			//check for limit switch hit
-			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcd_Display_Error(26); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcd_Display_Error(25); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcd_Display_Error(24); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcd_Display_Error(23); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcd_Display_Error(27); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcd_Display_Error(28); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcdDisplayError(26); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcdDisplayError(25); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcdDisplayError(24); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcdDisplayError(23); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcdDisplayError(27); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcdDisplayError(28); nonRecoverableError();}
 		}
 		
 		//coast
@@ -337,12 +337,12 @@ void moveMotor(int axis, int moveAmount){
 			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
 			//check for limit switch hit
-			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcd_Display_Error(26); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcd_Display_Error(25); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcd_Display_Error(24); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcd_Display_Error(23); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcd_Display_Error(27); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcd_Display_Error(28); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcdDisplayError(26); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcdDisplayError(25); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcdDisplayError(24); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcdDisplayError(23); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcdDisplayError(27); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcdDisplayError(28); nonRecoverableError();}
 		}
 		
 		//decel
@@ -359,12 +359,12 @@ void moveMotor(int axis, int moveAmount){
 			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
 			//check for limit switch hit
-			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcd_Display_Error(26); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcd_Display_Error(25); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcd_Display_Error(24); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcd_Display_Error(23); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcd_Display_Error(27); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcd_Display_Error(28); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcdDisplayError(26); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcdDisplayError(25); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcdDisplayError(24); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcdDisplayError(23); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcdDisplayError(27); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcdDisplayError(28); nonRecoverableError();}
 		}
 	}
 	
@@ -389,12 +389,12 @@ void moveMotor(int axis, int moveAmount){
 			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
 			//check for limit switch hit
-			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcd_Display_Error(26); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcd_Display_Error(25); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcd_Display_Error(24); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcd_Display_Error(23); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcd_Display_Error(27); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcd_Display_Error(28); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcdDisplayError(26); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcdDisplayError(25); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcdDisplayError(24); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcdDisplayError(23); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcdDisplayError(27); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcdDisplayError(28); nonRecoverableError();}
 		}
 		
 		
@@ -412,12 +412,12 @@ void moveMotor(int axis, int moveAmount){
 			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
 			//check for limit switch hit
-			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcd_Display_Error(26); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcd_Display_Error(25); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcd_Display_Error(24); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcd_Display_Error(23); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcd_Display_Error(27); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcd_Display_Error(28); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcdDisplayError(26); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcdDisplayError(25); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcdDisplayError(24); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcdDisplayError(23); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcdDisplayError(27); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcdDisplayError(28); nonRecoverableError();}
 		}
 		
 	}
@@ -470,12 +470,12 @@ void moveMotorSlow(int axis, int moveAmount){
 			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
 			//check for limit switch hit
-			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcd_Display_Error(26); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcd_Display_Error(25); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcd_Display_Error(24); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcd_Display_Error(23); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcd_Display_Error(27); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcd_Display_Error(28); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcdDisplayError(26); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcdDisplayError(25); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcdDisplayError(24); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcdDisplayError(23); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcdDisplayError(27); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcdDisplayError(28); nonRecoverableError();}
 		}
 		
 		//coast
@@ -491,12 +491,12 @@ void moveMotorSlow(int axis, int moveAmount){
 			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
 			//check for limit switch hit
-			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcd_Display_Error(26); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcd_Display_Error(25); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcd_Display_Error(24); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcd_Display_Error(23); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcd_Display_Error(27); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcd_Display_Error(28); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcdDisplayError(26); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcdDisplayError(25); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcdDisplayError(24); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcdDisplayError(23); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcdDisplayError(27); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcdDisplayError(28); nonRecoverableError();}
 		}
 		
 		//decel
@@ -513,12 +513,12 @@ void moveMotorSlow(int axis, int moveAmount){
 			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
 			//check for limit switch hit
-			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcd_Display_Error(26); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcd_Display_Error(25); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcd_Display_Error(24); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcd_Display_Error(23); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcd_Display_Error(27); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcd_Display_Error(28); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcdDisplayError(26); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcdDisplayError(25); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcdDisplayError(24); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcdDisplayError(23); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcdDisplayError(27); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcdDisplayError(28); nonRecoverableError();}
 		}
 	}
 	
@@ -545,12 +545,12 @@ void moveMotorSlow(int axis, int moveAmount){
 			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
 			//check for limit switch hit
-			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcd_Display_Error(26); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcd_Display_Error(25); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcd_Display_Error(24); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcd_Display_Error(23); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcd_Display_Error(27); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcd_Display_Error(28); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcdDisplayError(26); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcdDisplayError(25); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcdDisplayError(24); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcdDisplayError(23); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcdDisplayError(27); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcdDisplayError(28); nonRecoverableError();}
 		}
 		
 		
@@ -568,12 +568,12 @@ void moveMotorSlow(int axis, int moveAmount){
 			else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
 			//check for limit switch hit
-			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcd_Display_Error(26); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcd_Display_Error(25); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcd_Display_Error(24); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcd_Display_Error(23); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcd_Display_Error(27); nonRecoverableError();}
-			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcd_Display_Error(28); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR1) == GPIO_IDR_IDR1){ lcdDisplayError(26); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR2) == GPIO_IDR_IDR2){ lcdDisplayError(25); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR3) == GPIO_IDR_IDR3){ lcdDisplayError(24); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR4) == GPIO_IDR_IDR4){ lcdDisplayError(23); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR5) == GPIO_IDR_IDR5){ lcdDisplayError(27); nonRecoverableError();}
+			if((GPIOA->IDR & GPIO_IDR_IDR6) == GPIO_IDR_IDR6){ lcdDisplayError(28); nonRecoverableError();}
 		}
 		
 	}
@@ -663,9 +663,9 @@ void homeMotors(void){
 			delayUs(delayTime);
 			timeoutCounter ++;
 			if(timeoutCounter > homeTimeout){
-				if     (axis == 1) lcd_Display_Error(14);
-				else if(axis == 2) lcd_Display_Error(15);
-				else if(axis == 3) lcd_Display_Error(16);
+				if     (axis == 1) lcdDisplayError(14);
+				else if(axis == 2) lcdDisplayError(15);
+				else if(axis == 3) lcdDisplayError(16);
 				break;
 				}
 		}
@@ -855,7 +855,7 @@ void phiHome(){
 	sendbyte(' ');
 	sendbyte(' ');
 	
-	lcd_Display_Status(4);															//status: homing phi
+	lcdDisplayStatus(4);															//status: homing phi
 	
 	if(moveAmount <= rampSizeDeg*2){										//if long move distance use accel, coast, devel ramp
 		int speedAccel;
@@ -874,7 +874,7 @@ void phiHome(){
 				timeoutCount++;
 	
 				if(timeoutCount >= timeoutValue){
-					lcd_Display_Error(13);
+					lcdDisplayError(13);
 				}
 								
 				delayUs(delayTime);
@@ -886,7 +886,7 @@ void phiHome(){
 					timeoutCount++;
 	
 					if(timeoutCount >= timeoutValue){
-						lcd_Display_Error(13);
+						lcdDisplayError(13);
 					}
 					
 					delayUs(delayTime);
@@ -912,7 +912,7 @@ void phiHome(){
 				timeoutCount++;
 	
 				if(timeoutCount >= timeoutValue){
-					lcd_Display_Error(13);
+					lcdDisplayError(13);
 				}
 					
 				delayUs(delayTime);
@@ -924,7 +924,7 @@ void phiHome(){
 					timeoutCount++;
 	
 					if(timeoutCount >= timeoutValue){
-						lcd_Display_Error(13);
+						lcdDisplayError(13);
 					}
 					
 					delayUs(delayTime);
@@ -950,7 +950,7 @@ void phiHome(){
 				timeoutCount++;
 	
 				if(timeoutCount >= timeoutValue){
-					lcd_Display_Error(13);
+					lcdDisplayError(13);
 				}
 					
 				delayUs(delayTime);
@@ -962,7 +962,7 @@ void phiHome(){
 					timeoutCount++;
 	
 					if(timeoutCount >= timeoutValue){
-						lcd_Display_Error(13);
+						lcdDisplayError(13);
 					}
 					
 					delayUs(delayTime);
@@ -996,7 +996,7 @@ void phiHome(){
 				timeoutCount++;
 	
 				if(timeoutCount >= timeoutValue){
-					lcd_Display_Error(13);
+					lcdDisplayError(13);
 				}
 					
 				delayUs(delayTime);
@@ -1007,7 +1007,7 @@ void phiHome(){
 					timeoutCount++;
 	
 					if(timeoutCount >= timeoutValue){
-						lcd_Display_Error(13);
+						lcdDisplayError(13);
 					}
 					
 					delayUs(delayTime);
@@ -1033,7 +1033,7 @@ void phiHome(){
 				timeoutCount++;
 	
 				if(timeoutCount >= timeoutValue){
-					lcd_Display_Error(13);
+					lcdDisplayError(13);
 				}
 					
 				delayUs(delayTime);
@@ -1045,7 +1045,7 @@ void phiHome(){
 					timeoutCount++;
 	
 					if(timeoutCount >= timeoutValue){
-						lcd_Display_Error(13);
+						lcdDisplayError(13);
 					}
 					
 					delayUs(delayTime);
@@ -1060,7 +1060,7 @@ void phiHome(){
 		}
 	}
 	
-	lcd_Display_Status(2);																//status: ready
+	lcdDisplayStatus(2);																//status: ready
 	
 }
 
