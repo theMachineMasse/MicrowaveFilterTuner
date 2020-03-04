@@ -19,14 +19,14 @@ g_screwNum = 0  # counter for screw assignment
 g_screwsDetected = 0  # flag that is set if any screws detected
 
 ##############################################
-# Function: wide_Angle_Camera()
+# Function: wideAngleCamera()
 # Programmer(s): Braden Massé
 # Date: January 18,2020
 # Purpose: To identify all tuning screws and determine X, Y, and Z position
 # Arguments: sensitivityVal
 # Outputs: N/A
 ##############################################
-def wide_Angle_Camera(sensitivityVal):
+def wideAngleCamera(sensitivityVal):
 
     # Globals #
     global g_minDepth
@@ -139,14 +139,14 @@ def wide_Angle_Camera(sensitivityVal):
 
 
 ##############################################
-# Function: click_event()
+# Function: clickEvent()
 # Programmer(s): Braden Massé
 # Date: February 5,2020
 # Purpose: Register user clicks and map them to the corresponding screws
 # Arguments: N/A
 # Outputs: N/A
 ##############################################
-def click_event(event, x, y, flags, param):
+def clickEvent(event, x, y, flags, param):
 
     # Globals #
     global g_screwNum
@@ -191,14 +191,14 @@ def click_event(event, x, y, flags, param):
     # print(screwLocationsGList)  # testing
 
 ##############################################
-# Function: screw_Assignment()
+# Function: screwAssignment()
 # Programmer(s): Braden Massé
 # Date: February 5,2020
 # Purpose: Get user to assign appropriate numbers to each detected screw
 # Arguments: N/A
 # Outputs: N/A
 ##############################################
-def screw_Assignment():
+def screwAssignment():
 
     # Globals #
     global screwLocationsGList
@@ -212,7 +212,7 @@ def screw_Assignment():
     cv2.imshow('Screw Assignment', img)
 
     # Mouse Event Function Call #
-    cv2.setMouseCallback('Screw Assignment', click_event)
+    cv2.setMouseCallback('Screw Assignment', clickEvent)
 
     # Close Window If 'Enter' Pressed #
     while 1:
@@ -242,7 +242,7 @@ def screw_Assignment():
 
 
 # To Be Incorporated Into The GUI #
-wide_Angle_Camera(25)  # testing
+wideAngleCamera(25)  # testing
 
 if g_screwsDetected != 0:
-    screw_Assignment()  # testing
+    screwAssignment()  # testing
