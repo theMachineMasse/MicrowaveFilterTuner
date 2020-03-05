@@ -19,7 +19,7 @@ int main(void) {
 	serial_open();
 	motorInit();
 	lightsInit();
-	vds_Init();
+	vdsInit();
 	//enableMotors();
 	//phiHome();
 	//moveP(50);

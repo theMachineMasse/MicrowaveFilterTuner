@@ -33,10 +33,10 @@
 
 
 /* FUNCTIONS */
-void vds_Init(void);
-void data_To_LCD (uint8_t data);
-void command_To_LCD (uint8_t data);
-void string_To_LCD (char * message);
-void lcd_Display_Status (int statusCode);
-void lcd_Display_Error (int errorCode);
+void vdsInit(void);
+void dataToLCD (uint8_t data);
+void commandToLCD (uint8_t data);
+void stringToLCD (char * message);
+void lcdDisplayStatus (int statusCode);
+void lcdDisplayError (int errorCode);
 void delay(uint32_t count);
