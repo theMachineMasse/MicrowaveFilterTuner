@@ -40,7 +40,7 @@ def wide_Angle_Camera(sensitivityVal):
     screwCount = 0
     measuredDepth = 210  # units are mm
     screwDiameter = 10  # units are mm
-    referenceDiameter = 38  # units are pixels
+    referenceRadius = 38  # units are pixels
 
     # Take Picture With Wide Angle Camera #
     # cap = cv2.VideoCapture(wideCamPort);
@@ -57,7 +57,7 @@ def wide_Angle_Camera(sensitivityVal):
     detected_circles = np.uint16(np.around(circles))
 
     # Update Tuning Screw List #
-    focalLength = ((referenceDiameter * 2) * measuredDepth) / screwDiameter  # determine focal length
+    focalLength = ((referenceRadius * 2) * measuredDepth) / screwDiameter  # determine focal length
     for (x, y, r) in detected_circles[0, :]:
         # Find Depth of Current Screw #
         calculatedDepth = (screwDiameter * focalLength) / (r * 2)
@@ -104,21 +104,21 @@ def zoom_Camera(sensitivityVal):
     screwLocations = []
 
     minDist = 100       # minimum distance between scerws
-    upCannyThreshold = 75  # sensitivity for detecting circles
-    centerThreshold = 35    # sensitivity for detecting circle centers
+    upCannyThreshold = 130  # sensitivity for detecting circles
+    centerThreshold = 50    # sensitivity for detecting circle centers
     maxR = 120          # maximum screw radius
     screwCount = 0
     dp = 1
     minDistCenter = 9999 # finds the screw the closest to the center
     closestCenter = 0   # the screw that is the closest to the center
-    measuredDepth = 210  # units are mm
-    screwDiameter = 10  # units are mm
-    referenceDiameter = 38  # units are pixels
+    measuredDepth = 162  # units are mm
+    screwDiameter = 9  # units are mm
+    referenceRadius = 102  # units are pixels
     offsetPxPermm = 1   #number of pixels per mm, used to caluculate offset
 
 
 
-    img = cv2.imread('NewPhotos5/opencv_frame_4.png')  # testing, comment out if taking picture
+    img = cv2.imread('NewPhotos6/opencv_frame_1.png')  # testing, comment out if taking picture
     output = img.copy()
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # change to greyscale image
     gray = cv2.medianBlur(gray, 5)                 # apply blur to reduce false positives
@@ -153,7 +153,7 @@ def zoom_Camera(sensitivityVal):
 
     #################################
     # determine the depth of the screw
-    focalLength = ((referenceDiameter * 2) * measuredDepth) / screwDiameter  # determine focal length
+    focalLength = ((referenceRadius * 2) * measuredDepth) / screwDiameter  # determine focal length
     screwDepth = (screwDiameter * focalLength) / (r * 2)
 
     print(closestCenter)
@@ -176,7 +176,7 @@ def zoom_Camera(sensitivityVal):
     cv2.imshow('crop', cropImg)
 
     crop_gray = cv2.cvtColor(cropImg, cv2.COLOR_BGR2GRAY)  # change to greyscale image
-    cannyEdges = cv2.Canny(crop_gray, 20, 80, None, 3)
+    cannyEdges = cv2.Canny(crop_gray, 40, 120, None, 3)
 
     linesP = cv2.HoughLinesP(cannyEdges, 1, np.pi / 180, 20, None, 20, 10)
     imageCutOff = 20

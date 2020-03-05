@@ -21,8 +21,13 @@ int yPosG = 0;
 int zPosG = 0;
 const int stepsPerMM = 100;
 const int rampSize = 1900;
-const int maxSpeed = 4000;
+const int maxSpeed = 8000;
 const int minSpeed = 200;
+
+const int homeRampSize = 1900;
+const int homeMaxSpeed = 4000;
+const int homeMinSpeed = 200;
+
 const int slowRampSize = 190;
 const int slowMaxSpeed = 800;
 const int slowMinSpeed = 40;
@@ -624,16 +629,16 @@ void homeMotors(void){
 	int timeoutCounter = 0;
 	
 
-	for(int axis = 4; axis < 1; axis--){
+	for(int axis = 3; axis > 0; axis--){
 		timeoutCounter = 0;
 		//accel
 		//move axis towards home
 		if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BR12;
 		else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BR7;
 		else if(axis == 3) GPIOA->BSRR |= GPIO_BSRR_BR10;
-		int accelRate = (maxSpeed - minSpeed) / rampSize;
-		for(int i = 0; i < rampSize; i++){
-			speedAccel = minSpeed + accelRate*(i);
+		int accelRate = (homeMaxSpeed - homeMinSpeed) / homeRampSize;
+		for(int i = 0; i < homeRampSize; i++){
+			speedAccel = homeMinSpeed + accelRate*(i);
 			delayTime = (1000000/speedAccel)/2;
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
@@ -651,7 +656,7 @@ void homeMotors(void){
 			}
 		
 		//coast
-		delayTime = (1000000/maxSpeed)/2;
+		delayTime = (1000000/homeMaxSpeed)/2;
 		while(((GPIOA->IDR & GPIO_IDR_IDR1) != GPIO_IDR_IDR1) && ((GPIOA->IDR & GPIO_IDR_IDR3) != GPIO_IDR_IDR3) && ((GPIOA->IDR & GPIO_IDR_IDR5) != GPIO_IDR_IDR5)){
 			if     (axis == 1) GPIOA->BSRR |= GPIO_BSRR_BS15;
 			else if(axis == 2) GPIOB->BSRR |= GPIO_BSRR_BS8;
