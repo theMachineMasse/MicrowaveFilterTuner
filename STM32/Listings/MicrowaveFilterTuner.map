@@ -254,7 +254,7 @@ Removing Unused input sections from the image.
     Removing motorcontrolsubsystem.o(.rrx_text), (6 bytes).
     Removing motorcontrolsubsystem.o(i.encoderInit), (28 bytes).
     Removing motorcontrolsubsystem.o(i.phiHome), (788 bytes).
-    Removing motorcontrolsubsystem.o(.constdata), (56 bytes).
+    Removing motorcontrolsubsystem.o(.constdata), (68 bytes).
     Removing communications.o(.rev16_text), (4 bytes).
     Removing communications.o(.revsh_text), (4 bytes).
     Removing communications.o(.rrx_text), (6 bytes).
@@ -264,7 +264,7 @@ Removing Unused input sections from the image.
     Removing system_stm32f10x.o(i.SystemCoreClockUpdate), (160 bytes).
     Removing system_stm32f10x.o(.data), (20 bytes).
 
-23 unused section(s) (total 1136 bytes) removed from the image.
+23 unused section(s) (total 1148 bytes) removed from the image.
 
 ==============================================================================
 
@@ -819,14 +819,14 @@ Image component sizes
 
       1376         80          0          8         30       9281   communications.o
         30          0          0          0          0       4983   main.o
-      5798        178          0         20          0      14806   motorcontrolsubsystem.o
+      5798        178          0         20          0      14929   motorcontrolsubsystem.o
         64         26        288          0       1536        832   startup_stm32f10x_md_vl.o
        292         24          0          0          0       2145   system_stm32f10x.o
       1796        772          0          0          0       3943   visualdisplaysubsystem.o
        152         10          0          0          0       1052   visualidentificationsubsystem.o
 
     ----------------------------------------------------------------------
-      9518       1090        320         28       1568      37042   Object Totals
+      9518       1090        320         28       1568      37165   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         10          0          0          0          2          0   (incl. Padding)
 
@@ -877,8 +877,8 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      9936       1106        320         28       1668      35386   Grand Totals
-      9936       1106        320         28       1668      35386   ELF Image Totals
+      9936       1106        320         28       1668      35509   Grand Totals
+      9936       1106        320         28       1668      35509   ELF Image Totals
       9936       1106        320         28          0          0   ROM Totals
 
 ==============================================================================
