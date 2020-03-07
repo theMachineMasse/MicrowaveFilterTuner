@@ -17,6 +17,7 @@
 
 /*******************************************
 *	Function: lightsInit
+*	Programmer(s): Matthew Rostad
 *	Date: February 20, 2020
 *	Purpose: Initializes the GPIO pins for lighting system
 *	Parameters: N/A
@@ -32,6 +33,7 @@ void lightsInit(void){
 
 /*******************************************
 *	Function: lightsToggle
+*	Programmer(s): Matthew Rostad
 *	Date: February 20, 2020
 *	Purpose: Turns the desired light on or off
 *	Parameters: int pin, int state

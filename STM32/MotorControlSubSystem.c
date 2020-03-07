@@ -46,6 +46,7 @@ const int slowMinSpeedDeg = 40;
 
 /*******************************************
 *	Function: motorInit
+*	Programmer(s): Matthew Rostad
 *	Date: February 20, 2020
 *	Purpose: Initializes necessary motor GPIO pins
 *	Parameters: N/A
@@ -103,6 +104,7 @@ void encoderInit(void){
 
 /*******************************************
 *	Function: moveX
+*	Programmer(s): Matthew Rostad
 *	Date: February 20, 2020
 *	Purpose: Moves the X axis the desired amount
 *	Parameters: int movePosition
@@ -123,6 +125,7 @@ void moveX(int movePosition){
 
 /*******************************************
 *	Function: moveY
+*	Programmer(s): Matthew Rostad
 *	Date: February 20, 2020
 *	Purpose: Moves the Y axis the desired amount
 *	Parameters: int movePosition
@@ -142,6 +145,7 @@ void moveY(int movePosition){
 
 /*******************************************
 *	Function: moveZ
+*	Programmer(s): Matthew Rostad
 *	Date: February 20, 2020
 *	Purpose: Moves the Z axis the desired amount
 *	Parameters: int movePosition
@@ -161,6 +165,7 @@ void moveZ(int movePosition){
 
 /*******************************************
 *	Function: moveXSlow
+*	Programmer(s): Matthew Rostad
 *	Date: February 20, 2020
 *	Purpose: Moves the X axis the desired amount at a slower speed
 *	Parameters: int movePosition
@@ -181,6 +186,7 @@ void moveXSlow(int movePosition){
 
 /*******************************************
 *	Function: moveYSlow
+*	Programmer(s): Matthew Rostad
 *	Date: February 20, 2020
 *	Purpose: Moves the Y axis the desired amount at a slower speed
 *	Parameters: int movePosition
@@ -201,6 +207,7 @@ void moveYSlow(int movePosition){
 
 /*******************************************
 *	Function: moveZSlow
+*	Programmer(s): Matthew Rostad
 *	Date: February 20, 2020
 *	Purpose: Moves the Z axis the desired amount at a slower speed
 *	Parameters: int movePosition
@@ -222,6 +229,7 @@ void moveZSlow(int movePosition){
 
 /*******************************************
 *	Function: moveP
+*	Programmer(s): Matthew Rostad
 *	Date: February 25, 2020
 *	Purpose: Rotates the Phi axis the desired amount in degrees
 *	Parameters: int movePosition
@@ -241,6 +249,7 @@ void moveP(int movePosition){
 
 /*******************************************
 *	Function: moveP
+*	Programmer(s): Matthew Rostad
 *	Date: February 25, 2020
 *	Purpose: Rotates the Phi axis the desired amount in degrees
 *	Parameters: int movePosition
@@ -261,6 +270,7 @@ void moveN(int movePosition){
 
 /*******************************************
 *	Function: delayUs
+*	Programmer(s): Matthew Rostad
 *	Date: February 20, 2020
 *	Purpose: Halts the CPU for the desired amount of time in micro seconds
 *	Parameters: int uS
@@ -278,6 +288,7 @@ void delayUs(int uS){
 
 /*******************************************
 *	Function: moveMotor
+*	Programmer(s): Matthew Rostad
 *	Date: February 20, 2020
 *	Purpose: Moves the motor the desired amount
 *	Parameters: int axis, int movePosition
@@ -432,6 +443,7 @@ void moveMotor(int axis, int moveAmount){
 	
 	/*******************************************
 *	Function: moveMotorSlow
+*	Programmer(s): Matthew Rostad
 *	Date: February 20, 2020
 *	Purpose: Moves the motor the desired amount at a slower speed
 *	Parameters: int axis, int movePosition
@@ -588,6 +600,7 @@ void moveMotorSlow(int axis, int moveAmount){
 }
 /*******************************************
 *	Function: enableMotors
+*	Programmer(s): Matthew Rostad
 *	Date: February 20, 2020
 *	Purpose: Enables all stepper motors
 *	Parameters: N/A
@@ -602,6 +615,7 @@ void enableMotors(void){
 
 /*******************************************
 *	Function: disableMotors
+*	Programmer(s): Matthew Rostad
 *	Date: February 20, 2020
 *	Purpose: Disables all stepper motors
 *	Parameters: N/A
@@ -617,6 +631,7 @@ void disableMotors(void){
 
 /*******************************************
 *	Function: homeMotors
+*	Programmer(s): Matthew Rostad
 *	Date: February 29, 2020
 *	Purpose: Home X, Y and Z motors
 *	Parameters: N/A
@@ -1072,6 +1087,7 @@ void phiHome(){
 
 /*******************************************
 *	Function: nonRecoverableError
+*	Programmer(s): Matthew Rostad
 *	Date: March 1, 2020
 *	Purpose: Inifinite loop for when a non recoverable error occurs
 *	Parameters: N/A

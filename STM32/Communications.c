@@ -14,6 +14,7 @@
 #include "Communications.h"
 #include "MotorControlSubSystem.h"
 #include "VisualIdentificationSubSystem.h"
+#include "VisualDisplaySubSystem.h"
 
 //Globals
 char get[30];				//CLI character buffer
@@ -22,6 +23,7 @@ char input;				//temp value to store input value
 
 /*******************************************
 *	Function: clockInit
+*	Programmer(s): Matthew Rostad
 *	Date: February 8, 2020
 *	Purpose: Initializes necessary clock registers
 *	Parameters: N/A
@@ -59,6 +61,7 @@ void clockInit(void)
 
 /*******************************************
 *	Function: serial_open
+*	Programmer(s): Matthew Rostad
 *	Date: February 8, 2020
 *	Purpose: Initializes necessary serial registers and begins serial communication
 *	Parameters: N/A
@@ -81,6 +84,7 @@ void serial_open (void)
 
 /*******************************************
 *	Function: sendbyte
+*	Programmer(s): Matthew Rostad
 *	Date: October 7,2019
 *	Purpose: Sends a byte to serial interface
 *	Parameters: data
@@ -98,6 +102,7 @@ void sendbyte(char BYTE)
 
 /*******************************************
 *	Function: getbyte
+*	Programmer(s): Matthew Rostad
 *	Date: October 7,2019
 *	Purpose: Receives byte from serial interface
 *	Parameters: data
@@ -117,6 +122,7 @@ char getbyte(void)
 
 /*******************************************
 *	Function: clearBuffer
+*	Programmer(s): Matthew Rostad
 *	Date: February 8, 2020
 *	Purpose: cleans 30 character buffer
 *	Parameters: N/A
@@ -132,6 +138,7 @@ void clearBuffer(void) {
 
 /*******************************************
 *	Function: command
+*	Programmer(s): Matthew Rostad
 *	Date: February 8, 2020
 *	Purpose: Logic to interperate input from Gcode commands
 *	Parameters: N/A
@@ -145,6 +152,7 @@ void command(void){
 	while(1){
 		input = getbyte();		//get the current byte
 		get[i] = input;				//set the temperary char to the current byte
+		lcdDisplayStatus(2);	//set ready status
 		
 		if((input == 0xD) || (i >= 29)){	//if the input is an enter command check the byte
 			checkCommand(get);	//check to see if command matches an input command
@@ -163,6 +171,7 @@ void command(void){
 
 /*******************************************
 *	Function: checkCommand
+*	Programmer(s): Matthew Rostad
 *	Date: October 7, 2019
 *	Purpose: Determines which command is to be ran
 *	Parameters: input[]
@@ -213,6 +222,7 @@ void checkCommand(char input[30]){
 
 /*******************************************
 *	Function: commandG0
+*	Programmer(s): Matthew Rostad
 *	Date: February 8, 2020
 *	Purpose: interprets the G1 command to move the machine axis at full speed
 *	Parameters: N/A
@@ -240,6 +250,7 @@ void commandG0(void){
 
 /*******************************************
 *	Function: commandG1
+*	Programmer(s): Matthew Rostad
 *	Date: February 8, 2020
 *	Purpose: interprets the G1 command to move the machine axis slowly
 *	Parameters: N/A
@@ -266,6 +277,7 @@ void commandG1(void){
 
 /*******************************************
 *	Function: commandG16
+*	Programmer(s): Jarett Tremblay
 *	Date: February 25, 2020
 *	Purpose: interprets the G16 command to move the machine phi axis at full speed
 *	Parameters: N/A
@@ -290,6 +302,7 @@ void commandG16(void){
 
 /*******************************************
 *	Function: printHex
+*	Programmer(s): Matthew Rostad
 *	Date: February 8, 2020
 *	Purpose: converts hex to ascii code and prints to screen
 *	Parameters: N/A
@@ -328,6 +341,7 @@ void printHex(int hex){
 
 /*******************************************
 *	Function: getNum
+*	Programmer(s): Matthew Rostad
 *	Date: February 8, 2020
 *	Purpose: determines the number being entered after a move command
 *	Parameters: int
@@ -349,7 +363,7 @@ int getNum(int i){
 			j = 7;										//exit the for loop
 		}
 		
-		else{
+		else if(get[j+1] == '.' || (get[j+i] >= 48 && get[j+i] <= 57)){	//only accept character if get is a number of a decimal point
 			moveNum[j] = get[j+i];
 			length = j;
 		}
@@ -392,6 +406,7 @@ int getNum(int i){
 
 /*******************************************
 *	Function: commandG28
+*	Programmer(s): Matthew Rostad
 *	Date: February 8, 2020
 *	Purpose: interprets the G28 command to send the machine home
 *	Parameters: N/A
@@ -405,6 +420,7 @@ void commandG28(void){
 
 /*******************************************
 *	Function: commandM42
+*	Programmer(s): Matthew Rostad
 *	Date: February 8, 2020
 *	Purpose: interprets the M42 command to turn on or off a specific I/O pin
 *	Parameters: N/A
@@ -430,6 +446,7 @@ void commandM42(void){
 
 /*******************************************
 *	Function: commandM17
+*	Programmer(s): Matthew Rostad
 *	Date: February 8, 2020
 *	Purpose: interprets theM17 command to enable all steppers
 *	Parameters: N/A
@@ -443,6 +460,7 @@ void commandM17(void){
 
 /*******************************************
 *	Function: commandM18
+*	Programmer(s): Matthew Rostad
 *	Date: February 8, 2020
 *	Purpose: interprets the M18 command to disable all steppers
 *	Parameters: N/A

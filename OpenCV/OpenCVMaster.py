@@ -2,7 +2,7 @@
 # Project: Microwave Filter Tuner
 # File: OpenCV.py
 # Date: January 18, 2020
-# Programmer(s): Braden Massé
+# Programmer(s): Braden Massé and Matthew Rostad
 # Sub-Systems: Visual Identification Sub-System
 # Version: 1.13
 ##############################################
@@ -17,28 +17,17 @@ g_minDepth = 260  # the distance from the tallest tuning screw (mm)
 g_wideCamPort = 0  # COM port for the wide angle camera
 g_screwNum = 0  # counter for screw assignment
 g_screwsDetected = 0  # flag that is set if any screws detected
-g_xOffset = 18  # number of cms that the camera sees in the x direction but isn't inside the work space, needs tuning
-g_yOffset = 12  # number of cms that the camera sees in the y direction but isn't inside the work space, needs tuning
-g_convertFactor = 35  # number of pixels per cm, needs to depend on screw selected, needs tuning
+g_height1 = 246 # height from the bed to the wide angle camera
+g_pixelsPerMM = 5.85    # pixels per milimeter at the bed height
 
 
-################
-# Matts test stuff
-
-g_xBedOffset = 70   # mm
-g_yBedOffset = 65   # mm
 
 
-g_pixelsPerMM = 6
-
-# triangulation
-x1 = 200
-h1 = 120
 
 
 ##############################################
 # Function: wideAngleCamera()
-# Programmer(s): Braden Massé
+# Programmer(s): Braden Massé and Matthew Rostad
 # Date: January 18,2020
 # Purpose: To identify all tuning screws and determine X, Y, and Z position
 # Arguments: sensitivityVal
@@ -58,8 +47,8 @@ def wideAngleCamera(sensitivityVal):
     minDist = 100  # allowable distance between screws
     upCannyThres = sensitivityVal * 2  # updated based on passed parameter
     centerThres = sensitivityVal  # updated based on passed parameter
-    maxR = 40  # max radius of screw, update based on GUI selection, needs to depend on screw selected
-    minR = 30  # min radius of screw, update based on GUI selection, needs to depend on screw selected
+    maxR = 45  # max radius of screw, update based on GUI selection, needs to depend on screw selected
+    minR = 20  # min radius of screw, update based on GUI selection, needs to depend on screw selected
     screwCount = 0  # counter for number of screws detected
     measuredDepth = 210  # units are mm, used for calibrating depth, needs tuning
     screwDiameter = 10  # units are mm, used for calibrating depth, needs to depend on screw selected
@@ -131,16 +120,23 @@ def wideAngleCamera(sensitivityVal):
             if g_minDepth > calculatedDepth:
                 g_minDepth = calculatedDepth
 
+            # calculate values based on heights
+            xOffset = 0.8337 * calculatedDepth - 125.73
+            yOffset = 0.5974 * calculatedDepth - 87.438
+            new_pixelsPerMM = g_pixelsPerMM * (g_height1 / calculatedDepth)
+
             # Add Screw to Global Screw Locations List #
             # screwLocations = [screwCount, assignedNum, ((x / g_convertFactor) - g_xOffset), ((y / g_convertFactor) - g_yOffset), calculatedDepth, r, 0]
-            screwLocations = [screwCount, assignedNum, ((x / g_pixelsPerMM) - g_xBedOffset),
-                              ((y / g_pixelsPerMM) - g_yBedOffset), calculatedDepth, r, 0]
+            screwLocations = [screwCount, assignedNum, ((x / new_pixelsPerMM) - xOffset),
+                              ((y / new_pixelsPerMM) - yOffset), calculatedDepth, r, 0]
             screwLocationsGList.append(screwLocations)
+
 
             # Indicate Detected Screws on Output Image #
             cv2.circle(output, (x, y), r, (0, 255, 0), 3)  # draw circles on detected screws
             # print("Circle ", screwCount, "at", ((x / g_convertFactor) - g_xOffset), "cm,", ((y / g_convertFactor) - g_yOffset), "cm with radius of", r, "pixels and a depth of", calculatedDepth, "mm")  # testing
-            print(screwCount, "at", ((x / g_pixelsPerMM) - g_xBedOffset), ((y / g_pixelsPerMM) - g_yBedOffset))
+
+            print(screwCount, "at", ((x / new_pixelsPerMM) - xOffset), ((y / new_pixelsPerMM) - yOffset))
             cv2.circle(output, (x, y), 2, (0, 255, 0), 3)  # draw dot on center of detected screws
             screwCount = screwCount + 1
 
