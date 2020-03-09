@@ -7,6 +7,7 @@ void moveN(int);
 void moveXSlow(int);
 void moveYSlow(int);
 void moveZSlow(int);
+void moveZScrew(int);
 void moveMotor(int,int);
 void moveMotorSlow(int,int);
 void enableMotors(void);

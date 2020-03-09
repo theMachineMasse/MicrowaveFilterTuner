@@ -9,6 +9,7 @@ void commandG0(void);
 void commandG1(void);
 void commandG16(void);
 void commandG28(void);
+void commandG30(void);
 void commandM42(void);
 void commandM17(void);
 void commandM18(void);

@@ -187,8 +187,13 @@ void checkCommand(char input[30]){
 		commandG1();
 	}
 	
+	
 	else if ((get[0] == 'G'|| get[0] == 'g') && (get[1] == '2') && (get[2] == '8')){
 		commandG28();
+	}
+	
+	else if ((get[0] == 'G'|| get[0] == 'g') && (get[1] == '3') && (get[2] == '0')){
+		commandG30();
 	}
 	
 		
@@ -415,6 +420,27 @@ int getNum(int i){
 void commandG28(void){
 	sendbyte('H');
 	homeMotors();
+}
+
+
+/*******************************************
+*	Function: commandG30
+*	Programmer(s): Matthew Rostad
+*	Date: February 8, 2020
+*	Purpose: interprets the G28 command to move z axis to hit screw
+*	Parameters: N/A
+*	Return value: N/A
+*******************************************/
+void commandG30(void){
+		for(int i=2; i<30; i++){
+		if(get[i] == ' '){
+		}
+		else if(get[i] == 'Z'|| get[i] == 'z'){
+			moveZScrew(getNum(i+1));
+		}
+		else{
+		}
+	}
 }
 
 

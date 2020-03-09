@@ -16,6 +16,7 @@
 #include "VisualDisplaySubSystem.h"
 
 //Globals
+int motorsEnabledG = 0;
 int xPosG = 0;
 int yPosG = 0;
 int zPosG = 0;
@@ -42,6 +43,10 @@ const int minSpeedDeg = 2000;
 const int slowRampSizeDeg = 190;
 const int slowMaxSpeedDeg = 400;
 const int slowMinSpeedDeg = 40;
+
+//Z axis hitting screw
+const int depthSlow = 80;	//percentage of depth to move down until slowing down
+const int depthMax = 120;	//percentage of depth to move down past where screw should have been
 
 
 /*******************************************
@@ -72,16 +77,7 @@ void motorInit(void){
 	
 	
 	//disable steppers by defualt
-	GPIOA->BSRR |= GPIO_BSRR_BS7;				//use this one 
-	GPIOA->BSRR |= GPIO_BSRR_BS8;
-	GPIOA->BSRR |= GPIO_BSRR_BS9;
-	GPIOA->BSRR |= GPIO_BSRR_BS10;
-	GPIOA->BSRR |= GPIO_BSRR_BS11;
-	GPIOA->BSRR |= GPIO_BSRR_BS12;
-	GPIOA->BSRR |= GPIO_BSRR_BS15;
-	GPIOB->BSRR |= GPIO_BSRR_BS6;
-	GPIOB->BSRR |= GPIO_BSRR_BS7;
-	GPIOB->BSRR |= GPIO_BSRR_BS8;
+	disableMotors();
 	
 }
 
@@ -117,7 +113,9 @@ void moveX(int movePosition){
 	sendbyte(' ');
 	lcdDisplayStatus(5);
 	int moveAmount = movePosition - xPosG;			//amount to move based off desired position minus current position 
-	xPosG = movePosition;												//update the current position
+	if(motorsEnabledG){
+		xPosG = movePosition;												//update the current position
+	}
 	
 	moveMotor(1,moveAmount);
 	
@@ -138,7 +136,9 @@ void moveY(int movePosition){
 	sendbyte(' ');
 	lcdDisplayStatus(6);
 	int moveAmount = movePosition - yPosG;			//amount to move based off desired position minus current position 
-	yPosG = movePosition;												//update the current position
+	if(motorsEnabledG){
+		yPosG = movePosition;												//update the current position
+	}
 	
 	moveMotor(2,moveAmount);
 }
@@ -158,7 +158,9 @@ void moveZ(int movePosition){
 	sendbyte(' ');
 	lcdDisplayStatus(7);
 	int moveAmount = movePosition - zPosG;			//amount to move based off desired position minus current position 
-	zPosG = movePosition;												//update the current position
+	if(motorsEnabledG){
+		zPosG = movePosition;												//update the current position
+	}
 	
 	moveMotor(3,moveAmount);
 }
@@ -179,7 +181,9 @@ void moveXSlow(int movePosition){
 	sendbyte(' ');
 	lcdDisplayStatus(5);
 	int moveAmount = movePosition - xPosG;			//amount to move based off desired position minus current position 
-	xPosG = movePosition;												//update the current position
+	if(motorsEnabledG){
+		xPosG = movePosition;												//update the current position
+	}
 	
 	moveMotorSlow(1,moveAmount);
 }
@@ -200,7 +204,9 @@ void moveYSlow(int movePosition){
 	sendbyte(' ');
 	lcdDisplayStatus(6);
 	int moveAmount = movePosition - yPosG;			//amount to move based off desired position minus current position 
-	yPosG = movePosition;												//update the current position
+	if(motorsEnabledG){
+		yPosG = movePosition;												//update the current position
+	}
 	
 	moveMotorSlow(2,moveAmount);
 }
@@ -221,7 +227,9 @@ void moveZSlow(int movePosition){
 	sendbyte(' ');
 	lcdDisplayStatus(7);
 	int moveAmount = movePosition - zPosG;			//amount to move based off desired position minus current position 
-	zPosG = movePosition;												//update the current position
+	if(motorsEnabledG){
+		zPosG = movePosition;												//update the current position
+	}
 	
 	moveMotorSlow(3,moveAmount);
 }
@@ -441,7 +449,7 @@ void moveMotor(int axis, int moveAmount){
 }
 	
 	
-	/*******************************************
+/*******************************************
 *	Function: moveMotorSlow
 *	Programmer(s): Matthew Rostad
 *	Date: February 20, 2020
@@ -598,6 +606,68 @@ void moveMotorSlow(int axis, int moveAmount){
 	
 	
 }
+
+
+
+
+/*******************************************
+*	Function: moveMotor
+*	Programmer(s): Matthew Rostad
+*	Date: February 20, 2020
+*	Purpose: Moves the motor the desired amount
+*	Parameters: int axis, int movePosition
+*	Return value: N/A
+*******************************************/
+void moveZScrew(int depth){
+	int delayTime;
+	int speedAccel;
+	int fastDepth = (depth * depthSlow) / 100;
+	int maxDepth = (depth * depthMax) / 100;
+
+	GPIOA->BSRR |= GPIO_BSRR_BS10;	//move away from home
+	
+	
+	//accel
+	int accelRate = (homeMaxSpeed - homeMinSpeed) / homeRampSize;
+	for(int i = 0; i < homeRampSize; i++){
+			speedAccel = homeMinSpeed + accelRate*(i);
+			delayTime = (1000000/speedAccel)/2;
+			GPIOA->BSRR |= GPIO_BSRR_BS11;
+			delayUs(delayTime);
+			GPIOA->BSRR |= GPIO_BSRR_BR11;
+			delayUs(delayTime);
+			zPosG++;
+			if((GPIOC->IDR & GPIO_IDR_IDR8) == GPIO_IDR_IDR8) return;
+	}
+	
+	//coast
+		int coastSteps = fastDepth - homeRampSize*2;
+		delayTime = (1000000/homeMaxSpeed)/2;
+		for(int i = 0; i < coastSteps; i++){
+			GPIOA->BSRR |= GPIO_BSRR_BS11;
+			delayUs(delayTime);
+			GPIOA->BSRR |= GPIO_BSRR_BR11;
+			delayUs(delayTime);
+			zPosG++;
+			if((GPIOC->IDR & GPIO_IDR_IDR8) == GPIO_IDR_IDR8) return;
+		}
+		
+		
+		//coast at slow speed
+		coastSteps = maxDepth - fastDepth;
+		delayTime = (1000000/slowMaxSpeed)/2;
+		for(int i = 0; i < coastSteps; i++){
+			GPIOA->BSRR |= GPIO_BSRR_BS11;
+			delayUs(delayTime);
+			GPIOA->BSRR |= GPIO_BSRR_BR11;
+			delayUs(delayTime);
+			zPosG++;
+			if((GPIOC->IDR & GPIO_IDR_IDR8) == GPIO_IDR_IDR8) return;
+		}
+}
+	
+	
+	
 /*******************************************
 *	Function: enableMotors
 *	Programmer(s): Matthew Rostad
@@ -611,6 +681,7 @@ void enableMotors(void){
 	GPIOA->BSRR |= GPIO_BSRR_BR7;
 	GPIOA->BSRR |= GPIO_BSRR_BR10;
 	GPIOA->BSRR |= GPIO_BSRR_BR13;
+	motorsEnabledG = 1;
 }
 
 /*******************************************
@@ -626,6 +697,7 @@ void disableMotors(void){
 	GPIOA->BSRR |= GPIO_BSRR_BS7;
 	GPIOA->BSRR |= GPIO_BSRR_BS10;
 	GPIOA->BSRR |= GPIO_BSRR_BS13;
+	motorsEnabledG = 0;
 }
 
 
@@ -638,13 +710,19 @@ void disableMotors(void){
 *	Return value: N/A
 *******************************************/
 void homeMotors(void){
+ if(motorsEnabledG){	
+	
 	int delayTime;
 	int speedAccel;
 	int homeTimeout = 1000000;
 	int timeoutCounter = 0;
+	int axis;
 	
 
-	for(int axis = 3; axis > 0; axis--){
+	for(int i = 0; i < 3; i++){
+		if(i == 0) axis = 3;	//z axis
+		if(i == 1) axis = 1;	//x axis
+		if(i == 2) axis = 2;	//y axis
 		timeoutCounter = 0;
 		//accel
 		//move axis towards home
@@ -745,6 +823,7 @@ void homeMotors(void){
 		if     (axis == 1) xPosG = 0;
 		else if(axis == 2) yPosG = 0;
 		else if(axis == 3) zPosG = 0;
+}
 }
 }
 
