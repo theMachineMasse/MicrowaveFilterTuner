@@ -13,16 +13,13 @@ import cv2 as cv2
 
 # Globals #
 screwLocationsGList = []  # (screwNum, assignedNum, x, y, z, r, locatedFlag)
+screwLocationsPixelsGList = []  # (screwNum, assignedNum, x, y, z, r, locatedFlag)
 g_minDepth = 260  # the distance from the tallest tuning screw (mm)
 g_wideCamPort = 0  # COM port for the wide angle camera
 g_screwNum = 0  # counter for screw assignment
 g_screwsDetected = 0  # flag that is set if any screws detected
-g_height1 = 246 # height from the bed to the wide angle camera
+g_height1 = 246  # height from the bed to the wide angle camera
 g_pixelsPerMM = 5.85    # pixels per milimeter at the bed height
-
-
-
-
 
 
 ##############################################
@@ -38,9 +35,6 @@ def wideAngleCamera(sensitivityVal):
     # Globals #
     global g_minDepth
     global g_screwsDetected
-    global g_xOffset
-    global g_yOffset
-    global g_convertFactor
 
     # Variable Initializations #
     dp = 1
@@ -61,9 +55,9 @@ def wideAngleCamera(sensitivityVal):
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1944)
     ret, img = cap.read()
     cap.release()
-    #cv2.imshow("test", img)
-    #cv2.waitKey(0)  # close image on pressing any key
-    #cv2.destroyAllWindows()
+    # cv2.imshow("test", img)
+    # cv2.waitKey(0)  # close image on pressing any key
+    # cv2.destroyAllWindows()
 
     # No Image Taken #
     if not ret:
@@ -131,6 +125,8 @@ def wideAngleCamera(sensitivityVal):
                               ((y / new_pixelsPerMM) - yOffset), calculatedDepth, r, 0]
             screwLocationsGList.append(screwLocations)
 
+            screwLocations2 = [screwCount, assignedNum, x, y, calculatedDepth, r, 0]
+            screwLocationsPixelsGList.append(screwLocations2)
 
             # Indicate Detected Screws on Output Image #
             cv2.circle(output, (x, y), r, (0, 255, 0), 3)  # draw circles on detected screws
@@ -168,9 +164,6 @@ def clickEvent(event, x, y, flags, param):
 
     # Globals #
     global g_screwNum
-    global g_xOffset
-    global g_yOffset
-    global g_convertFactor
 
     # Variable Initializations #
     font = cv2.FONT_HERSHEY_COMPLEX
@@ -186,9 +179,9 @@ def clickEvent(event, x, y, flags, param):
         for i in range(len(screwLocationsGList)):
 
             # Find Needed Values from List #
-            x1 = int(((screwLocationsGList[i][2] + g_xOffset) * g_convertFactor) / 2)
-            r1 = int(screwLocationsGList[i][5] / 2)
-            y1 = int(((screwLocationsGList[i][3] + g_yOffset) * g_convertFactor) / 2)
+            x1 = int(screwLocationsPixelsGList[i][2] / 2)
+            r1 = int(screwLocationsPixelsGList[i][5] / 2)
+            y1 = int(screwLocationsPixelsGList[i][3] / 2)
             assignedNum = screwLocationsGList[i][1]
 
             # Check Click Location Is Within A Screw #

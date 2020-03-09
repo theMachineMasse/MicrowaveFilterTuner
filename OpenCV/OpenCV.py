@@ -17,9 +17,9 @@ g_minDepth = 260  # the distance from the tallest tuning screw (mm)
 g_wideCamPort = 0  # COM port for the wide angle camera
 g_screwNum = 0  # counter for screw assignment
 g_screwsDetected = 0  # flag that is set if any screws detected
-g_xOffset = 18  # number of cms that the camera sees in the x direction but isn't inside the work space, needs tuning
-g_yOffset = 12  # number of cms that the camera sees in the y direction but isn't inside the work space, needs tuning
-g_convertFactor = 35  # number of pixels per cm, needs to depend on screw selected, needs tuning
+g_xOffset = 200  # 18 # number of cms that the camera sees in the x direction but isn't inside the work space, needs tuning
+g_yOffset = 120  # 12 # number of cms that the camera sees in the y direction but isn't inside the work space, needs tuning
+g_convertFactor = 6  # 35  # number of pixels per cm, needs to depend on screw selected, needs tuning
 
 
 ################
@@ -172,9 +172,9 @@ def clickEvent(event, x, y, flags, param):
 
     # Globals #
     global g_screwNum
-    global g_xOffset
-    global g_yOffset
-    global g_convertFactor
+    global g_xBedOffset
+    global g_yBedOffset
+    global g_pixelsPerMM
 
     # Variable Initializations #
     font = cv2.FONT_HERSHEY_COMPLEX
@@ -190,12 +190,13 @@ def clickEvent(event, x, y, flags, param):
         for i in range(len(screwLocationsGList)):
 
             # Find Needed Values from List #
-            x1 = int(((screwLocationsGList[i][2] + g_xOffset) * g_convertFactor) / 2)
+            x1 = int(((screwLocationsGList[i][2] + g_xBedOffset) * g_pixelsPerMM) / 2)
             r1 = int(screwLocationsGList[i][5] / 2)
-            y1 = int(((screwLocationsGList[i][3] + g_yOffset) * g_convertFactor) / 2)
+            y1 = int(((screwLocationsGList[i][3] + g_yBedOffset) * g_pixelsPerMM) / 2)
             assignedNum = screwLocationsGList[i][1]
 
             # Check Click Location Is Within A Screw #
+
             if (x1 - r1) < x < (x1 + r1) and (y1 - r1) < y < (y1 + r1) and assignedNum == -1:
                 screwLocationsGList[i][1] = g_screwNum
                 strXY = str(g_screwNum)  # convert number to a string
