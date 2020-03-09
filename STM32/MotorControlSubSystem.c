@@ -611,11 +611,11 @@ void moveMotorSlow(int axis, int moveAmount){
 
 
 /*******************************************
-*	Function: moveMotor
+*	Function: moveZScrew
 *	Programmer(s): Matthew Rostad
-*	Date: February 20, 2020
-*	Purpose: Moves the motor the desired amount
-*	Parameters: int axis, int movePosition
+*	Date: March 09, 2020
+*	Purpose: Moves the z axis to align with screw
+*	Parameters: int depth
 *	Return value: N/A
 *******************************************/
 void moveZScrew(int depth){
@@ -637,7 +637,7 @@ void moveZScrew(int depth){
 			GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
 			zPosG++;
-			if((GPIOC->IDR & GPIO_IDR_IDR8) == GPIO_IDR_IDR8) return;
+			if((GPIOC->IDR & GPIO_IDR_IDR10) == GPIO_IDR_IDR10) return;
 	}
 	
 	//coast
@@ -649,7 +649,7 @@ void moveZScrew(int depth){
 			GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
 			zPosG++;
-			if((GPIOC->IDR & GPIO_IDR_IDR8) == GPIO_IDR_IDR8) return;
+			if((GPIOC->IDR & GPIO_IDR_IDR10) == GPIO_IDR_IDR10) return;
 		}
 		
 		
@@ -662,7 +662,7 @@ void moveZScrew(int depth){
 			GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
 			zPosG++;
-			if((GPIOC->IDR & GPIO_IDR_IDR8) == GPIO_IDR_IDR8) return;
+			if((GPIOC->IDR & GPIO_IDR_IDR10) == GPIO_IDR_IDR10) return;
 		}
 }
 	

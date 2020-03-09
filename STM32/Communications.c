@@ -196,7 +196,10 @@ void checkCommand(char input[30]){
 		commandG30();
 	}
 	
-		
+	else if ((get[0] == 'G'|| get[0] == 'g') && (get[1] == '1') && (get[2] == '5')){
+		commandG15();
+	}
+	
 	else if ((get[0] == 'G'|| get[0] == 'g') && (get[1] == '1') && (get[2] == '6')){
 		sendbyte('q');
 		commandG16();
@@ -278,6 +281,21 @@ void commandG1(void){
 		}
 	}
 }
+
+
+
+/*******************************************
+*	Function: commandG15
+*	Programmer(s): Jarett Tremblay and Matthew Rostad
+*	Date: February 25, 2020
+*	Purpose: interprets the G15 command to home the phi axis
+*	Parameters: N/A
+*	Return value: N/A
+*******************************************/
+void commandG15(void){
+	  phiHome();
+}
+
 
 
 /*******************************************

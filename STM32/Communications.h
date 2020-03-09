@@ -7,6 +7,7 @@ void clearBuffer(void);
 void checkCommand(char input[30]);
 void commandG0(void);
 void commandG1(void);
+void commandG15(void);
 void commandG16(void);
 void commandG28(void);
 void commandG30(void);
