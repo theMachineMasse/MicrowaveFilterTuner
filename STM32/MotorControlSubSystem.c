@@ -2,7 +2,7 @@
 *	Project: Microwave Filter Tuner
 * File: MotorControlSubSystem
 *	Date: January 27, 2020
-*	Programmer(s): Matthew Rostad
+*	Programmer(s): Matthew Rostad and Jarett Tremblay
 * Sub-System: Motor Control Sub-System
 *	Description: Contains the movement of the motors from Gcode commands
 * Version: 1.0
@@ -34,9 +34,8 @@ const int slowMaxSpeed = 800;
 const int slowMinSpeed = 40;
 
 int pDegG = 0;
-//bool encFlag = false;
 int encFlag = 0;
-const int stepsPerDeg = 9;
+const int stepsPerDeg = 9;	//steps per degree = 
 const int rampSizeDeg = 1900;
 const int maxSpeedDeg = 4000;
 const int minSpeedDeg = 2000;
@@ -84,6 +83,7 @@ void motorInit(void){
 
 /*******************************************
 *	Function: encoderInit
+* Programmer(s): Jarett Tremblay
 *	Date: February 25, 2020
 *	Purpose: Initializes necessary encoder GPIO pins
 *	Parameters: N/A
@@ -237,7 +237,7 @@ void moveZSlow(int movePosition){
 
 /*******************************************
 *	Function: moveP
-*	Programmer(s): Matthew Rostad
+*	Programmer(s): Matthew Rostad and Jarett Tremblay
 *	Date: February 25, 2020
 *	Purpose: Rotates the Phi axis the desired amount in degrees
 *	Parameters: int movePosition
@@ -248,27 +248,6 @@ void moveP(int movePosition){
 	sendbyte('P');
 	printHex(movePosition);
 	sendbyte(' '); 
-	pDegG = movePosition;												//update the current position
-	
-	moveMotorDeg(movePosition);
-	
-}
-
-
-/*******************************************
-*	Function: moveP
-*	Programmer(s): Matthew Rostad
-*	Date: February 25, 2020
-*	Purpose: Rotates the Phi axis the desired amount in degrees
-*	Parameters: int movePosition
-*	Return value: N/A
-*******************************************/
-void moveN(int movePosition){
-	sendbyte(' ');
-	sendbyte('P');
-	printHex(movePosition);
-	sendbyte(' '); 
-	movePosition = movePosition * -1;
 	pDegG = movePosition;												//update the current position
 	
 	moveMotorDeg(movePosition);
@@ -829,6 +808,7 @@ void homeMotors(void){
 
 /*******************************************
 *	Function: moveMotorDeg
+* Programmer(s): Jarett Tremblay
 *	Date: February 20, 2020
 *	Purpose: Moves the motor the desired amount in degrees
 *	Parameters: int axis, int movePosition
@@ -926,6 +906,7 @@ void moveMotorDeg(int moveAmount){
 
 /*******************************************
 *	Function: phiHome
+* Programmer(s): Jarett Tremblay
 *	Date: February 29, 2020
 *	Purpose: Moves the motor the desired amount in degrees
 *	Parameters: int axis, int movePosition
@@ -934,7 +915,7 @@ void moveMotorDeg(int moveAmount){
 void phiHome(){
 	
 	int moveAmount = 360; 															//move one full rotation
-	int timeoutValue = 3240;															//(moveAmount * stepsPerDeg) / 10
+	int timeoutValue = 3240;														//(moveAmount * stepsPerDeg) / 10
 	int timeoutCount = 0;																//timeout counter
 		
 	
@@ -948,13 +929,11 @@ void phiHome(){
 	
 	moveAmount = (moveAmount * stepsPerDeg) / 10;				//convert move amount from degrees to steps
 	
-
-	
 	printHex(moveAmount);
 	sendbyte(' ');
 	sendbyte(' ');
 	
-	lcdDisplayStatus(4);															//status: homing phi
+	lcdDisplayStatus(4);															  //status: homing phi
 	
 	if(moveAmount <= rampSizeDeg*2){										//if long move distance use accel, coast, devel ramp
 		int speedAccel;
@@ -1039,7 +1018,7 @@ void phiHome(){
 		
 		//decel
 		for(int i = 0; i < rampSizeDeg; i++){
-			speedAccel = maxSpeedDeg -  accelRate*(i);
+			speedAccel = maxSpeedDeg - accelRate*(i);
 			delayTime = (1000000/speedAccel)/2;
 			
 			if ((GPIOB->IDR & GPIO_IDR_IDR9) == 0){
