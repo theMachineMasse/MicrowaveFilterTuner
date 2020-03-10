@@ -44,9 +44,9 @@ def wideAngleCamera(sensitivityVal):
     maxR = 45  # max radius of screw, update based on GUI selection, needs to depend on screw selected
     minR = 20  # min radius of screw, update based on GUI selection, needs to depend on screw selected
     screwCount = 0  # counter for number of screws detected
-    measuredDepth = 210  # units are mm, used for calibrating depth, needs tuning
+    measuredDepth = 180  # units are mm, used for calibrating depth, needs tuning
     screwDiameter = 10  # units are mm, used for calibrating depth, needs to depend on screw selected
-    referenceRadius = 38  # units are pixels, used for calibrating depth, needs to depend on screw selected, needs tuning
+    referenceRadius = 36  # units are pixels, used for calibrating depth, needs to depend on screw selected, needs tuning
     assignedNum = -1  # number assigned to each screw based on user input later
 
     # Take Picture With Wide Angle Camera #
@@ -109,14 +109,15 @@ def wideAngleCamera(sensitivityVal):
 
             # Find Depth of Current Screw #
             calculatedDepth = (screwDiameter * focalLength) / (r * 2)
-
+            #calculatedDepth = 220
             # Find Tallest Tuning Screw's Depth #
             if g_minDepth > calculatedDepth:
                 g_minDepth = calculatedDepth
 
             # calculate values based on heights
+            # calculatedDepth = 190
             xOffset = 0.8337 * calculatedDepth - 125.73
-            yOffset = 0.5974 * calculatedDepth - 87.438
+            yOffset = 0.5941 * calculatedDepth - 87.438
             new_pixelsPerMM = g_pixelsPerMM * (g_height1 / calculatedDepth)
 
             # Add Screw to Global Screw Locations List #

@@ -15,6 +15,10 @@ import statistics
 from numpy import array
 
 # Globals #
+g_zoomCamPort = 0  # COM port for the zoom camera
+g_height1 = 246  # height from the bed to the wide angle camera
+g_pixelsPerMM = 16.2    # pixels per milimeter at the bed height
+
 
 ##############################################
 # Function: zoom_Camera()
@@ -28,31 +32,46 @@ from numpy import array
 def zoom_Camera(sensitivityVal):
     # values to be outputed
     screwDepth = 0
-    offsetPx = [0, 0]
+
     screwLocations = []
 
-    minDist = 100       # minimum distance between scerws
-    upCannyThreshold = 130  # sensitivity for detecting circles
+    minDist = 80       # minimum distance between scerws
+    upCannyThreshold = 120  # sensitivity for detecting circles
     centerThreshold = 50    # sensitivity for detecting circle centers
-    maxR = 120          # maximum screw radius
+    maxR = 140          # maximum screw radius
     screwCount = 0
     dp = 1
     minDistCenter = 9999 # finds the screw the closest to the center
     closestCenter = 0   # the screw that is the closest to the center
     measuredDepth = 162  # units are mm
-    screwDiameter = 9  # units are mm
+    screwDiameter = 10  # units are mm
     referenceRadius = 102  # units are pixels
-    offsetPxPermm = 1   #number of pixels per mm, used to caluculate offset
 
-
+    '''
+    cap = cv2.VideoCapture(g_zoomCamPort)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 2592)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1944)
+    ret, img = cap.read()
+    print(ret)
+    cap.release()
+    img = cv2.flip(img, -1)
+    '''
 
     img = cv2.imread('NewPhotos6/opencv_frame_2.png')  # testing, comment out if taking picture
+    img = cv2.flip(img, -1)
+
+
+
     output = img.copy()
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)  # change to greyscale image
     gray = cv2.medianBlur(gray, 5)                 # apply blur to reduce false positives
 
     circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, dp, minDist, param1=upCannyThreshold, param2=centerThreshold,
                                minRadius=sensitivityVal, maxRadius=maxR)
+    if circles is None:
+        print("No screws Detected")
+    else:
+        print(circles.size, "screws detected")
     detected_circles = np.uint16(np.around(circles))
 
     for (x, y, r) in detected_circles[0, :]:
@@ -72,21 +91,88 @@ def zoom_Camera(sensitivityVal):
 
         screwCount = screwCount + 1
 
-    ################################
-    # determine the offset from the center
-    x, y, r = detected_circles[0][closestCenter]
 
-    offsetPx = [x - horizontalCenter, y - verticalCenter]
-    offsetmm = [offsetPx[0] / offsetPxPermm, offsetPx[1] / offsetPxPermm]
+
+
+    x, y, r = detected_circles[0][closestCenter]
+    '''
+    xScrewOffset = 37.82
+    yScrewOffset = 3.4
+    calculatedDepth = 185
+    new_pixelsPerMM = g_pixelsPerMM * (g_height1 / calculatedDepth)
+    print(x)
+    print(y)
+    print(verticalCenter)
+    print(horizontalCenter)
+
+    newY = y - verticalCenter
+    newX = x - horizontalCenter
+
+    xOffset = (newX / new_pixelsPerMM) + xScrewOffset
+    yOffset = (newY / new_pixelsPerMM) + yScrewOffset
+'''
 
     #################################
     # determine the depth of the screw
     focalLength = ((referenceRadius * 2) * measuredDepth) / screwDiameter  # determine focal length
-    screwDepth = (screwDiameter * focalLength) / (r * 2)
+    calculatedDepth = (screwDiameter * focalLength) / (r * 2)
+
+    ################################
+
+    print('depth', calculatedDepth)
+
+    offsetImage = img.copy()
+
+    xPixelError = horizontalCenter - x
+    yPixelError = verticalCenter - y
+    print('x error', xPixelError)
+    print('y error', yPixelError)
+
+    new_pixelsPerMM = g_pixelsPerMM * (g_height1 / calculatedDepth)
+    print('px per mm', new_pixelsPerMM)
+    xMMError = xPixelError / new_pixelsPerMM
+    yMMError = yPixelError / new_pixelsPerMM
+    print('x error mm', xMMError)
+    print('y error mm', yMMError)
+
+    offsetImage = cv2.line(offsetImage, (0, int(y)), (2592, int(y)), (0, 0, 255), 2)
+    offsetImage = cv2.line(offsetImage, (int(x), 0), (int(x), 1944), (0, 0, 255), 2)
+
+
+
+
+
+
+
+    offsetImage = cv2.line(offsetImage, (0,972), (2592, 972), (0,0,0), 2)
+    offsetImage = cv2.line(offsetImage, (1290, 0), (1290, 1944), (0, 0, 0), 2)
+    cv2.imshow("offset", offsetImage)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     print(closestCenter)
     print(screwLocations)
-    print('offset', offsetPx)
 
     # output a circle on only the screw closest to the center
     x,y,r = detected_circles[0, closestCenter]
@@ -141,13 +227,13 @@ def zoom_Camera(sensitivityVal):
     mostSimilarAngles = max(similarAngles,key=len)
     screwAngle = statistics.mean(mostSimilarAngles)
 
-    screwOutputs = [offsetmm, screwAngle, screwDepth]
+    #screwOutputs = [offsetmm, screwAngle, calculatedDepth]
 
     # End of Function Clean-Up *
     cv2.waitKey(0)  # close image on pressing any key
     cv2.destroyAllWindows()
 
-    return screwOutputs
+    return
 
 # global list
 # screw number, X pos, Y pos, Z pos, flag
@@ -157,6 +243,7 @@ def zoom_Camera(sensitivityVal):
 
 zoomScrewOutputs = zoom_Camera(30)
 
+'''
 screwOffset = zoomScrewOutputs[0]
 screwAngle = zoomScrewOutputs[1]
 zoomScrewDepth = zoomScrewOutputs[2]
@@ -164,7 +251,7 @@ zoomScrewDepth = zoomScrewOutputs[2]
 print(screwOffset)
 print(screwAngle)
 print(zoomScrewDepth)
-
+'''
 
 #wide_Angle_Camera(30)  # testing
 #print(screwLocationsGList)

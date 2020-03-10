@@ -600,8 +600,10 @@ void moveMotorSlow(int axis, int moveAmount){
 void moveZScrew(int depth){
 	int delayTime;
 	int speedAccel;
+	depth = (depth * stepsPerMM) / 10;
 	int fastDepth = (depth * depthSlow) / 100;
 	int maxDepth = (depth * depthMax) / 100;
+	int zSteps = 0;
 
 	GPIOA->BSRR |= GPIO_BSRR_BS10;	//move away from home
 	
@@ -615,10 +617,10 @@ void moveZScrew(int depth){
 			delayUs(delayTime);
 			GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
-			zPosG++;
-			if((GPIOC->IDR & GPIO_IDR_IDR10) == GPIO_IDR_IDR10) return;
+			zSteps++;
+			if((GPIOC->IDR & GPIO_IDR_IDR10) == GPIO_IDR_IDR10){ zPosG = (zSteps / stepsPerMM)*10; return;}
 	}
-	
+	                                                                       
 	//coast
 		int coastSteps = fastDepth - homeRampSize*2;
 		delayTime = (1000000/homeMaxSpeed)/2;
@@ -627,12 +629,12 @@ void moveZScrew(int depth){
 			delayUs(delayTime);
 			GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
-			zPosG++;
-			if((GPIOC->IDR & GPIO_IDR_IDR10) == GPIO_IDR_IDR10) return;
+			zSteps++;
+			if((GPIOC->IDR & GPIO_IDR_IDR10) == GPIO_IDR_IDR10) { zPosG = (zSteps / stepsPerMM)*10; return;}
 		}
 		
 		
-		//coast at slow speed
+	//coast at slow speed
 		coastSteps = maxDepth - fastDepth;
 		delayTime = (1000000/slowMaxSpeed)/2;
 		for(int i = 0; i < coastSteps; i++){
@@ -640,9 +642,11 @@ void moveZScrew(int depth){
 			delayUs(delayTime);
 			GPIOA->BSRR |= GPIO_BSRR_BR11;
 			delayUs(delayTime);
-			zPosG++;
-			if((GPIOC->IDR & GPIO_IDR_IDR10) == GPIO_IDR_IDR10) return;
+			zSteps++;
+			if((GPIOC->IDR & GPIO_IDR_IDR10) == GPIO_IDR_IDR10) { zPosG = (zSteps / stepsPerMM)*10; return;}
 		}
+		
+		zPosG = (zSteps / stepsPerMM)*10;
 }
 	
 	
