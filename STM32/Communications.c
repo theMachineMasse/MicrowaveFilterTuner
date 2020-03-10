@@ -220,9 +220,6 @@ void checkCommand(char input[30]){
 	
 	
 	
-	
-	
-	
 }
 
 
@@ -386,7 +383,8 @@ int getNum(int i){
 			j = 7;										//exit the for loop
 		}
 		
-		else if(get[j+1] == '.' || (get[j+i] >= 48 && get[j+i] <= 57)){	//only accept character if get is a number of a decimal point
+		//else if((get[j+i] == '.') || (get[j+i] >= 48 && get[j+i] <= 57)){	//only accept character if get is a number of a decimal point
+		else{
 			moveNum[j] = get[j+i];
 			length = j;
 		}
