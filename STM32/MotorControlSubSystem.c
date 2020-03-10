@@ -842,6 +842,8 @@ void homeMotors(void){
 void moveMotorDeg(int moveAmount){
 	sendbyte('v');
 	
+	lcdDisplayStatus(8);																//moving phi status
+	
 	if(moveAmount > 0){																	//if move direction is positive set direction outputs high
 		GPIOA->BSRR |= GPIO_BSRR_BR8;
 	}
@@ -927,6 +929,9 @@ void moveMotorDeg(int moveAmount){
 			delayUs(delayTime);
 		}
 	}
+	
+	lcdDisplayStatus(2);																//ready status																	
+	
 }
 
 /*******************************************
