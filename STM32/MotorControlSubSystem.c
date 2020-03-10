@@ -35,7 +35,7 @@ const int slowMinSpeed = 40;
 
 int pDegG = 0;
 int encFlag = 0;
-const int stepsPerDeg = 9;	//steps per degree = 
+const float stepsPerDeg = 8.88;	//steps per degree = 
 const int rampSizeDeg = 1900;
 const int maxSpeedDeg = 4000;
 const int minSpeedDeg = 2000;
@@ -839,7 +839,7 @@ void homeMotors(void){
 *	Parameters: int axis, int movePosition
 *	Return value: N/A
 *******************************************/
-void moveMotorDeg(int moveAmount){
+void moveMotorDeg(float moveAmount){
 	sendbyte('v');
 	
 	lcdDisplayStatus(8);																//moving phi status
@@ -852,9 +852,11 @@ void moveMotorDeg(int moveAmount){
 		moveAmount = moveAmount * -1;											//if move direction is negative take the absolute value
 	}
 	
+
 	moveAmount = (moveAmount * stepsPerDeg) / 10;				//convert move amount from degrees to steps
 	
-
+	moveAmount = (int)moveAmount;
+	
 	printHex(moveAmount);
 	sendbyte(' ');
 	sendbyte(' ');
