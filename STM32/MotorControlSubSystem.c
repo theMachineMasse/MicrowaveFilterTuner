@@ -36,12 +36,12 @@ const int slowMinSpeed = 40;
 int pDegG = 0;
 int encFlag = 0;
 const float stepsPerDeg = 8.88;	//steps per degree = 
-const int rampSizeDeg = 1900;
-const int maxSpeedDeg = 4000;
-const int minSpeedDeg = 2000;
-const int slowRampSizeDeg = 190;
-const int slowMaxSpeedDeg = 400;
-const int slowMinSpeedDeg = 40;
+const float rampSizeDeg = 1900;
+const float maxSpeedDeg = 4000;
+const float minSpeedDeg = 2000;
+const float slowRampSizeDeg = 190;
+const float slowMaxSpeedDeg = 400;
+const float slowMinSpeedDeg = 40;
 
 //Z axis hitting screw
 const int depthSlow = 80;	//percentage of depth to move down until slowing down
