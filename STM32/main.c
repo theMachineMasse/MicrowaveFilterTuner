@@ -20,9 +20,6 @@ int main(void) {
 	motorInit();
 	lightsInit();
 	vdsInit();
-	//enableMotors();
-	//phiHome();
-	//moveP(50);
 	command();
 
 	

@@ -254,6 +254,27 @@ void moveP(int movePosition){
 	
 }
 
+/*******************************************
+*	Function: moveN
+*	Programmer(s): Matthew Rostad and Jarett Tremblay
+*	Date: February 25, 2020
+*	Purpose: Rotates the Phi axis opposite to moveP
+*	Parameters: int movePosition
+*	Return value: N/A
+*******************************************/
+void moveN(int movePosition){
+	sendbyte(' ');
+	sendbyte('N');
+	printHex(movePosition);
+	sendbyte(' '); 
+	pDegG = movePosition;												//update the current position
+	
+	moveMotorDeg(-movePosition);
+	
+}
+
+
+
 
 /*******************************************
 *	Function: delayUs

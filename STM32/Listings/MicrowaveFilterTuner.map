@@ -442,21 +442,21 @@ Image Symbol Table
     i.moveMotorDeg                           0x08001c24   Section        0  motorcontrolsubsystem.o(i.moveMotorDeg)
     i.moveMotorSlow                          0x08001de0   Section        0  motorcontrolsubsystem.o(i.moveMotorSlow)
     i.moveN                                  0x08002468   Section        0  motorcontrolsubsystem.o(i.moveN)
-    i.moveP                                  0x08002498   Section        0  motorcontrolsubsystem.o(i.moveP)
-    i.moveX                                  0x080024c4   Section        0  motorcontrolsubsystem.o(i.moveX)
-    i.moveXSlow                              0x08002508   Section        0  motorcontrolsubsystem.o(i.moveXSlow)
-    i.moveY                                  0x08002554   Section        0  motorcontrolsubsystem.o(i.moveY)
-    i.moveYSlow                              0x08002598   Section        0  motorcontrolsubsystem.o(i.moveYSlow)
-    i.moveZ                                  0x080025e4   Section        0  motorcontrolsubsystem.o(i.moveZ)
-    i.moveZScrew                             0x08002628   Section        0  motorcontrolsubsystem.o(i.moveZScrew)
-    i.moveZSlow                              0x080027a0   Section        0  motorcontrolsubsystem.o(i.moveZSlow)
-    i.nonRecoverableError                    0x080027ec   Section        0  motorcontrolsubsystem.o(i.nonRecoverableError)
-    i.phiHome                                0x080027f0   Section        0  motorcontrolsubsystem.o(i.phiHome)
-    i.printHex                               0x08002b04   Section        0  communications.o(i.printHex)
-    i.sendbyte                               0x08002b84   Section        0  communications.o(i.sendbyte)
-    i.serial_open                            0x08002ba0   Section        0  communications.o(i.serial_open)
-    i.stringToLCD                            0x08002bec   Section        0  visualdisplaysubsystem.o(i.stringToLCD)
-    i.vdsInit                                0x08002c10   Section        0  visualdisplaysubsystem.o(i.vdsInit)
+    i.moveP                                  0x08002494   Section        0  motorcontrolsubsystem.o(i.moveP)
+    i.moveX                                  0x080024c0   Section        0  motorcontrolsubsystem.o(i.moveX)
+    i.moveXSlow                              0x08002504   Section        0  motorcontrolsubsystem.o(i.moveXSlow)
+    i.moveY                                  0x08002550   Section        0  motorcontrolsubsystem.o(i.moveY)
+    i.moveYSlow                              0x08002594   Section        0  motorcontrolsubsystem.o(i.moveYSlow)
+    i.moveZ                                  0x080025e0   Section        0  motorcontrolsubsystem.o(i.moveZ)
+    i.moveZScrew                             0x08002624   Section        0  motorcontrolsubsystem.o(i.moveZScrew)
+    i.moveZSlow                              0x0800279c   Section        0  motorcontrolsubsystem.o(i.moveZSlow)
+    i.nonRecoverableError                    0x080027e8   Section        0  motorcontrolsubsystem.o(i.nonRecoverableError)
+    i.phiHome                                0x080027ec   Section        0  motorcontrolsubsystem.o(i.phiHome)
+    i.printHex                               0x08002b00   Section        0  communications.o(i.printHex)
+    i.sendbyte                               0x08002b80   Section        0  communications.o(i.sendbyte)
+    i.serial_open                            0x08002b9c   Section        0  communications.o(i.serial_open)
+    i.stringToLCD                            0x08002be8   Section        0  visualdisplaysubsystem.o(i.stringToLCD)
+    i.vdsInit                                0x08002c0c   Section        0  visualdisplaysubsystem.o(i.vdsInit)
     .data                                    0x20000000   Section       24  motorcontrolsubsystem.o(.data)
     .data                                    0x20000018   Section        8  communications.o(.data)
     .bss                                     0x20000020   Section       30  communications.o(.bss)
@@ -653,24 +653,24 @@ Image Symbol Table
     moveMotor                                0x08001591   Thumb Code  1672  motorcontrolsubsystem.o(i.moveMotor)
     moveMotorDeg                             0x08001c25   Thumb Code   434  motorcontrolsubsystem.o(i.moveMotorDeg)
     moveMotorSlow                            0x08001de1   Thumb Code  1660  motorcontrolsubsystem.o(i.moveMotorSlow)
-    moveN                                    0x08002469   Thumb Code    42  motorcontrolsubsystem.o(i.moveN)
-    moveP                                    0x08002499   Thumb Code    40  motorcontrolsubsystem.o(i.moveP)
-    moveX                                    0x080024c5   Thumb Code    60  motorcontrolsubsystem.o(i.moveX)
-    moveXSlow                                0x08002509   Thumb Code    66  motorcontrolsubsystem.o(i.moveXSlow)
-    moveY                                    0x08002555   Thumb Code    60  motorcontrolsubsystem.o(i.moveY)
-    moveYSlow                                0x08002599   Thumb Code    66  motorcontrolsubsystem.o(i.moveYSlow)
-    moveZ                                    0x080025e5   Thumb Code    60  motorcontrolsubsystem.o(i.moveZ)
-    moveZScrew                               0x08002629   Thumb Code   360  motorcontrolsubsystem.o(i.moveZScrew)
-    moveZSlow                                0x080027a1   Thumb Code    66  motorcontrolsubsystem.o(i.moveZSlow)
-    nonRecoverableError                      0x080027ed   Thumb Code     4  motorcontrolsubsystem.o(i.nonRecoverableError)
-    phiHome                                  0x080027f1   Thumb Code   776  motorcontrolsubsystem.o(i.phiHome)
-    printHex                                 0x08002b05   Thumb Code   126  communications.o(i.printHex)
-    sendbyte                                 0x08002b85   Thumb Code    22  communications.o(i.sendbyte)
-    serial_open                              0x08002ba1   Thumb Code    66  communications.o(i.serial_open)
-    stringToLCD                              0x08002bed   Thumb Code    34  visualdisplaysubsystem.o(i.stringToLCD)
-    vdsInit                                  0x08002c11   Thumb Code   216  visualdisplaysubsystem.o(i.vdsInit)
-    Region$$Table$$Base                      0x08002d1c   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08002d3c   Number         0  anon$$obj.o(Region$$Table)
+    moveN                                    0x08002469   Thumb Code    40  motorcontrolsubsystem.o(i.moveN)
+    moveP                                    0x08002495   Thumb Code    40  motorcontrolsubsystem.o(i.moveP)
+    moveX                                    0x080024c1   Thumb Code    60  motorcontrolsubsystem.o(i.moveX)
+    moveXSlow                                0x08002505   Thumb Code    66  motorcontrolsubsystem.o(i.moveXSlow)
+    moveY                                    0x08002551   Thumb Code    60  motorcontrolsubsystem.o(i.moveY)
+    moveYSlow                                0x08002595   Thumb Code    66  motorcontrolsubsystem.o(i.moveYSlow)
+    moveZ                                    0x080025e1   Thumb Code    60  motorcontrolsubsystem.o(i.moveZ)
+    moveZScrew                               0x08002625   Thumb Code   360  motorcontrolsubsystem.o(i.moveZScrew)
+    moveZSlow                                0x0800279d   Thumb Code    66  motorcontrolsubsystem.o(i.moveZSlow)
+    nonRecoverableError                      0x080027e9   Thumb Code     4  motorcontrolsubsystem.o(i.nonRecoverableError)
+    phiHome                                  0x080027ed   Thumb Code   776  motorcontrolsubsystem.o(i.phiHome)
+    printHex                                 0x08002b01   Thumb Code   126  communications.o(i.printHex)
+    sendbyte                                 0x08002b81   Thumb Code    22  communications.o(i.sendbyte)
+    serial_open                              0x08002b9d   Thumb Code    66  communications.o(i.serial_open)
+    stringToLCD                              0x08002be9   Thumb Code    34  visualdisplaysubsystem.o(i.stringToLCD)
+    vdsInit                                  0x08002c0d   Thumb Code   216  visualdisplaysubsystem.o(i.vdsInit)
+    Region$$Table$$Base                      0x08002d18   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x08002d38   Number         0  anon$$obj.o(Region$$Table)
     motorsEnabledG                           0x20000000   Data           4  motorcontrolsubsystem.o(.data)
     xPosG                                    0x20000004   Data           4  motorcontrolsubsystem.o(.data)
     yPosG                                    0x20000008   Data           4  motorcontrolsubsystem.o(.data)
@@ -691,9 +691,9 @@ Memory Map of the image
 
   Image Entry point : 0x080001bd
 
-  Load Region LR_1 (Base: 0x08000000, Size: 0x00002d5c, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x08000000, Size: 0x00002d58, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00002d3c, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Exec base: 0x08000000, Load base: 0x08000000, Size: 0x00002d38, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -793,41 +793,41 @@ Memory Map of the image
     0x08001590   0x08001590   0x00000694   Code   RO          159    i.moveMotor         motorcontrolsubsystem.o
     0x08001c24   0x08001c24   0x000001bc   Code   RO          160    i.moveMotorDeg      motorcontrolsubsystem.o
     0x08001de0   0x08001de0   0x00000688   Code   RO          161    i.moveMotorSlow     motorcontrolsubsystem.o
-    0x08002468   0x08002468   0x00000030   Code   RO          162    i.moveN             motorcontrolsubsystem.o
-    0x08002498   0x08002498   0x0000002c   Code   RO          163    i.moveP             motorcontrolsubsystem.o
-    0x080024c4   0x080024c4   0x00000044   Code   RO          164    i.moveX             motorcontrolsubsystem.o
-    0x08002508   0x08002508   0x0000004c   Code   RO          165    i.moveXSlow         motorcontrolsubsystem.o
-    0x08002554   0x08002554   0x00000044   Code   RO          166    i.moveY             motorcontrolsubsystem.o
-    0x08002598   0x08002598   0x0000004c   Code   RO          167    i.moveYSlow         motorcontrolsubsystem.o
-    0x080025e4   0x080025e4   0x00000044   Code   RO          168    i.moveZ             motorcontrolsubsystem.o
-    0x08002628   0x08002628   0x00000178   Code   RO          169    i.moveZScrew        motorcontrolsubsystem.o
-    0x080027a0   0x080027a0   0x0000004c   Code   RO          170    i.moveZSlow         motorcontrolsubsystem.o
-    0x080027ec   0x080027ec   0x00000004   Code   RO          171    i.nonRecoverableError  motorcontrolsubsystem.o
-    0x080027f0   0x080027f0   0x00000314   Code   RO          172    i.phiHome           motorcontrolsubsystem.o
-    0x08002b04   0x08002b04   0x0000007e   Code   RO          310    i.printHex          communications.o
-    0x08002b82   0x08002b82   0x00000002   PAD
-    0x08002b84   0x08002b84   0x0000001c   Code   RO          311    i.sendbyte          communications.o
-    0x08002ba0   0x08002ba0   0x0000004c   Code   RO          312    i.serial_open       communications.o
-    0x08002bec   0x08002bec   0x00000022   Code   RO           65    i.stringToLCD       visualdisplaysubsystem.o
-    0x08002c0e   0x08002c0e   0x00000002   PAD
-    0x08002c10   0x08002c10   0x0000010c   Code   RO           66    i.vdsInit           visualdisplaysubsystem.o
-    0x08002d1c   0x08002d1c   0x00000020   Data   RO          638    Region$$Table       anon$$obj.o
+    0x08002468   0x08002468   0x0000002c   Code   RO          162    i.moveN             motorcontrolsubsystem.o
+    0x08002494   0x08002494   0x0000002c   Code   RO          163    i.moveP             motorcontrolsubsystem.o
+    0x080024c0   0x080024c0   0x00000044   Code   RO          164    i.moveX             motorcontrolsubsystem.o
+    0x08002504   0x08002504   0x0000004c   Code   RO          165    i.moveXSlow         motorcontrolsubsystem.o
+    0x08002550   0x08002550   0x00000044   Code   RO          166    i.moveY             motorcontrolsubsystem.o
+    0x08002594   0x08002594   0x0000004c   Code   RO          167    i.moveYSlow         motorcontrolsubsystem.o
+    0x080025e0   0x080025e0   0x00000044   Code   RO          168    i.moveZ             motorcontrolsubsystem.o
+    0x08002624   0x08002624   0x00000178   Code   RO          169    i.moveZScrew        motorcontrolsubsystem.o
+    0x0800279c   0x0800279c   0x0000004c   Code   RO          170    i.moveZSlow         motorcontrolsubsystem.o
+    0x080027e8   0x080027e8   0x00000004   Code   RO          171    i.nonRecoverableError  motorcontrolsubsystem.o
+    0x080027ec   0x080027ec   0x00000314   Code   RO          172    i.phiHome           motorcontrolsubsystem.o
+    0x08002b00   0x08002b00   0x0000007e   Code   RO          310    i.printHex          communications.o
+    0x08002b7e   0x08002b7e   0x00000002   PAD
+    0x08002b80   0x08002b80   0x0000001c   Code   RO          311    i.sendbyte          communications.o
+    0x08002b9c   0x08002b9c   0x0000004c   Code   RO          312    i.serial_open       communications.o
+    0x08002be8   0x08002be8   0x00000022   Code   RO           65    i.stringToLCD       visualdisplaysubsystem.o
+    0x08002c0a   0x08002c0a   0x00000002   PAD
+    0x08002c0c   0x08002c0c   0x0000010c   Code   RO           66    i.vdsInit           visualdisplaysubsystem.o
+    0x08002d18   0x08002d18   0x00000020   Data   RO          638    Region$$Table       anon$$obj.o
 
 
-    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x08002d3c, Size: 0x00000020, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RW (Exec base: 0x20000000, Load base: 0x08002d38, Size: 0x00000020, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
-    0x20000000   0x08002d3c   0x00000018   Data   RW          174    .data               motorcontrolsubsystem.o
-    0x20000018   0x08002d54   0x00000008   Data   RW          314    .data               communications.o
+    0x20000000   0x08002d38   0x00000018   Data   RW          174    .data               motorcontrolsubsystem.o
+    0x20000018   0x08002d50   0x00000008   Data   RW          314    .data               communications.o
 
 
-    Execution Region ER_ZI (Exec base: 0x20000020, Load base: 0x08002d5c, Size: 0x00000680, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_ZI (Exec base: 0x20000020, Load base: 0x08002d58, Size: 0x00000680, Max: 0xffffffff, ABSOLUTE)
 
     Exec Addr    Load Addr    Size         Type   Attr      Idx    E Section Name        Object
 
     0x20000020        -       0x0000001e   Zero   RW          313    .bss                communications.o
-    0x2000003e   0x08002d5c   0x00000002   PAD
+    0x2000003e   0x08002d58   0x00000002   PAD
     0x20000040        -       0x00000060   Zero   RW          512    .bss                c_w.l(libspace.o)
     0x200000a0        -       0x00000200   Zero   RW          423    HEAP                startup_stm32f10x_md_vl.o
     0x200002a0        -       0x00000400   Zero   RW          422    STACK               startup_stm32f10x_md_vl.o
@@ -840,16 +840,16 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-      1524         88          0          8         30      10319   communications.o
-        30          0          0          0          0       4983   main.o
-      6974        240          0         24          0      17870   motorcontrolsubsystem.o
+      1524         88          0          8         30      10215   communications.o
+        30          0          0          0          0       4987   main.o
+      6970        238          0         24          0      17878   motorcontrolsubsystem.o
         64         26        288          0       1536        832   startup_stm32f10x_md_vl.o
-       292         24          0          0          0       2145   system_stm32f10x.o
-      1796        772          0          0          0       3920   visualdisplaysubsystem.o
-       152         10          0          0          0       1052   visualidentificationsubsystem.o
+       292         24          0          0          0       2037   system_stm32f10x.o
+      1796        772          0          0          0       3924   visualdisplaysubsystem.o
+       152         10          0          0          0       1056   visualidentificationsubsystem.o
 
     ----------------------------------------------------------------------
-     10842       1160        320         32       1568      41121   Object Totals
+     10838       1158        320         32       1568      40929   Object Totals
          0          0         32          0          0          0   (incl. Generated)
         10          0          0          0          2          0   (incl. Padding)
 
@@ -900,15 +900,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     11260       1176        320         32       1664      39257   Grand Totals
-     11260       1176        320         32       1664      39257   ELF Image Totals
-     11260       1176        320         32          0          0   ROM Totals
+     11256       1174        320         32       1664      39065   Grand Totals
+     11256       1174        320         32       1664      39065   ELF Image Totals
+     11256       1174        320         32          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                11580 (  11.31kB)
+    Total RO  Size (Code + RO Data)                11576 (  11.30kB)
     Total RW  Size (RW Data + ZI Data)              1696 (   1.66kB)
-    Total ROM Size (Code + RO Data + RW Data)      11612 (  11.34kB)
+    Total ROM Size (Code + RO Data + RW Data)      11608 (  11.34kB)
 
 ==============================================================================
 
