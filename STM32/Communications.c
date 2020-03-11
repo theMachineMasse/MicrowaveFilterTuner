@@ -373,7 +373,6 @@ int getNum(int i){
 	int decimal = 0;
 	int moveAmount = 0;
 	int multiplyFactor = 1;
-	int negative = 1;
 	for(int j = 0; j<6; j++){
 		if(get[j+i] == ' '){ 	//if character is a space the number is over. Exit the loop
 			j = 7;							//exit the for loop
@@ -417,9 +416,6 @@ int getNum(int i){
 		}
 	}
 	
-	printHex(moveAmount);
-	moveAmount = moveAmount*negative;
-	printHex(moveAmount);
 	
 	return moveAmount;
 }

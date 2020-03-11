@@ -16,7 +16,7 @@ from numpy import array
 
 # Globals #
 g_zoomCamPort = 0  # COM port for the zoom camera
-g_height1 = 246  # height from the bed to the wide angle camera
+g_height1 = 260  # height from the bed to the zoom camera
 g_pixelsPerMM = 16.2    # pixels per milimeter at the bed height
 
 
@@ -36,30 +36,31 @@ def zoom_Camera(sensitivityVal):
     screwLocations = []
 
     minDist = 80       # minimum distance between scerws
-    upCannyThreshold = 120  # sensitivity for detecting circles
-    centerThreshold = 50    # sensitivity for detecting circle centers
-    maxR = 140          # maximum screw radius
+    upCannyThreshold = 100  # sensitivity for detecting circles
+    centerThreshold = 40    # sensitivity for detecting circle centers
+    maxR = 180          # maximum screw radius
     screwCount = 0
     dp = 1
     minDistCenter = 9999 # finds the screw the closest to the center
     closestCenter = 0   # the screw that is the closest to the center
-    measuredDepth = 162  # units are mm
+    measuredDepth = 260  # units are mm
     screwDiameter = 10  # units are mm
     referenceRadius = 102  # units are pixels
 
-    '''
+
     cap = cv2.VideoCapture(g_zoomCamPort)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 2592)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1944)
-    ret, img = cap.read()
-    print(ret)
+    for i in range(0,20):
+        ret, img = cap.read()
+        print(ret)
     cap.release()
     img = cv2.flip(img, -1)
+
     '''
-
-    img = cv2.imread('NewPhotos6/opencv_frame_2.png')  # testing, comment out if taking picture
+    img = cv2.imread('NewPhotos6/opencv_frame_1.png')  # testing, comment out if taking picture
     img = cv2.flip(img, -1)
-
+    '''
 
 
     output = img.copy()
@@ -118,34 +119,31 @@ def zoom_Camera(sensitivityVal):
     calculatedDepth = (screwDiameter * focalLength) / (r * 2)
 
     ################################
-
+    calculatedDepth = 153
     print('depth', calculatedDepth)
 
     offsetImage = img.copy()
 
-    xPixelError = horizontalCenter - x
-    yPixelError = verticalCenter - y
+    xPixelError = x - horizontalCenter
+    yPixelError = y - verticalCenter
     print('x error', xPixelError)
     print('y error', yPixelError)
 
-    new_pixelsPerMM = g_pixelsPerMM * (g_height1 / calculatedDepth)
+    #new_pixelsPerMM = g_pixelsPerMM * (g_height1 / calculatedDepth)
+    calculatedDepth = 205
+    new_pixelsPerMM = -0.1283 * calculatedDepth + 47.762
+    # new_pixelsPerMM = 21.7
     print('px per mm', new_pixelsPerMM)
-    xMMError = xPixelError / new_pixelsPerMM
-    yMMError = yPixelError / new_pixelsPerMM
+    xMMError = xPixelError / new_pixelsPerMM + 137.4
+    yMMError = yPixelError / new_pixelsPerMM + 109.6
     print('x error mm', xMMError)
     print('y error mm', yMMError)
 
     offsetImage = cv2.line(offsetImage, (0, int(y)), (2592, int(y)), (0, 0, 255), 2)
     offsetImage = cv2.line(offsetImage, (int(x), 0), (int(x), 1944), (0, 0, 255), 2)
 
-
-
-
-
-
-
-    offsetImage = cv2.line(offsetImage, (0,972), (2592, 972), (0,0,0), 2)
-    offsetImage = cv2.line(offsetImage, (1290, 0), (1290, 1944), (0, 0, 0), 2)
+    offsetImage = cv2.line(offsetImage, (0,int(verticalCenter)), (2592, int(verticalCenter)), (0,0,0), 2)
+    offsetImage = cv2.line(offsetImage, (int(horizontalCenter), 0), (int(horizontalCenter), 1944), (0, 0, 0), 2)
     cv2.imshow("offset", offsetImage)
 
 

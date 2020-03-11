@@ -109,7 +109,6 @@ void encoderInit(void){
 void moveX(int movePosition){
 	sendbyte(' ');
 	sendbyte('X');
-	printHex(movePosition);
 	sendbyte(' ');
 	lcdDisplayStatus(5);
 	int moveAmount = movePosition - xPosG;			//amount to move based off desired position minus current position 
@@ -132,7 +131,6 @@ void moveX(int movePosition){
 void moveY(int movePosition){
 	sendbyte(' ');
 	sendbyte('Y');
-	printHex(movePosition);
 	sendbyte(' ');
 	lcdDisplayStatus(6);
 	int moveAmount = movePosition - yPosG;			//amount to move based off desired position minus current position 
