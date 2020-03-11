@@ -35,13 +35,13 @@ const int slowMinSpeed = 40;
 
 int pDegG = 0;
 int encFlag = 0;
-const int stepsPerDeg = 9;	//steps per degree = 
-const int rampSizeDeg = 1900;
-const int maxSpeedDeg = 4000;
-const int minSpeedDeg = 2000;
-const int slowRampSizeDeg = 190;
-const int slowMaxSpeedDeg = 400;
-const int slowMinSpeedDeg = 40;
+const float stepsPerDeg = 8.88;	//steps per degree = 
+const float rampSizeDeg = 1900;
+const float maxSpeedDeg = 4000;
+const float minSpeedDeg = 2000;
+const float slowRampSizeDeg = 190;
+const float slowMaxSpeedDeg = 400;
+const float slowMinSpeedDeg = 40;
 
 //Z axis hitting screw
 const int depthSlow = 80;	//percentage of depth to move down until slowing down
@@ -837,8 +837,10 @@ void homeMotors(void){
 *	Parameters: int axis, int movePosition
 *	Return value: N/A
 *******************************************/
-void moveMotorDeg(int moveAmount){
+void moveMotorDeg(float moveAmount){
 	sendbyte('v');
+	
+	lcdDisplayStatus(8);																//moving phi status
 	
 	if(moveAmount > 0){																	//if move direction is positive set direction outputs high
 		GPIOA->BSRR |= GPIO_BSRR_BR8;
@@ -848,9 +850,11 @@ void moveMotorDeg(int moveAmount){
 		moveAmount = moveAmount * -1;											//if move direction is negative take the absolute value
 	}
 	
+
 	moveAmount = (moveAmount * stepsPerDeg) / 10;				//convert move amount from degrees to steps
 	
-
+	moveAmount = (int)moveAmount;
+	
 	printHex(moveAmount);
 	sendbyte(' ');
 	sendbyte(' ');
@@ -925,6 +929,9 @@ void moveMotorDeg(int moveAmount){
 			delayUs(delayTime);
 		}
 	}
+	
+	lcdDisplayStatus(2);																//ready status																	
+	
 }
 
 /*******************************************

@@ -14,6 +14,6 @@ void enableMotors(void);
 void disableMotors(void);
 void homeMotors(void);
 void phiHome(void);
-void moveMotorDeg(int);
+void moveMotorDeg(float);
 void nonRecoverableError(void);
 void delayUs(int uS);
