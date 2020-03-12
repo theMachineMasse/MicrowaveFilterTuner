@@ -1,7 +1,7 @@
 /********************************************
 *	Project: Microwave Filter Tuner
-* File: MotorControlSubSystem
-*	Date: January 27, 2020
+* File: MotorControlSubSystem.c
+*	Date: February 20, 2020
 *	Programmer(s): Matthew Rostad and Jarett Tremblay
 * Sub-System: Motor Control Sub-System
 *	Description: Contains the movement of the motors from Gcode commands
@@ -15,7 +15,7 @@
 #include "stm32f10x.h"
 #include "VisualDisplaySubSystem.h"
 
-//Globals
+/* Globals */
 int motorsEnabledG = 0;
 int xPosG = 0;
 int yPosG = 0;

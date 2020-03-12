@@ -1,9 +1,9 @@
 /********************************************
 *	Project: Microwave Filter Tuner
 * File: Communications.c
-*	Date: January 27, 2020
-*	Programmer(s): Matthew Rostad
-* Sub-System: Motor Control Sub-System
+*	Date: February 8, 2020
+*	Programmer(s): Matthew Rostad and Jarett Tremblay
+* Sub-System: Motor Control Sub-System and Visual Identification Sub-System
 *	Description: Contains all the functions to send and receive G code commands from the PC
 * Version: 1.0
 *	
@@ -16,7 +16,7 @@
 #include "VisualIdentificationSubSystem.h"
 #include "VisualDisplaySubSystem.h"
 
-//Globals
+/* Globals */
 char get[30];				//CLI character buffer
 char input;				//temp value to store input value
 
