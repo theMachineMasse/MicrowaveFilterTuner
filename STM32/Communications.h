@@ -26,6 +26,7 @@ void commandG30(void);
 void commandM42(void);
 void commandM17(void);
 void commandM18(void);
+void commandA(void);
 void printHex(int hex);
 int getNum(int);
 

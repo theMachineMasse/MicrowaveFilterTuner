@@ -19,6 +19,7 @@
 /* Globals */
 char get[30];				//CLI character buffer
 char input;				//temp value to store input value
+int gCodeErrorCount = 0;
 
 
 /*******************************************
@@ -79,6 +80,8 @@ void serial_open (void)
 	USART3->BRR = 0x9C4;
 	USART3->CR1 |= USART_CR1_TE;
 	USART3->CR1 |= USART_CR1_RE;
+	
+	lcdDisplayStatus(1);
 }
 
 
@@ -180,43 +183,77 @@ void checkCommand(char input[30]){
 	
 	if ((get[0] == 'G' || get[0] == 'g') && (get[1] == '0')){
 		commandG0();
+		gCodeErrorCount = 0;
+		lcdDisplayError(99);
 	}
 	
 	else if ((get[0] == 'G'|| get[0] == 'g') && (get[1] == '1') && (get[2] == ' ')){
 		commandG1();
+		gCodeErrorCount = 0;
+		lcdDisplayError(99);
 	}
 	
 	
 	else if ((get[0] == 'G'|| get[0] == 'g') && (get[1] == '2') && (get[2] == '8')){
 		commandG28();
+		gCodeErrorCount = 0;
+		lcdDisplayError(99);
 	}
 	
 	else if ((get[0] == 'G'|| get[0] == 'g') && (get[1] == '3') && (get[2] == '0')){
 		commandG30();
+		gCodeErrorCount = 0;
+		lcdDisplayError(99);
 	}
 	
 	else if ((get[0] == 'G'|| get[0] == 'g') && (get[1] == '1') && (get[2] == '5')){
 		commandG15();
+		gCodeErrorCount = 0;
+		lcdDisplayError(99);
 	}
 	
 	else if ((get[0] == 'G'|| get[0] == 'g') && (get[1] == '1') && (get[2] == '6')){
-		sendbyte('q');
 		commandG16();
+		gCodeErrorCount = 0;
+		lcdDisplayError(99);
 	}
 	
 	else if ((get[0] == 'M'|| get[0] == 'm') && (get[1] == '4') && (get[2] == '2')){
 		commandM42();
+		gCodeErrorCount = 0;
+		lcdDisplayError(99);
 	}
 	
 	else if ((get[0] == 'M'|| get[0] == 'm') && (get[1] == '1') && (get[2] == '7')){
 		commandM17();
+		gCodeErrorCount = 0;
+		lcdDisplayError(99);
 	}
 	
 	else if ((get[0] == 'M'|| get[0] == 'm') && (get[1] == '1') && (get[2] == '8')){
 		commandM18();
+		gCodeErrorCount = 0;
+		lcdDisplayError(99);
+	}
+	
+	else if ((get[0] == 'A' || get[0] == 'a')){
+		commandA();
+		gCodeErrorCount = 0;
+		lcdDisplayError(99);
 	}
 
+	else{
+		lcdDisplayError(31);
+		gCodeErrorCount ++;
+	}
+		
+	if(gCodeErrorCount >= 3){
+		lcdDisplayError(11);
+		nonRecoverableError();
+	}
+	
 	lcdDisplayStatus(2);	//set ready status
+	sendbyte('k');	//send ok message
 	
 	
 }
@@ -506,4 +543,17 @@ void commandM17(void){
 void commandM18(void){
 	disableMotors();
 	
+}
+
+
+/*******************************************
+*	Function: commandA
+*	Programmer(s): Matthew Rostad
+*	Date: February 8, 2020
+*	Purpose: hello message from the PC to start communications
+*	Parameters: N/A
+*	Return value: N/A
+*******************************************/
+void commandA(void){
+	lcdDisplayStatus(3);
 }
