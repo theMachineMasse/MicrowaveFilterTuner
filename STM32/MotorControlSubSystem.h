@@ -1,3 +1,15 @@
+/********************************************
+*	Project: Microwave Filter Tuner
+* File: MotorControlSubSystem.h
+*	Date: February 20, 2020
+*	Programmer(s): Matthew Rostad and Jarett Tremblay
+* Sub-System: Motor Control Sub-System
+*	Description: Function declarations for all functions related to the Motor Control Sub-System (MCS)
+* Version: 1.0
+*	
+********************************************/
+
+/* FUNCTIONS */
 void motorInit(void);
 void moveX(int);
 void moveY(int);

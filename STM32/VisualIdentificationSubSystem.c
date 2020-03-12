@@ -1,9 +1,9 @@
 /********************************************
 *	Project: Microwave Filter Tuner
-* File: VisualIdentificationSubSystem
+* File: VisualIdentificationSubSystem.c
 *	Date: February 20, 2020
 *	Programmer(s): Matthew Rostad
-* Sub-System: Visual Identification SubSystem
+* Sub-System: Visual Identification Sub-System
 *	Description: Controls the lights and other visual identification systems
 * Version: 1.0
 *	

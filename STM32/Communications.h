@@ -1,3 +1,15 @@
+/********************************************
+*	Project: Microwave Filter Tuner
+* File: Communications.h
+*	Date: February 8, 2020
+*	Programmer(s): Matthew Rostad and Jarett Tremblay
+* Sub-System: Motor Control Sub-System and Visual Identification Sub-System
+*	Description: Function declarations for all communication functions related to the Motor Control Sub-System (MCS) and Visual Identification Sub-System (VIS)
+* Version: 1.0
+*	
+********************************************/
+
+/* FUNCTIONS */
 void clockInit (void);
 void serial_open (void);
 void sendbyte(char);

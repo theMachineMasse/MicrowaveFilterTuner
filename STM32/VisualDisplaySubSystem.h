@@ -4,7 +4,7 @@
 *	Date: January 27, 2020
 *	Programmer(s): Braden Massé
 * Sub-System: Visual Display Sub-System
-*	Description: Function declarations for all functions related tp the Visual Display Sub-System (VDS)
+*	Description: Function declarations for all functions related to the Visual Display Sub-System (VDS)
 * Version: 1.4
 *	
 ********************************************/

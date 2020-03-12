@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\MicrowaveFilterTuner.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\MicrowaveFilterTuner.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Tue Mar 10 15:26:41 2020
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060750: Last Updated: Thu Mar 12 08:35:15 2020
 <BR><P>
 <H3>Maximum Stack Usage =        120 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -423,7 +423,7 @@ Global Symbols
 <P><STRONG><a name="[86]"></a>strlen</STRONG> (Thumb, 62 bytes, Stack size 8 bytes, strlen.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 8<LI>Call Chain = strlen
 </UL>
-<BR>[Called By]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stringToLCD
+<BR>[Called By]<UL><LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stringToLCD
 </UL>
 
 <P><STRONG><a name="[6f]"></a>__aeabi_memclr4</STRONG> (Thumb, 0 bytes, Stack size 4 bytes, rt_memclr_w.o(.text))
@@ -576,7 +576,7 @@ Global Symbols
 </UL>
 
 <P><STRONG><a name="[52]"></a>commandG30</STRONG> (Thumb, 50 bytes, Stack size 16 bytes, communications.o(i.commandG30))
-<BR><BR>[Stack]<UL><LI>Max Depth = 76<LI>Call Chain = commandG30 &rArr; getNum &rArr; __aeabi_memclr4
+<BR><BR>[Stack]<UL><LI>Max Depth = 68<LI>Call Chain = commandG30 &rArr; getNum &rArr; __aeabi_memclr4
 </UL>
 <BR>[Calls]<UL><LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getNum
 <LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveZScrew
@@ -614,7 +614,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayStatus
-<LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayError
+<LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayError
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vdsInit
 </UL>
 
@@ -623,7 +623,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay
 </UL>
-<BR>[Called By]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stringToLCD
+<BR>[Called By]<UL><LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stringToLCD
 </UL>
 
 <P><STRONG><a name="[6d]"></a>delay</STRONG> (Thumb, 14 bytes, Stack size 0 bytes, visualdisplaysubsystem.o(i.delay))
@@ -631,7 +631,7 @@ Global Symbols
 <LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commandToLCD
 </UL>
 
-<P><STRONG><a name="[71]"></a>delayUs</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, motorcontrolsubsystem.o(i.delayUs))
+<P><STRONG><a name="[70]"></a>delayUs</STRONG> (Thumb, 22 bytes, Stack size 0 bytes, motorcontrolsubsystem.o(i.delayUs))
 <BR><BR>[Called By]<UL><LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;phiHome
 <LI><a href="#[68]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveZScrew
 <LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveMotorSlow
@@ -649,11 +649,10 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[57]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commandM17
 </UL>
 
-<P><STRONG><a name="[5d]"></a>getNum</STRONG> (Thumb, 212 bytes, Stack size 56 bytes, communications.o(i.getNum))
-<BR><BR>[Stack]<UL><LI>Max Depth = 60<LI>Call Chain = getNum &rArr; __aeabi_memclr4
+<P><STRONG><a name="[5d]"></a>getNum</STRONG> (Thumb, 178 bytes, Stack size 48 bytes, communications.o(i.getNum))
+<BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = getNum &rArr; __aeabi_memclr4
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_memclr4
-<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
 </UL>
 <BR>[Called By]<UL><LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commandG30
 <LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commandG16
@@ -668,16 +667,16 @@ Global Symbols
 <P><STRONG><a name="[67]"></a>homeMotors</STRONG> (Thumb, 1158 bytes, Stack size 40 bytes, motorcontrolsubsystem.o(i.homeMotors))
 <BR><BR>[Stack]<UL><LI>Max Depth = 72<LI>Call Chain = homeMotors &rArr; lcdDisplayError &rArr; stringToLCD &rArr; strlen
 </UL>
-<BR>[Calls]<UL><LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delayUs
-<LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayError
+<BR>[Calls]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delayUs
+<LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayError
 </UL>
 <BR>[Called By]<UL><LI><a href="#[51]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commandG28
 </UL>
 
-<P><STRONG><a name="[72]"></a>lcdDisplayError</STRONG> (Thumb, 444 bytes, Stack size 8 bytes, visualdisplaysubsystem.o(i.lcdDisplayError))
+<P><STRONG><a name="[71]"></a>lcdDisplayError</STRONG> (Thumb, 444 bytes, Stack size 8 bytes, visualdisplaysubsystem.o(i.lcdDisplayError))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = lcdDisplayError &rArr; stringToLCD &rArr; strlen
 </UL>
-<BR>[Calls]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stringToLCD
+<BR>[Calls]<UL><LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stringToLCD
 <LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commandToLCD
 </UL>
 <BR>[Called By]<UL><LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;phiHome
@@ -689,7 +688,7 @@ Global Symbols
 <P><STRONG><a name="[5c]"></a>lcdDisplayStatus</STRONG> (Thumb, 232 bytes, Stack size 8 bytes, visualdisplaysubsystem.o(i.lcdDisplayStatus))
 <BR><BR>[Stack]<UL><LI>Max Depth = 32<LI>Call Chain = lcdDisplayStatus &rArr; stringToLCD &rArr; strlen
 </UL>
-<BR>[Calls]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stringToLCD
+<BR>[Calls]<UL><LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stringToLCD
 <LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commandToLCD
 </UL>
 <BR>[Called By]<UL><LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;phiHome
@@ -712,7 +711,7 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 20<LI>Call Chain = lightsToggle &rArr; printHex
 </UL>
 <BR>[Calls]<UL><LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendbyte
-<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
+<LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
 </UL>
 <BR>[Called By]<UL><LI><a href="#[56]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commandM42
 </UL>
@@ -742,10 +741,10 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = moveMotor &rArr; lcdDisplayError &rArr; stringToLCD &rArr; strlen
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nonRecoverableError
-<LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delayUs
+<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delayUs
 <LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendbyte
-<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
-<LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayError
+<LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
+<LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayError
 </UL>
 <BR>[Called By]<UL><LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveZ
 <LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveY
@@ -764,9 +763,9 @@ Global Symbols
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fsub
 <LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_frsub
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fadd
-<LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delayUs
+<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delayUs
 <LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendbyte
-<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
+<LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayStatus
 </UL>
 <BR>[Called By]<UL><LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveP
@@ -777,10 +776,10 @@ Global Symbols
 <BR><BR>[Stack]<UL><LI>Max Depth = 64<LI>Call Chain = moveMotorSlow &rArr; lcdDisplayError &rArr; stringToLCD &rArr; strlen
 </UL>
 <BR>[Calls]<UL><LI><a href="#[7a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;nonRecoverableError
-<LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delayUs
+<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delayUs
 <LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendbyte
-<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
-<LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayError
+<LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
+<LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayError
 </UL>
 <BR>[Called By]<UL><LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveZSlow
 <LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveYSlow
@@ -793,7 +792,7 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2f
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveMotorDeg
 <LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendbyte
-<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
+<LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
 </UL>
 <BR>[Called By]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commandG16
 </UL>
@@ -804,17 +803,16 @@ Global Symbols
 <BR>[Calls]<UL><LI><a href="#[80]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_i2f
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveMotorDeg
 <LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendbyte
-<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
+<LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
 </UL>
 <BR>[Called By]<UL><LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commandG16
 </UL>
 
-<P><STRONG><a name="[5e]"></a>moveX</STRONG> (Thumb, 60 bytes, Stack size 16 bytes, motorcontrolsubsystem.o(i.moveX))
+<P><STRONG><a name="[5e]"></a>moveX</STRONG> (Thumb, 54 bytes, Stack size 16 bytes, motorcontrolsubsystem.o(i.moveX))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = moveX &rArr; moveMotor &rArr; lcdDisplayError &rArr; stringToLCD &rArr; strlen
 </UL>
 <BR>[Calls]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveMotor
 <LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendbyte
-<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayStatus
 </UL>
 <BR>[Called By]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commandG0
@@ -825,18 +823,17 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveMotorSlow
 <LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendbyte
-<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
+<LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayStatus
 </UL>
 <BR>[Called By]<UL><LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commandG1
 </UL>
 
-<P><STRONG><a name="[5f]"></a>moveY</STRONG> (Thumb, 60 bytes, Stack size 16 bytes, motorcontrolsubsystem.o(i.moveY))
+<P><STRONG><a name="[5f]"></a>moveY</STRONG> (Thumb, 54 bytes, Stack size 16 bytes, motorcontrolsubsystem.o(i.moveY))
 <BR><BR>[Stack]<UL><LI>Max Depth = 80<LI>Call Chain = moveY &rArr; moveMotor &rArr; lcdDisplayError &rArr; stringToLCD &rArr; strlen
 </UL>
 <BR>[Calls]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveMotor
 <LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendbyte
-<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayStatus
 </UL>
 <BR>[Called By]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commandG0
@@ -847,7 +844,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveMotorSlow
 <LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendbyte
-<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
+<LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayStatus
 </UL>
 <BR>[Called By]<UL><LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commandG1
@@ -858,7 +855,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveMotor
 <LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendbyte
-<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
+<LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayStatus
 </UL>
 <BR>[Called By]<UL><LI><a href="#[4f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commandG0
@@ -867,7 +864,7 @@ Global Symbols
 <P><STRONG><a name="[68]"></a>moveZScrew</STRONG> (Thumb, 360 bytes, Stack size 40 bytes, motorcontrolsubsystem.o(i.moveZScrew))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = moveZScrew
 </UL>
-<BR>[Calls]<UL><LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delayUs
+<BR>[Calls]<UL><LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delayUs
 </UL>
 <BR>[Called By]<UL><LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commandG30
 </UL>
@@ -877,7 +874,7 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveMotorSlow
 <LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendbyte
-<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
+<LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayStatus
 </UL>
 <BR>[Called By]<UL><LI><a href="#[50]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commandG1
@@ -899,28 +896,25 @@ Global Symbols
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fsub
 <LI><a href="#[84]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_frsub
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_fadd
-<LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delayUs
+<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delayUs
 <LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendbyte
-<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
+<LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayStatus
-<LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayError
+<LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayError
 </UL>
 <BR>[Called By]<UL><LI><a href="#[53]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commandG15
 </UL>
 
-<P><STRONG><a name="[70]"></a>printHex</STRONG> (Thumb, 126 bytes, Stack size 4 bytes, communications.o(i.printHex))
+<P><STRONG><a name="[73]"></a>printHex</STRONG> (Thumb, 126 bytes, Stack size 4 bytes, communications.o(i.printHex))
 <BR><BR>[Stack]<UL><LI>Max Depth = 4<LI>Call Chain = printHex
 </UL>
 <BR>[Calls]<UL><LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;sendbyte
 </UL>
-<BR>[Called By]<UL><LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;getNum
-<LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;phiHome
+<BR>[Called By]<UL><LI><a href="#[64]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;phiHome
 <LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveZSlow
 <LI><a href="#[60]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveZ
 <LI><a href="#[62]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveYSlow
-<LI><a href="#[5f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveY
 <LI><a href="#[61]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveXSlow
-<LI><a href="#[5e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveX
 <LI><a href="#[65]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveP
 <LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveN
 <LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveMotorSlow
@@ -945,7 +939,7 @@ Global Symbols
 <LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveMotorSlow
 <LI><a href="#[7b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveMotorDeg
 <LI><a href="#[79]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;moveMotor
-<LI><a href="#[70]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
+<LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;printHex
 <LI><a href="#[6b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lightsToggle
 <LI><a href="#[59]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;command
 </UL>
@@ -954,21 +948,21 @@ Global Symbols
 <BR><BR>[Called By]<UL><LI><a href="#[44]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[73]"></a>stringToLCD</STRONG> (Thumb, 34 bytes, Stack size 16 bytes, visualdisplaysubsystem.o(i.stringToLCD))
+<P><STRONG><a name="[72]"></a>stringToLCD</STRONG> (Thumb, 34 bytes, Stack size 16 bytes, visualdisplaysubsystem.o(i.stringToLCD))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = stringToLCD &rArr; strlen
 </UL>
 <BR>[Calls]<UL><LI><a href="#[86]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;strlen
 <LI><a href="#[6e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;dataToLCD
 </UL>
 <BR>[Called By]<UL><LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayStatus
-<LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayError
+<LI><a href="#[71]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayError
 <LI><a href="#[78]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;vdsInit
 </UL>
 
 <P><STRONG><a name="[78]"></a>vdsInit</STRONG> (Thumb, 216 bytes, Stack size 8 bytes, visualdisplaysubsystem.o(i.vdsInit))
 <BR><BR>[Stack]<UL><LI>Max Depth = 40<LI>Call Chain = vdsInit &rArr; lcdDisplayStatus &rArr; stringToLCD &rArr; strlen
 </UL>
-<BR>[Calls]<UL><LI><a href="#[73]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stringToLCD
+<BR>[Calls]<UL><LI><a href="#[72]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;stringToLCD
 <LI><a href="#[5c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;lcdDisplayStatus
 <LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;commandToLCD
 </UL>
