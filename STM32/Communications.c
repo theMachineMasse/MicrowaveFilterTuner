@@ -152,7 +152,6 @@ void command(void){
 	while(1){
 		input = getbyte();		//get the current byte
 		get[i] = input;				//set the temperary char to the current byte
-		lcdDisplayStatus(2);	//set ready status
 		
 		if((input == 0xD) || (i >= 29)){	//if the input is an enter command check the byte
 			checkCommand(get);	//check to see if command matches an input command
@@ -217,7 +216,7 @@ void checkCommand(char input[30]){
 		commandM18();
 	}
 
-	
+	lcdDisplayStatus(2);	//set ready status
 	
 	
 }

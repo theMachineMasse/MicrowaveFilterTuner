@@ -713,7 +713,7 @@ void disableMotors(void){
 *******************************************/
 void homeMotors(void){
  if(motorsEnabledG){	
-	
+	lcdDisplayStatus(3);
 	int delayTime;
 	int speedAccel;
 	int homeTimeout = 1000000;

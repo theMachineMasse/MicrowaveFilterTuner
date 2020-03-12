@@ -15,7 +15,7 @@ import statistics
 from numpy import array
 
 # Globals #
-g_zoomCamPort = 0  # COM port for the zoom camera
+g_zoomCamPort = 1  # COM port for the zoom camera
 g_height1 = 260  # height from the bed to the zoom camera
 g_pixelsPerMM = 16.2    # pixels per milimeter at the bed height
 
@@ -36,18 +36,18 @@ def zoom_Camera(sensitivityVal):
     screwLocations = []
 
     minDist = 80       # minimum distance between scerws
-    upCannyThreshold = 100  # sensitivity for detecting circles
-    centerThreshold = 40    # sensitivity for detecting circle centers
+    upCannyThreshold = 120  # sensitivity for detecting circles
+    centerThreshold = 55    # sensitivity for detecting circle centers
     maxR = 180          # maximum screw radius
     screwCount = 0
     dp = 1
     minDistCenter = 9999 # finds the screw the closest to the center
     closestCenter = 0   # the screw that is the closest to the center
-    measuredDepth = 260  # units are mm
+    measuredDepth = 195  # units are mm
     screwDiameter = 10  # units are mm
     referenceRadius = 102  # units are pixels
 
-
+    '''
     cap = cv2.VideoCapture(g_zoomCamPort)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 2592)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1944)
@@ -58,9 +58,9 @@ def zoom_Camera(sensitivityVal):
     img = cv2.flip(img, -1)
 
     '''
-    img = cv2.imread('NewPhotos6/opencv_frame_1.png')  # testing, comment out if taking picture
+    img = cv2.imread('NewPhotos6/opencv_frame_2.png')  # testing, comment out if taking picture
     img = cv2.flip(img, -1)
-    '''
+
 
 
     output = img.copy()
@@ -81,7 +81,6 @@ def zoom_Camera(sensitivityVal):
         height, width = img.shape[:2]       # get the height and width of the image
         verticalCenter = height/2
         horizontalCenter = width/2
-
         #################################
         # determine which screw is closest to the center
         distCenter = abs(x - horizontalCenter) + abs(y - verticalCenter)
@@ -119,7 +118,6 @@ def zoom_Camera(sensitivityVal):
     calculatedDepth = (screwDiameter * focalLength) / (r * 2)
 
     ################################
-    calculatedDepth = 153
     print('depth', calculatedDepth)
 
     offsetImage = img.copy()
@@ -130,12 +128,15 @@ def zoom_Camera(sensitivityVal):
     print('y error', yPixelError)
 
     #new_pixelsPerMM = g_pixelsPerMM * (g_height1 / calculatedDepth)
-    calculatedDepth = 205
+    # calculatedDepth = 205
+    # bedHeight = 260
+    # filterHeight = 65
+    # calculatedDepth = bedHeight - filterHeight
     new_pixelsPerMM = -0.1283 * calculatedDepth + 47.762
     # new_pixelsPerMM = 21.7
     print('px per mm', new_pixelsPerMM)
-    xMMError = xPixelError / new_pixelsPerMM + 137.4
-    yMMError = yPixelError / new_pixelsPerMM + 109.6
+    xMMError = xPixelError / new_pixelsPerMM + 100 # + 137.4
+    yMMError = yPixelError / new_pixelsPerMM + 100 # + 109.6
     print('x error mm', xMMError)
     print('y error mm', yMMError)
 
@@ -230,7 +231,7 @@ def zoom_Camera(sensitivityVal):
     # End of Function Clean-Up *
     cv2.waitKey(0)  # close image on pressing any key
     cv2.destroyAllWindows()
-
+    print(screwAngle)
     return
 
 # global list
