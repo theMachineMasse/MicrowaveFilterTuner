@@ -53,7 +53,8 @@ def wideAngleCamera(sensitivityVal):
     cap = cv2.VideoCapture(g_wideCamPort)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 2592)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1944)
-    ret, img = cap.read()
+    for i in range(0, 20):
+        ret, img = cap.read()
     cap.release()
     # cv2.imshow("test", img)
     # cv2.waitKey(0)  # close image on pressing any key

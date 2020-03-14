@@ -47,7 +47,7 @@ def zoom_Camera(sensitivityVal):
     screwDiameter = 10  # units are mm
     referenceRadius = 102  # units are pixels
 
-    '''
+
     cap = cv2.VideoCapture(g_zoomCamPort)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, 2592)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1944)
@@ -60,7 +60,7 @@ def zoom_Camera(sensitivityVal):
     '''
     img = cv2.imread('NewPhotos6/opencv_frame_2.png')  # testing, comment out if taking picture
     img = cv2.flip(img, -1)
-
+    '''
 
 
     output = img.copy()

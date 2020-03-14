@@ -2,22 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2eb1c72a-8ae1-4342-9219-6cffbd99a83d" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/OpenCV.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/OpenCV.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/OpenCVMaster.py" beforeDir="false" afterPath="$PROJECT_DIR$/OpenCVMaster.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/output.png" beforeDir="false" afterPath="$PROJECT_DIR$/output.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/temp.png" beforeDir="false" afterPath="$PROJECT_DIR$/temp.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../OpenCV_Zoom/OpenCVZoom.py" beforeDir="false" afterPath="$PROJECT_DIR$/../OpenCV_Zoom/OpenCVZoom.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../STM32/Communications.c" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/Communications.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../STM32/Listings/MicrowaveFilterTuner.map" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/Listings/MicrowaveFilterTuner.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../STM32/MicrowaveFilterTuner.uvguix.matth" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/MicrowaveFilterTuner.uvguix.matth" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../STM32/Objects/MicrowaveFilterTuner.axf" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/Objects/MicrowaveFilterTuner.axf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../STM32/Objects/MicrowaveFilterTuner.build_log.htm" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/Objects/MicrowaveFilterTuner.build_log.htm" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../STM32/Objects/MicrowaveFilterTuner.htm" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/Objects/MicrowaveFilterTuner.htm" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../STM32/Objects/MicrowaveFilterTuner_Target 1.dep" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/Objects/MicrowaveFilterTuner_Target 1.dep" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../STM32/Objects/communications.crf" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/Objects/communications.crf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../STM32/Objects/communications.o" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/Objects/communications.o" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../STM32/Objects/motorcontrolsubsystem.crf" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/Objects/motorcontrolsubsystem.crf" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../STM32/Objects/motorcontrolsubsystem.o" beforeDir="false" afterPath="$PROJECT_DIR$/../STM32/Objects/motorcontrolsubsystem.o" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -58,7 +48,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.OpenCVZoom">
+  <component name="RunManager" selected="Python.OpenCVMaster">
     <configuration name="ImgCap" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="OpenCV" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -173,10 +163,10 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.OpenCVZoom" />
-        <item itemvalue="Python.ImgCap" />
         <item itemvalue="Python.OpenCVMaster" />
         <item itemvalue="Python.OpenCV" />
+        <item itemvalue="Python.OpenCVZoom" />
+        <item itemvalue="Python.ImgCap" />
         <item itemvalue="Python.OpenCVMattTest" />
       </list>
     </recent_temporary>
