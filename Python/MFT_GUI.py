@@ -70,9 +70,12 @@ class Ui_MainWindow(object):
         font.setUnderline(True)
         self.Settings_Label.setFont(font)
         self.Settings_Label.setObjectName("Settings_Label")
+        
         self.Send_Cmd_Button = QtWidgets.QCommandLinkButton(self.centralwidget)
+        self.Send_Cmd_Button.clicked.connect(self.cmdButton)
         self.Send_Cmd_Button.setGeometry(QtCore.QRect(710, 770, 151, 41))
         self.Send_Cmd_Button.setObjectName("Send_Cmd_Button")
+        
         self.Screw_Type_List = QtWidgets.QComboBox(self.centralwidget)
         self.Screw_Type_List.setGeometry(QtCore.QRect(70, 560, 161, 22))
         self.Screw_Type_List.setObjectName("Screw_Type_List")
@@ -117,18 +120,23 @@ class Ui_MainWindow(object):
         self.MZC_Port_Label = QtWidgets.QLabel(self.centralwidget)
         self.MZC_Port_Label.setGeometry(QtCore.QRect(90, 710, 121, 21))
         self.MZC_Port_Label.setObjectName("MZC_Port_Label")
+        
         self.Tighten_Button = QtWidgets.QPushButton(self.centralwidget)
+        self.Tighten_Button.clicked.connect(self.tightenButton)
         self.Tighten_Button.setGeometry(QtCore.QRect(870, 570, 161, 81))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.Tighten_Button.setFont(font)
         self.Tighten_Button.setObjectName("Tighten_Button")
+        
         self.Tune_Button = QtWidgets.QPushButton(self.centralwidget)
+        self.Tune_Button.clicked.connect(self.tuneButton)
         self.Tune_Button.setGeometry(QtCore.QRect(870, 470, 161, 81))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.Tune_Button.setFont(font)
         self.Tune_Button.setObjectName("Tune_Button")
+        
         self.Status_Browser = QtWidgets.QTextBrowser(self.centralwidget)
         self.Status_Browser.setGeometry(QtCore.QRect(330, 860, 381, 61))
         font = QtGui.QFont()
@@ -141,7 +149,7 @@ class Ui_MainWindow(object):
         self.MFT_Logo = QtWidgets.QLabel(self.centralwidget)
         self.MFT_Logo.setGeometry(QtCore.QRect(820, 750, 300, 300))
         self.MFT_Logo.setText("")
-        self.MFT_Logo.setPixmap(QtGui.QPixmap("MFT V2_TopRight.png"))
+        self.MFT_Logo.setPixmap(QtGui.QPixmap("MFT_Logo.png"))
         self.MFT_Logo.setScaledContents(True)
         self.MFT_Logo.setObjectName("MFT_Logo")
         self.Send_Cmd_Button.raise_()
@@ -216,6 +224,17 @@ class Ui_MainWindow(object):
         self.Tune_Button.setText(_translate("MainWindow", "Tune"))
         self.Status_Label.setText(_translate("MainWindow", "Status"))
 
+    def tuneButton(self):
+        sys.exit()
+
+    def tightenButton(self):
+        sys.exit()
+        
+    def cmdButton(self):
+        sys.exit()
+
+        
+        
 
 if __name__ == "__main__":
     import sys
