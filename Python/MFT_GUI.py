@@ -16,23 +16,25 @@ class Ui_MainWindow(object):
         MainWindow.resize(1105, 1000)
         MainWindow.setMinimumSize(QtCore.QSize(1105, 1000))
         MainWindow.setMaximumSize(QtCore.QSize(1105, 1000))
+        
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
+        #Wide Angle Camera Slider
+        self.WAC_Sensitivity_Slider = QtWidgets.QSlider(self.centralwidget)
+        self.WAC_Sensitivity_Slider.setGeometry(QtCore.QRect(70, 570, 160, 22))
+        self.WAC_Sensitivity_Slider.setOrientation(QtCore.Qt.Horizontal)
+        self.WAC_Sensitivity_Slider.setObjectName("WAC_Sensitivity_Slider")
         
-        self.Sensitivity_Slider = QtWidgets.QSlider(self.centralwidget)
-        self.Sensitivity_Slider.setGeometry(QtCore.QRect(70, 510, 160, 22))
-        self.Sensitivity_Slider.setOrientation(QtCore.Qt.Horizontal)
-        self.Sensitivity_Slider.setObjectName("Sensitivity_Slider")
+        self.WAC_Sensitivity_Label = QtWidgets.QLabel(self.centralwidget)
+        self.WAC_Sensitivity_Label.setGeometry(QtCore.QRect(70, 540, 171, 21))
+        self.WAC_Sensitivity_Label.setObjectName("WAC_Sensitivity_Label")
         
-        self.Sensitivity_Label = QtWidgets.QLabel(self.centralwidget)
-        self.Sensitivity_Label.setGeometry(QtCore.QRect(100, 480, 101, 21))
-        self.Sensitivity_Label.setObjectName("Sensitivity_Label")
         self.Enter_Cmd_Line = QtWidgets.QLineEdit(self.centralwidget)
         self.Enter_Cmd_Line.setEnabled(True)
         self.Enter_Cmd_Line.setGeometry(QtCore.QRect(330, 770, 381, 41))
         font = QtGui.QFont()
         font.setPointSize(11)
-        
         self.Enter_Cmd_Line.setFont(font)
         self.Enter_Cmd_Line.setText("")
         self.Enter_Cmd_Line.setObjectName("Enter_Cmd_Line")
@@ -58,69 +60,37 @@ class Ui_MainWindow(object):
         self.Output_Label.setObjectName("Output_Label")
         
         self.Settings_Label = QtWidgets.QLabel(self.centralwidget)
-        self.Settings_Label.setGeometry(QtCore.QRect(130, 430, 51, 31))
+        self.Settings_Label.setGeometry(QtCore.QRect(120, 430, 61, 21))
         font = QtGui.QFont()
-        font.setPointSize(11)
+        font.setPointSize(12)
         font.setUnderline(True)
         self.Settings_Label.setFont(font)
         self.Settings_Label.setObjectName("Settings_Label")
-        
+
+        #Send Command
         self.Send_Cmd_Button = QtWidgets.QCommandLinkButton(self.centralwidget)
         self.Send_Cmd_Button.clicked.connect(self.cmdButton)
         self.Send_Cmd_Button.setGeometry(QtCore.QRect(710, 770, 151, 41))
         self.Send_Cmd_Button.setObjectName("Send_Cmd_Button")
         
-        self.Screw_Type_List = QtWidgets.QComboBox(self.centralwidget)
-        self.Screw_Type_List.setGeometry(QtCore.QRect(70, 560, 161, 22))
-        self.Screw_Type_List.setObjectName("Screw_Type_List")
-        self.Screw_Type_List.addItem("")
-        
-        self.Screw_Type_Label = QtWidgets.QLabel(self.centralwidget)
-        self.Screw_Type_Label.setGeometry(QtCore.QRect(120, 540, 61, 21))
-        self.Screw_Type_Label.setObjectName("Screw_Type_Label")
-        
-        self.MZC_Port_List = QtWidgets.QComboBox(self.centralwidget)
-        self.MZC_Port_List.setGeometry(QtCore.QRect(70, 730, 161, 22))
-        self.MZC_Port_List.setObjectName("MZC_Port_List")
-        self.MZC_Port_List.addItem("")
-        self.MZC_Port_List.addItem("")
-        self.MZC_Port_List.addItem("")
-        self.MZC_Port_List.addItem("")
-        
         self.WAC_Port_Label = QtWidgets.QLabel(self.centralwidget)
-        self.WAC_Port_Label.setGeometry(QtCore.QRect(90, 650, 121, 21))
+        self.WAC_Port_Label.setGeometry(QtCore.QRect(70, 740, 121, 21))
         self.WAC_Port_Label.setObjectName("WAC_Port_Label")
         
-        self.Serial_Port_List = QtWidgets.QComboBox(self.centralwidget)
-        self.Serial_Port_List.setGeometry(QtCore.QRect(70, 790, 161, 22))
-        self.Serial_Port_List.setObjectName("Serial_Port_List")
-        self.Serial_Port_List.addItem("")
-        self.Serial_Port_List.addItem("")
-        self.Serial_Port_List.addItem("")
-        self.Serial_Port_List.addItem("")
-        
         self.Serial_Port_Label = QtWidgets.QLabel(self.centralwidget)
-        self.Serial_Port_Label.setGeometry(QtCore.QRect(110, 770, 81, 21))
+        self.Serial_Port_Label.setGeometry(QtCore.QRect(90, 860, 81, 21))
         self.Serial_Port_Label.setObjectName("Serial_Port_Label")
         
-        self.WAC_Port_List = QtWidgets.QComboBox(self.centralwidget)
-        self.WAC_Port_List.setGeometry(QtCore.QRect(70, 670, 161, 22))
-        self.WAC_Port_List.setObjectName("WAC_Port_List")
-        self.WAC_Port_List.addItem("")
-        self.WAC_Port_List.addItem("")
-        self.WAC_Port_List.addItem("")
-        self.WAC_Port_List.addItem("")
-        
         self.COM_Port_Label = QtWidgets.QLabel(self.centralwidget)
-        self.COM_Port_Label.setGeometry(QtCore.QRect(120, 610, 71, 31))
+        self.COM_Port_Label.setGeometry(QtCore.QRect(110, 690, 81, 31))
         font = QtGui.QFont()
-        font.setPointSize(11)
+        font.setPointSize(12)
         font.setUnderline(True)
         self.COM_Port_Label.setFont(font)
         self.COM_Port_Label.setObjectName("COM_Port_Label")
         
         self.MZC_Port_Label = QtWidgets.QLabel(self.centralwidget)
-        self.MZC_Port_Label.setGeometry(QtCore.QRect(90, 710, 121, 21))
+        self.MZC_Port_Label.setGeometry(QtCore.QRect(70, 800, 121, 21))
         self.MZC_Port_Label.setObjectName("MZC_Port_Label")
 
         #Tighten Button
@@ -131,7 +101,7 @@ class Ui_MainWindow(object):
         font.setPointSize(12)
         self.Tighten_Button.setFont(font)
         self.Tighten_Button.setObjectName("Tighten_Button")
-
+        
         #Tune Button
         self.Tune_Button = QtWidgets.QPushButton(self.centralwidget)
         self.Tune_Button.clicked.connect(self.tuneButton)
@@ -159,46 +129,79 @@ class Ui_MainWindow(object):
         self.MFT_Logo.setPixmap(QtGui.QPixmap("MFT_Logo.png"))
         self.MFT_Logo.setScaledContents(True)
         self.MFT_Logo.setObjectName("MFT_Logo")
-        
-        self.MFT_Logo_2 = QtWidgets.QLabel(self.centralwidget)
-        self.MFT_Logo_2.setGeometry(QtCore.QRect(320, 400, 471, 341))
-        self.MFT_Logo_2.setText("")
-        self.MFT_Logo_2.setPixmap(QtGui.QPixmap("Filter_Response.png"))
-        self.MFT_Logo_2.setScaledContents(True)
-        self.MFT_Logo_2.setObjectName("MFT_Logo_2")
-        
-        self.MFT_Logo_3 = QtWidgets.QLabel(self.centralwidget)
-        self.MFT_Logo_3.setGeometry(QtCore.QRect(570, 30, 471, 341))
-        self.MFT_Logo_3.setText("")
-        self.MFT_Logo_3.setPixmap(QtGui.QPixmap("temp.png"))
-        self.MFT_Logo_3.setScaledContents(True)
-        self.MFT_Logo_3.setObjectName("MFT_Logo_3")
-        
-        self.MFT_Logo_4 = QtWidgets.QLabel(self.centralwidget)
-        self.MFT_Logo_4.setGeometry(QtCore.QRect(60, 30, 471, 341))
-        self.MFT_Logo_4.setText("")
-        self.MFT_Logo_4.setPixmap(QtGui.QPixmap("temp.png"))
-        self.MFT_Logo_4.setScaledContents(True)
-        self.MFT_Logo_4.setObjectName("MFT_Logo_4")
 
+        #Output Response View
+        self.Output_View = QtWidgets.QLabel(self.centralwidget)
+        self.Output_View.setGeometry(QtCore.QRect(320, 400, 471, 341))
+        self.Output_View.setText("")
+        self.Output_View.setPixmap(QtGui.QPixmap("Filter_Response.png"))
+        self.Output_View.setScaledContents(True)
+        self.Output_View.setObjectName("Output_View")
+
+        #Macro Zoom Camera View
+        self.MZC_View = QtWidgets.QLabel(self.centralwidget)
+        self.MZC_View.setGeometry(QtCore.QRect(570, 30, 471, 341))
+        self.MZC_View.setText("")
+        self.MZC_View.setPixmap(QtGui.QPixmap("temp.png"))
+        self.MZC_View.setScaledContents(True)
+        self.MZC_View.setObjectName("MZC_View")
+
+        #Wide Angle Camera View
+        self.WAC_View = QtWidgets.QLabel(self.centralwidget)
+        self.WAC_View.setGeometry(QtCore.QRect(60, 30, 471, 341))
+        self.WAC_View.setText("")
+        self.WAC_View.setPixmap(QtGui.QPixmap("temp.png"))
+        self.WAC_View.setScaledContents(True)
+        self.WAC_View.setObjectName("WAC_View")
+        
+        self.WAC_spinBox = QtWidgets.QSpinBox(self.centralwidget)
+        self.WAC_spinBox.setGeometry(QtCore.QRect(200, 740, 42, 22))
+        self.WAC_spinBox.setObjectName("WAC_spinBox")
+        
+        self.MZC_spinBox = QtWidgets.QSpinBox(self.centralwidget)
+        self.MZC_spinBox.setGeometry(QtCore.QRect(200, 800, 42, 22))
+        self.MZC_spinBox.setObjectName("MZC_spinBox")
+        
+        self.Serial_spinBox = QtWidgets.QSpinBox(self.centralwidget)
+        self.Serial_spinBox.setGeometry(QtCore.QRect(200, 860, 42, 22))
+        self.Serial_spinBox.setObjectName("Serial_spinBox")
+
+        #Macro Zoom Camera Slider
+        self.MZC_Sensitivity_Slider = QtWidgets.QSlider(self.centralwidget)
+        self.MZC_Sensitivity_Slider.setMinimum(10)
+        self.MZC_Sensitivity_Slider.setMaximum(60)
+        self.MZC_Sensitivity_Slider.setValue(35)
+        self.MZC_Sensitivity_Slider.setTickInterval(5)
+        #self.MZC_Sensitivity_Slider.TicksBelow()
+        self.MZC_Sensitivity_Slider.setGeometry(QtCore.QRect(70, 630, 160, 22))
+        self.MZC_Sensitivity_Slider.setOrientation(QtCore.Qt.Horizontal)
+        self.MZC_Sensitivity_Slider.setObjectName("MZC_Sensitivity_Slider")
+        
+        self.MZC_Sensitivity_Label = QtWidgets.QLabel(self.centralwidget)
+        self.MZC_Sensitivity_Label.setGeometry(QtCore.QRect(70, 600, 161, 21))
+        self.MZC_Sensitivity_Label.setObjectName("MZC_Sensitivity_Label")
+        
+        self.Screw_Type_List = QtWidgets.QComboBox(self.centralwidget)
+        self.Screw_Type_List.setGeometry(QtCore.QRect(70, 490, 161, 22))
+        self.Screw_Type_List.setObjectName("Screw_Type_List")
+        self.Screw_Type_List.addItem("")
+        
+        self.Screw_Type_Label = QtWidgets.QLabel(self.centralwidget)
+        self.Screw_Type_Label.setGeometry(QtCore.QRect(120, 470, 61, 21))
+        self.Screw_Type_Label.setObjectName("Screw_Type_Label")
         
         self.Send_Cmd_Button.raise_()
-        self.Screw_Type_Label.raise_()
         self.Enter_Cmd_Line.raise_()
         self.Enter_Cmd_Label.raise_()
-        self.Sensitivity_Label.raise_()
+        self.WAC_Sensitivity_Label.raise_()
         self.Output_Label.raise_()
-        self.Sensitivity_Slider.raise_()
-        self.Screw_Type_List.raise_()
+        self.WAC_Sensitivity_Slider.raise_()
         self.Settings_Label.raise_()
         self.Version_Label.raise_()
         self.WAC_View_Label.raise_()
         self.MZC_View_Label.raise_()
-        self.MZC_Port_List.raise_()
         self.WAC_Port_Label.raise_()
-        self.Serial_Port_List.raise_()
         self.Serial_Port_Label.raise_()
-        self.WAC_Port_List.raise_()
         self.COM_Port_Label.raise_()
         self.MZC_Port_Label.raise_()
         self.Tighten_Button.raise_()
@@ -206,9 +209,16 @@ class Ui_MainWindow(object):
         self.Status_Browser.raise_()
         self.Status_Label.raise_()
         self.MFT_Logo.raise_()
-        self.MFT_Logo_2.raise_()
-        self.MFT_Logo_3.raise_()
-        self.MFT_Logo_4.raise_()
+        self.Output_View.raise_()
+        self.MZC_View.raise_()
+        self.WAC_View.raise_()
+        self.WAC_spinBox.raise_()
+        self.MZC_spinBox.raise_()
+        self.Serial_spinBox.raise_()
+        self.MZC_Sensitivity_Slider.raise_()
+        self.MZC_Sensitivity_Label.raise_()
+        self.Screw_Type_List.raise_()
+        self.Screw_Type_Label.raise_()
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -224,7 +234,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.Sensitivity_Label.setText(_translate("MainWindow", "Detection Sensitivity"))
+        self.WAC_Sensitivity_Label.setText(_translate("MainWindow", "Wide Angle Detection Sensitivity"))
         self.Enter_Cmd_Label.setText(_translate("MainWindow", "Enter Command"))
         self.Version_Label.setText(_translate("MainWindow", "Microwave Filter Tuner GUI v1.0"))
         self.WAC_View_Label.setText(_translate("MainWindow", "Wide Angle Camera View"))
@@ -232,28 +242,16 @@ class Ui_MainWindow(object):
         self.Output_Label.setText(_translate("MainWindow", "Output Response"))
         self.Settings_Label.setText(_translate("MainWindow", "Settings"))
         self.Send_Cmd_Button.setText(_translate("MainWindow", "Send Command"))
-        self.Screw_Type_List.setItemText(0, _translate("MainWindow", "#10-32 Phillips"))
-        self.Screw_Type_Label.setText(_translate("MainWindow", "Screw Type"))
-        self.MZC_Port_List.setItemText(0, _translate("MainWindow", "COM0"))
-        self.MZC_Port_List.setItemText(1, _translate("MainWindow", "COM1"))
-        self.MZC_Port_List.setItemText(2, _translate("MainWindow", "COM2"))
-        self.MZC_Port_List.setItemText(3, _translate("MainWindow", "COM3"))
         self.WAC_Port_Label.setText(_translate("MainWindow", "Wide Angle Camera Port"))
-        self.Serial_Port_List.setItemText(0, _translate("MainWindow", "COM0"))
-        self.Serial_Port_List.setItemText(1, _translate("MainWindow", "COM1"))
-        self.Serial_Port_List.setItemText(2, _translate("MainWindow", "COM2"))
-        self.Serial_Port_List.setItemText(3, _translate("MainWindow", "COM3"))
         self.Serial_Port_Label.setText(_translate("MainWindow", "Serial COM Port"))
-        self.WAC_Port_List.setItemText(0, _translate("MainWindow", "COM0"))
-        self.WAC_Port_List.setItemText(1, _translate("MainWindow", "COM1"))
-        self.WAC_Port_List.setItemText(2, _translate("MainWindow", "COM2"))
-        self.WAC_Port_List.setItemText(3, _translate("MainWindow", "COM3"))
         self.COM_Port_Label.setText(_translate("MainWindow", "COM Ports"))
         self.MZC_Port_Label.setText(_translate("MainWindow", "Macro Zoom Camera Port"))
         self.Tighten_Button.setText(_translate("MainWindow", "Tighten"))
         self.Tune_Button.setText(_translate("MainWindow", "Tune"))
         self.Status_Label.setText(_translate("MainWindow", "Status"))
-
+        self.MZC_Sensitivity_Label.setText(_translate("MainWindow", "Macro Zoom Detection Sensitivity"))
+        self.Screw_Type_List.setItemText(0, _translate("MainWindow", "#10-32 Phillips"))
+        self.Screw_Type_Label.setText(_translate("MainWindow", "Screw Type"))
 
     def tuneButton(self):
         sys.exit()
@@ -267,10 +265,6 @@ class Ui_MainWindow(object):
     def sensSlider(self):
         sys.exit()
         
-        
-
-
-
 
 if __name__ == "__main__":
     import sys
