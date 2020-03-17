@@ -45,7 +45,7 @@ const float slowMinSpeedDeg = 40;
 
 //Z axis hitting screw
 const int depthSlow = 80;	//percentage of depth to move down until slowing down
-const int depthMax = 120;	//percentage of depth to move down past where screw should have been
+const int depthMax = 150;	//percentage of depth to move down past where screw should have been
 
 
 /*******************************************
@@ -641,7 +641,7 @@ void moveZScrew(int depth){
 	}
 	                                                                       
 	//coast
-		int coastSteps = fastDepth - homeRampSize*2;
+		int coastSteps = fastDepth - homeRampSize;
 		delayTime = (1000000/homeMaxSpeed)/2;
 		for(int i = 0; i < coastSteps; i++){
 			GPIOA->BSRR |= GPIO_BSRR_BS11;
@@ -946,7 +946,7 @@ void moveMotorDeg(float moveAmount){
 void phiHome(){
 	
 	int moveAmount = 360; 															//move one full rotation
-	int timeoutValue = 3240;														//(moveAmount * stepsPerDeg) / 10
+	int timeoutValue = 12960;														//(moveAmount * stepsPerDeg) / 10
 	int timeoutCount = 0;																//timeout counter
 		
 	
