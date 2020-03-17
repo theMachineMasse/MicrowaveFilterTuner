@@ -204,17 +204,17 @@ def zoomCamera(sensitivityVal):
     #########################################
     # find screw angle
 
-    cropImg = img[(y-r):(y+r), (x-r):(x+r)]
+    cropImg = img[(y-r+30):(y+r-30), (x-r+30):(x+r-30 )]
     imageSize = r*2
     cropCopy = cropImg.copy()
     cv2.imshow('crop', cropImg)
 
     crop_gray = cv2.cvtColor(cropImg, cv2.COLOR_BGR2GRAY)  # change to greyscale image
-    cannyEdges = cv2.Canny(crop_gray, 50, 120, None, 5)
+    cannyEdges = cv2.Canny(crop_gray, 100, 250, None, 3)
 
-    linesP = cv2.HoughLinesP(cannyEdges, 1, np.pi / 180, 35, None, 0, 0)
+    linesP = cv2.HoughLinesP(cannyEdges, 3, np.pi / 180, 30, None, 25, 8)
     imageCutOff = 20
-    angleAllowance = 10
+    angleAllowance = 5
     similarAngles = []
     similarAngle = []
     angles = []
