@@ -931,7 +931,7 @@ void moveMotorDeg(float moveAmount){
 		}
 	}
 	
-	lcdDisplayStatus(2);																//ready status																	
+	//lcdDisplayStatus(2);																//ready status																	
 	
 }
 
@@ -1169,7 +1169,7 @@ void phiHome(){
 		}
 	}
 	
-	lcdDisplayStatus(2);																//status: ready
+	//lcdDisplayStatus(2);																//status: ready
 	
 }
 

@@ -2,7 +2,7 @@
 *	Project: Microwave Filter Tuner
 * File: main.c
 *	Date: January 27, 2020
-*	Programmer(s): Braden Massé, Matthew Rostad
+*	Programmer(s): Braden Massé, Matthew Rostad, Jarett Tremblay
 * Sub-System: N/A	
 *	Description: Main file
 * Version: 1.0
