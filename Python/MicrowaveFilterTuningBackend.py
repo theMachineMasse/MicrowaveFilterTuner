@@ -134,10 +134,11 @@ def automaticTune():
                     # zoomCamera(30)  # for testing only
 
                     # move down to screw
-                    zPos = screwLocationsList[j][2]
+                    zPos = zoomOffsetsAngles[2]
                     print(zPos)
                     zPos = round(zPos, 1)
                     zPos = str(zPos)
+                    print(zPos)
                     gCode = 'g30 z' + zPos
                     print(gCode)
                     # move to screw location

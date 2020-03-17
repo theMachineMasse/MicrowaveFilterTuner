@@ -50,7 +50,7 @@ def zoomCamera(sensitivityVal):
     referenceRadius = 102  # units are pixels
     screwZOffset = 97 # distance between camera and screw driver bit in mm
     screwXoffset = 42
-    screwYoffset = 9.1
+    screwYoffset = 9.4
 
     circles = None
 
@@ -255,6 +255,7 @@ def zoomCamera(sensitivityVal):
     print(screwAngle)
 
     ZoomOffsetsAngles = [xMMError + screwXoffset, yMMError + screwYoffset, calculatedDepth - screwZOffset, screwAngle]
+    print('depth', ZoomOffsetsAngles[2])
     return ZoomOffsetsAngles
 
 # global list
