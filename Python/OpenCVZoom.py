@@ -38,8 +38,9 @@ def zoomCamera(sensitivityVal):
     global centerThreshold
     minDist = 80       # minimum distance between scerws
     upCannyThreshold = 85  # sensitivity for detecting circles
-    centerThreshold = 45    # sensitivity for detecting circle centers
-    maxR = 180          # maximum screw radius
+    centerThreshold = 40    # sensitivity for detecting circle centers
+    maxR = 145  # max radius of screw, update based on GUI selection, needs to depend on screw selected
+    minR = 70  # min radius of screw, update based on GUI selection, needs to depend on screw selected
     screwCount = 0
     dp = 1
     minDistCenter = 9999 # finds the screw the closest to the center
@@ -47,6 +48,9 @@ def zoomCamera(sensitivityVal):
     measuredDepth = 195  # units are mm
     screwDiameter = 10  # units are mm
     referenceRadius = 102  # units are pixels
+    screwZOffset = 97 # distance between camera and screw driver bit in mm
+    screwXoffset = 42
+    screwYoffset = 9.4
 
     circles = None
 
@@ -55,7 +59,7 @@ def zoomCamera(sensitivityVal):
         cap = cv2.VideoCapture(g_zoomCamPort)
         cap.set(cv2.CAP_PROP_FRAME_WIDTH, 2592)
         cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 1944)
-        for i in range(0,20):
+        for i in range(0,10):
             ret, img = cap.read()
             print(ret)
         cap.release()
@@ -72,7 +76,7 @@ def zoomCamera(sensitivityVal):
         gray = cv2.medianBlur(gray, 5)                 # apply blur to reduce false positives
 
         circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, dp, minDist, param1=upCannyThreshold, param2=centerThreshold,
-                                   minRadius=sensitivityVal, maxRadius=maxR)
+                                   minRadius=minR, maxRadius=maxR)
 
         # if no circles are detected increase sensitivity
         if circles is None:
@@ -82,8 +86,8 @@ def zoomCamera(sensitivityVal):
 
 
     # reset canny thresholds
-    upCannyThreshold = 150  # sensitivity for detecting circles
-    centerThreshold = 50    # sensitivity for detecting circle centers
+    upCannyThreshold = 85  # sensitivity for detecting circles
+    centerThreshold = 45    # sensitivity for detecting circle centers
 
     print(circles.size, "screws detected")
     detected_circles = np.uint16(np.around(circles))
@@ -206,9 +210,9 @@ def zoomCamera(sensitivityVal):
     cv2.imshow('crop', cropImg)
 
     crop_gray = cv2.cvtColor(cropImg, cv2.COLOR_BGR2GRAY)  # change to greyscale image
-    cannyEdges = cv2.Canny(crop_gray, 40, 120, None, 3)
+    cannyEdges = cv2.Canny(crop_gray, 50, 120, None, 5)
 
-    linesP = cv2.HoughLinesP(cannyEdges, 1, np.pi / 180, 20, None, 20, 10)
+    linesP = cv2.HoughLinesP(cannyEdges, 1, np.pi / 180, 35, None, 0, 0)
     imageCutOff = 20
     angleAllowance = 10
     similarAngles = []
@@ -250,7 +254,8 @@ def zoomCamera(sensitivityVal):
     cv2.destroyAllWindows()
     print(screwAngle)
 
-    ZoomOffsetsAngles = [xMMError, yMMError, screwAngle]
+    ZoomOffsetsAngles = [xMMError + screwXoffset, yMMError + screwYoffset, calculatedDepth - screwZOffset, screwAngle]
+    print('depth', ZoomOffsetsAngles[2])
     return ZoomOffsetsAngles
 
 # global list

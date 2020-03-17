@@ -47,17 +47,17 @@ def automaticTune():
     print('k')
 
     # turn on ring light
-    line = b''
-    ser.write(b'm42 p2 s1')
-    ser.write(b'\r')
-    while b'k' not in line :
-        line = ser.readline()
-    print('k')
+    #line = b''
+    #ser.write(b'm42 p2 s1')
+    #ser.write(b'\r')
+    #while b'k' not in line :
+    #    line = ser.readline()
+    #print('k')
 
 
 
     # take wide angle photos
-    screwsDetected = wideAngleCamera(25)  # testing
+    screwsDetected = wideAngleCamera(22)  # testing
 
     print(screwsDetected)
     if screwsDetected != 0:
@@ -89,7 +89,7 @@ def automaticTune():
 
     # move to all locations in tuning file (for loop)
     for i in range(len(text)):
-        if text[i][1] != 0:
+        if text[i][1] != '0':
             for j in range(len(screwLocationsList)):
                 if screwLocationsList[j][1] == i:
                     print(screwLocationsList[j])
@@ -131,7 +131,31 @@ def automaticTune():
                         line = ser.readline()
                     print('k')
 
-                    zoomCamera(30)  # for testing only
+                    # zoomCamera(30)  # for testing only
+
+                    # move down to screw
+                    zPos = zoomOffsetsAngles[2]
+                    print(zPos)
+                    zPos = round(zPos, 1)
+                    zPos = str(zPos)
+                    print(zPos)
+                    gCode = 'g30 z' + zPos
+                    print(gCode)
+                    # move to screw location
+                    line = b''
+                    ser.write(gCode.encode('UTF-8'))
+                    ser.write(b'\r')
+                    while b'k' not in line:
+                        line = ser.readline()
+                    print('k')
+
+                    # move to center position
+                    line = b''
+                    ser.write(b'g0 z0')
+                    ser.write(b'\r')
+                    while b'k' not in line:
+                        line = ser.readline()
+                    print('k')
 
 
     # disable motors
