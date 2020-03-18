@@ -57,7 +57,7 @@ def automaticTune():
 
 
     # take wide angle photos
-    screwsDetected = wideAngleCamera(22)  # testing
+    screwsDetected = wideAngleCamera(30)  # testing
 
     print(screwsDetected)
     if screwsDetected != 0:
@@ -132,7 +132,15 @@ def automaticTune():
                     print('k')
 
                     # zoomCamera(30)  # for testing only
-
+                    '''
+                    # home phi axis
+                    line = b''
+                    ser.write(b'g15')
+                    ser.write(b'\r')
+                    while b'k' not in line:
+                        line = ser.readline()
+                    print('k')
+                    '''
                     # move down to screw
                     zPos = zoomOffsetsAngles[2]
                     print(zPos)
@@ -148,6 +156,20 @@ def automaticTune():
                     while b'k' not in line:
                         line = ser.readline()
                     print('k')
+
+                    '''
+                    # rotate desired amount
+                    phiPos = text[i][1]
+                    phiPos = round(phiPos, 1)
+                    phiPos = str(phiPos)
+                    gCode = 'g16 p' + phiPos
+                    line = b''
+                    ser.write(gCode.encode('UTF-8'))
+                    ser.write(b'\r')
+                    while b'k' not in line:
+                        line = ser.readline()
+                    print('k')
+                    '''
 
                     # move to center position
                     line = b''
@@ -179,7 +201,7 @@ def automaticTune():
 
 
 
-automaticTune()
-#zoomCamera(30)
-#wideAngleCamera(25)
+#automaticTune()
+zoomCamera(30)
+#wideAngleCamera(30)
 #screwAssignment()

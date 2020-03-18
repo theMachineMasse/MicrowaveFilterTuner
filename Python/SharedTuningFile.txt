@@ -1,8 +1,8 @@
 String passed from algorithm to be displayed in GUI
 
 
-1 1
-2 1
+1 360
+2 2000
 3 1
 4 1
 5 1
