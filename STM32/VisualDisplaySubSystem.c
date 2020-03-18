@@ -5,7 +5,7 @@
 *	Programmer(s): Braden Massé
 * Sub-System: Visual Display Sub-System
 *	Description: Contains all the functions to modify, update, and change the LCD and the LEDs
-* Version: 1.5
+* Version: 1.6
 *	
 ********************************************/
 
@@ -212,36 +212,32 @@ void lcdDisplayError (int errorCode) {
 			stringToLCD("Error: 1-6 Z home   ");
 			GPIOC->BSRR |= GPIO_BSRR_BS13; // turn on RED LED
 			break;
-		case 21: 
-			stringToLCD("Error: 2-1 no resp  ");
-			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn on YELLOW LED
-			break;
 		case 22: 
 			stringToLCD("Error: 2-2 no screw ");
 			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn on YELLOW LED
 			break;
 		case 23: 
-			stringToLCD("Error: 2-3 F Y hit  ");
+			stringToLCD("Error: 1-7 F Y hit  ");
 			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn on YELLOW LED
 			break;
 		case 24: 
-			stringToLCD("Error: 2-4 B Y hit  ");
+			stringToLCD("Error: 1-8 B Y hit  ");
 			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn on YELLOW LED
 			break;
 		case 25: 
-			stringToLCD("Error: 2-5 L X hit  ");
+			stringToLCD("Error: 1-9 L X hit  ");
 			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn on YELLOW LED
 			break;
 		case 26: 
-			stringToLCD("Error: 2-6 R X hit  ");
+			stringToLCD("Error: 1-10 R X hit ");
 			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn on YELLOW LED
 			break;
 		case 27: 
-			stringToLCD("Error: 2-7 U Z hit  ");
+			stringToLCD("Error: 1-11 U Z hit ");
 			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn on YELLOW LED
 			break;
 		case 28: 
-			stringToLCD("Error: 2-8 L Z hit  ");
+			stringToLCD("Error: 1-12 L Z hit ");
 			GPIOB->BSRR |= GPIO_BSRR_BS14; // turn on YELLOW LED
 			break;
 		case 31: 
