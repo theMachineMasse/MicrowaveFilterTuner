@@ -100,9 +100,18 @@ class Ui_MainWindow(object):
         self.Zoom_Port_Label.setGeometry(QtCore.QRect(85, 800, 121, 21))
         self.Zoom_Port_Label.setObjectName("Zoom_Port_Label")
 
+        #Cancel Button
+        self.Cancel_Button = QtWidgets.QPushButton(self.centralwidget)
+        self.Cancel_Button.setGeometry(QtCore.QRect(870, 701, 161, 41))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.Cancel_Button.setFont(font)
+        self.Cancel_Button.setObjectName("Cancel_Button")
+        self.Cancel_Button.clicked.connect(self.cancelButton)
+
         #Refresh Button
         self.Refresh_Button = QtWidgets.QPushButton(self.centralwidget)
-        self.Refresh_Button.setGeometry(QtCore.QRect(870, 670, 161, 41))
+        self.Refresh_Button.setGeometry(QtCore.QRect(870, 610, 161, 41))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.Refresh_Button.setFont(font)
@@ -111,7 +120,7 @@ class Ui_MainWindow(object):
         
         #Tighten Button
         self.Tighten_Button = QtWidgets.QPushButton(self.centralwidget)
-        self.Tighten_Button.setGeometry(QtCore.QRect(870, 570, 161, 81))
+        self.Tighten_Button.setGeometry(QtCore.QRect(870, 510, 161, 81))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.Tighten_Button.setFont(font)
@@ -120,24 +129,24 @@ class Ui_MainWindow(object):
         
         #Tune Button
         self.Tune_Button = QtWidgets.QPushButton(self.centralwidget)
-        self.Tune_Button.setGeometry(QtCore.QRect(870, 470, 161, 81))
+        self.Tune_Button.setGeometry(QtCore.QRect(870, 410, 161, 81))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.Tune_Button.setFont(font)
         self.Tune_Button.setObjectName("Tune_Button")
         self.Tune_Button.clicked.connect(self.tuneButton)
 
-        #Status Browser
-        self.Status_Browser = QtWidgets.QTextBrowser(self.centralwidget)
-        self.Status_Browser.setGeometry(QtCore.QRect(330, 860, 381, 61))
+        #Input TextEdit
+        self.Input_TextEdit = QtWidgets.QPlainTextEdit(self.centralwidget)
+        self.Input_TextEdit.setGeometry(QtCore.QRect(330, 860, 381, 61))
         font = QtGui.QFont()
         font.setPointSize(12)
-        self.Status_Browser.setFont(font)
-        self.Status_Browser.setObjectName("Status_Browser")
+        self.Input_TextEdit.setFont(font)
+        self.Input_TextEdit.setObjectName("Input_TextEdit")
         
-        self.Status_Label = QtWidgets.QLabel(self.centralwidget)
-        self.Status_Label.setGeometry(QtCore.QRect(330, 840, 91, 21))
-        self.Status_Label.setObjectName("Status_Label")
+        self.Input_Label = QtWidgets.QLabel(self.centralwidget)
+        self.Input_Label.setGeometry(QtCore.QRect(330, 840, 91, 21))
+        self.Input_Label.setObjectName("Input_Label")
         
         self.MFT_Logo = QtWidgets.QLabel(self.centralwidget)
         self.MFT_Logo.setGeometry(QtCore.QRect(820, 750, 300, 300))
@@ -239,10 +248,11 @@ class Ui_MainWindow(object):
         self.COM_Port_Label.raise_()
         self.Zoom_Port_Label.raise_()
         self.Refresh_Button.raise_()
+        self.Cancel_Button.raise_()
         self.Tighten_Button.raise_()
         self.Tune_Button.raise_()
-        self.Status_Browser.raise_()
-        self.Status_Label.raise_()
+        self.Input_TextEdit.raise_()
+        self.Input_Label.raise_()
         self.MFT_Logo.raise_()
         self.Output_View.raise_()
         self.Zoom_View.raise_()
@@ -281,24 +291,29 @@ class Ui_MainWindow(object):
         self.Serial_Port_Label.setText(_translate("MainWindow", "Serial COM Port"))
         self.COM_Port_Label.setText(_translate("MainWindow", "COM Ports"))
         self.Zoom_Port_Label.setText(_translate("MainWindow", "Zoom Camera Port"))
+        self.Cancel_Button.setText(_translate("MainWindow", "Cancel"))
         self.Refresh_Button.setText(_translate("MainWindow", "Refresh"))
         self.Tighten_Button.setText(_translate("MainWindow", "Tighten"))
         self.Tune_Button.setText(_translate("MainWindow", "Tune"))
-        self.Status_Label.setText(_translate("MainWindow", "Status"))
+        self.Input_Label.setText(_translate("MainWindow", "Input"))
         self.Zoom_Sensitivity_Label.setText(_translate("MainWindow", "Zoom Detection Sensitivity"))
         self.Screw_Type_List.setItemText(0, _translate("MainWindow", "#10-32 Phillips"))
         self.Screw_Type_List.setItemText(1, _translate("MainWindow", "#10-24 Phillips"))
         self.Screw_Type_Label.setText(_translate("MainWindow", "Screw Type"))
-
+        
     #TUNE BUTTON
     def tuneButton(self):
         print('test')
         screwType = int(self.Screw_Type_List.currentIndex())
         print(screwType)
-
+     
     #TIGHTEN BUTTON
     def tightenButton(self):
         print('test1')
+
+    #CANCEL BUTTON
+    def cancelButton(self):
+        print('test2')   
 
     #REFRESH BUTTON
     def refreshButton(self):
@@ -313,43 +328,46 @@ class Ui_MainWindow(object):
         Command = self.Enter_Cmd_Line.text()
         print(Command)
         self.Enter_Cmd_Line.clear()
+
         f = open("SharedTuningFile.txt", "r")
-        print(f.read(100))
+        #print(f.read(100))
+        g = f.read(100)
+        self.Input_TextEdit.appendPlainText(g)
         f.close()
+        
+        self.Input_TextEdit.setReadOnly(True)
+        print(self.Input_TextEdit.isReadOnly())
 
     #WIDE SLIDER    
     def wideSlider(self):
-        print('test4')
+        print('test5')
         wideSens = int(self.Wide_Sensitivity_Slider.value())
         print(wideSens)
 
     #ZOOM SLIDER
     def zoomSlider(self):
-        print('test5')
+        print('test6')
         zoomSens = int(self.Zoom_Sensitivity_Slider.value())
         print(zoomSens)
 
     #WIDE SPINBOX
     def wideSpin(self):
-        print('test6')
+        print('test7')
         widePort = int(self.Wide_spinBox.value())
         print(widePort)
 
     #ZOOM SPINBOX
     def zoomSpin(self):
-        print('test7')
+        print('test8')
         zoomPort = int(self.Zoom_spinBox.value())
         print(zoomPort)
 
     #SERIAL SPINBOX
     def serialSpin(self):
-        print('test8')
+        print('test9')
         serialPort = int(self.Serial_spinBox.value())
         print(serialPort)
 
-    #COMMAND LINE
-    def cmdLine(self):
-        print('test9')
        
         
         
