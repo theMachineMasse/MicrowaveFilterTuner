@@ -22,7 +22,6 @@ class Ui_MainWindow(object):
 
         #Wide Angle Camera Slider
         self.Wide_Sensitivity_Slider = QtWidgets.QSlider(self.centralwidget)
-        self.Wide_Sensitivity_Slider.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.Wide_Sensitivity_Slider.setGeometry(QtCore.QRect(50, 570, 200, 22))
         self.Wide_Sensitivity_Slider.setOrientation(QtCore.Qt.Horizontal)
         self.Wide_Sensitivity_Slider.setObjectName("Wide_Sensitivity_Slider")
@@ -30,12 +29,14 @@ class Ui_MainWindow(object):
         self.Wide_Sensitivity_Slider.setMaximum(40)
         self.Wide_Sensitivity_Slider.setValue(25)
         self.Wide_Sensitivity_Slider.setTickInterval(5)
+        self.Wide_Sensitivity_Slider.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.Wide_Sensitivity_Slider.valueChanged.connect(self.wideSlider)
         
         self.Wide_Sensitivity_Label = QtWidgets.QLabel(self.centralwidget)
         self.Wide_Sensitivity_Label.setGeometry(QtCore.QRect(70, 540, 171, 21))
         self.Wide_Sensitivity_Label.setObjectName("Wide_Sensitivity_Label")
-        
+
+        #Enter Command Line
         self.Enter_Cmd_Line = QtWidgets.QLineEdit(self.centralwidget)
         self.Enter_Cmd_Line.setEnabled(True)
         self.Enter_Cmd_Line.setGeometry(QtCore.QRect(330, 770, 381, 41))
@@ -62,7 +63,7 @@ class Ui_MainWindow(object):
         self.Zoom_View_Label.setObjectName("Zoom_View_Label")
         
         self.Output_Label = QtWidgets.QLabel(self.centralwidget)
-        self.Output_Label.setGeometry(QtCore.QRect(510, 380, 91, 16))
+        self.Output_Label.setGeometry(QtCore.QRect(520, 380, 91, 16))
         self.Output_Label.setObjectName("Output_Label")
         
         self.Settings_Label = QtWidgets.QLabel(self.centralwidget)
@@ -99,6 +100,15 @@ class Ui_MainWindow(object):
         self.Zoom_Port_Label.setGeometry(QtCore.QRect(85, 800, 121, 21))
         self.Zoom_Port_Label.setObjectName("Zoom_Port_Label")
 
+        #Refresh Button
+        self.Refresh_Button = QtWidgets.QPushButton(self.centralwidget)
+        self.Refresh_Button.setGeometry(QtCore.QRect(870, 670, 161, 41))
+        font = QtGui.QFont()
+        font.setPointSize(12)
+        self.Refresh_Button.setFont(font)
+        self.Refresh_Button.setObjectName("Refresh_Button")
+        self.Refresh_Button.clicked.connect(self.refreshButton)
+        
         #Tighten Button
         self.Tighten_Button = QtWidgets.QPushButton(self.centralwidget)
         self.Tighten_Button.setGeometry(QtCore.QRect(870, 570, 161, 81))
@@ -189,7 +199,6 @@ class Ui_MainWindow(object):
 
         #Zoom Camera Slider
         self.Zoom_Sensitivity_Slider = QtWidgets.QSlider(self.centralwidget)
-        self.Zoom_Sensitivity_Slider.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.Zoom_Sensitivity_Slider.setGeometry(QtCore.QRect(50, 630, 200, 22))
         self.Zoom_Sensitivity_Slider.setOrientation(QtCore.Qt.Horizontal)
         self.Zoom_Sensitivity_Slider.setObjectName("Zoom_Sensitivity_Slider")
@@ -197,18 +206,19 @@ class Ui_MainWindow(object):
         self.Zoom_Sensitivity_Slider.setMaximum(60)
         self.Zoom_Sensitivity_Slider.setValue(35)
         self.Zoom_Sensitivity_Slider.setTickInterval(5)
+        self.Zoom_Sensitivity_Slider.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.Zoom_Sensitivity_Slider.valueChanged.connect(self.zoomSlider)
         
         self.Zoom_Sensitivity_Label = QtWidgets.QLabel(self.centralwidget)
-        self.Zoom_Sensitivity_Label.setGeometry(QtCore.QRect(70, 600, 161, 21))
+        self.Zoom_Sensitivity_Label.setGeometry(QtCore.QRect(90, 600, 161, 21))
         self.Zoom_Sensitivity_Label.setObjectName("Zoom_Sensitivity_Label")
 
-        
+        #Screw Type List 
         self.Screw_Type_List = QtWidgets.QComboBox(self.centralwidget)
         self.Screw_Type_List.setGeometry(QtCore.QRect(70, 490, 161, 22))
         self.Screw_Type_List.setObjectName("Screw_Type_List")
         self.Screw_Type_List.addItem("")
-        
+        self.Screw_Type_List.addItem("")
         
         self.Screw_Type_Label = QtWidgets.QLabel(self.centralwidget)
         self.Screw_Type_Label.setGeometry(QtCore.QRect(120, 470, 61, 21))
@@ -228,6 +238,7 @@ class Ui_MainWindow(object):
         self.Serial_Port_Label.raise_()
         self.COM_Port_Label.raise_()
         self.Zoom_Port_Label.raise_()
+        self.Refresh_Button.raise_()
         self.Tighten_Button.raise_()
         self.Tune_Button.raise_()
         self.Status_Browser.raise_()
@@ -270,48 +281,76 @@ class Ui_MainWindow(object):
         self.Serial_Port_Label.setText(_translate("MainWindow", "Serial COM Port"))
         self.COM_Port_Label.setText(_translate("MainWindow", "COM Ports"))
         self.Zoom_Port_Label.setText(_translate("MainWindow", "Zoom Camera Port"))
+        self.Refresh_Button.setText(_translate("MainWindow", "Refresh"))
         self.Tighten_Button.setText(_translate("MainWindow", "Tighten"))
         self.Tune_Button.setText(_translate("MainWindow", "Tune"))
         self.Status_Label.setText(_translate("MainWindow", "Status"))
         self.Zoom_Sensitivity_Label.setText(_translate("MainWindow", "Zoom Detection Sensitivity"))
-        self.Screw_Type_List.setItemText(0, _translate("MainWindow", "#10-32 Phillips", "#10-24 Phillips"))
+        self.Screw_Type_List.setItemText(0, _translate("MainWindow", "#10-32 Phillips"))
+        self.Screw_Type_List.setItemText(1, _translate("MainWindow", "#10-24 Phillips"))
         self.Screw_Type_Label.setText(_translate("MainWindow", "Screw Type"))
 
+    #TUNE BUTTON
     def tuneButton(self):
         print('test')
+        screwType = int(self.Screw_Type_List.currentIndex())
+        print(screwType)
 
+    #TIGHTEN BUTTON
     def tightenButton(self):
         print('test1')
-        
-    def cmdButton(self):
-        print('test2')
-        Screw = int(self.Screw_Type_List.currentIndex())
-        print(Screw)
-        
-    def wideSlider(self):
+
+    #REFRESH BUTTON
+    def refreshButton(self):
         print('test3')
+        self.Output_View.setPixmap(QtGui.QPixmap("Images/Filter_Response.png"))
+        self.Wide_View.setPixmap(QtGui.QPixmap("Images/temp.png"))
+        self.Zoom_View.setPixmap(QtGui.QPixmap("Images/temp.png"))
+
+    #SEND COMMAND BUTTON  
+    def cmdButton(self):
+        print('test4')
+        Command = self.Enter_Cmd_Line.text()
+        print(Command)
+        self.Enter_Cmd_Line.clear()
+        f = open("SharedTuningFile.txt", "r")
+        print(f.read(100))
+        f.close()
+
+    #WIDE SLIDER    
+    def wideSlider(self):
+        print('test4')
         wideSens = int(self.Wide_Sensitivity_Slider.value())
         print(wideSens)
-        
+
+    #ZOOM SLIDER
     def zoomSlider(self):
-        print('test4')
+        print('test5')
         zoomSens = int(self.Zoom_Sensitivity_Slider.value())
         print(zoomSens)
 
+    #WIDE SPINBOX
     def wideSpin(self):
-        print('test5')
+        print('test6')
         widePort = int(self.Wide_spinBox.value())
         print(widePort)
 
+    #ZOOM SPINBOX
     def zoomSpin(self):
-        print('test6')
+        print('test7')
         zoomPort = int(self.Zoom_spinBox.value())
         print(zoomPort)
 
+    #SERIAL SPINBOX
     def serialSpin(self):
-        print('test7')
+        print('test8')
         serialPort = int(self.Serial_spinBox.value())
         print(serialPort)
+
+    #COMMAND LINE
+    def cmdLine(self):
+        print('test9')
+       
         
         
 
