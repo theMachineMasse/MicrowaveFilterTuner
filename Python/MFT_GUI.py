@@ -13,9 +13,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1105, 1000)
-        MainWindow.setMinimumSize(QtCore.QSize(1105, 1000))
-        MainWindow.setMaximumSize(QtCore.QSize(1105, 1000))
+        MainWindow.resize(1102, 1000)
+        MainWindow.setMinimumSize(QtCore.QSize(1102, 1000))
+        MainWindow.setMaximumSize(QtCore.QSize(1102, 1000))
         
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -35,6 +35,10 @@ class Ui_MainWindow(object):
         self.Wide_Sensitivity_Label = QtWidgets.QLabel(self.centralwidget)
         self.Wide_Sensitivity_Label.setGeometry(QtCore.QRect(70, 540, 171, 21))
         self.Wide_Sensitivity_Label.setObjectName("Wide_Sensitivity_Label")
+
+        self.Wide_Value_Label = QtWidgets.QLabel(self.centralwidget)
+        self.Wide_Value_Label.setGeometry(QtCore.QRect(255, 565, 171, 21))
+        self.Wide_Value_Label.setObjectName("Wide_Value_Label")
 
         #Enter Command Line
         self.Enter_Cmd_Line = QtWidgets.QLineEdit(self.centralwidget)
@@ -63,7 +67,7 @@ class Ui_MainWindow(object):
         self.Zoom_View_Label.setObjectName("Zoom_View_Label")
         
         self.Output_Label = QtWidgets.QLabel(self.centralwidget)
-        self.Output_Label.setGeometry(QtCore.QRect(520, 380, 91, 16))
+        self.Output_Label.setGeometry(QtCore.QRect(515, 380, 91, 16))
         self.Output_Label.setObjectName("Output_Label")
         
         self.Settings_Label = QtWidgets.QLabel(self.centralwidget)
@@ -222,6 +226,10 @@ class Ui_MainWindow(object):
         self.Zoom_Sensitivity_Label.setGeometry(QtCore.QRect(90, 600, 161, 21))
         self.Zoom_Sensitivity_Label.setObjectName("Zoom_Sensitivity_Label")
 
+        self.Zoom_Value_Label = QtWidgets.QLabel(self.centralwidget)
+        self.Zoom_Value_Label.setGeometry(QtCore.QRect(255, 625, 171, 21))
+        self.Zoom_Value_Label.setObjectName("Zoom_Value_Label")
+
         #Screw Type List 
         self.Screw_Type_List = QtWidgets.QComboBox(self.centralwidget)
         self.Screw_Type_List.setGeometry(QtCore.QRect(70, 490, 161, 22))
@@ -237,6 +245,7 @@ class Ui_MainWindow(object):
         self.Enter_Cmd_Line.raise_()
         self.Enter_Cmd_Label.raise_()
         self.Wide_Sensitivity_Label.raise_()
+        self.Wide_Value_Label.raise_()
         self.Output_Label.raise_()
         self.Wide_Sensitivity_Slider.raise_()
         self.Settings_Label.raise_()
@@ -262,6 +271,7 @@ class Ui_MainWindow(object):
         self.Serial_spinBox.raise_()
         self.Zoom_Sensitivity_Slider.raise_()
         self.Zoom_Sensitivity_Label.raise_()
+        self.Zoom_Value_Label.raise_()
         self.Screw_Type_List.raise_()
         self.Screw_Type_Label.raise_()
         MainWindow.setCentralWidget(self.centralwidget)
@@ -279,6 +289,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.Wide_Value_Label.setNum(self.Wide_Sensitivity_Slider.value())
         self.Wide_Sensitivity_Label.setText(_translate("MainWindow", "Wide Angle Detection Sensitivity"))
         self.Enter_Cmd_Label.setText(_translate("MainWindow", "Enter Command"))
         self.Version_Label.setText(_translate("MainWindow", "Microwave Filter Tuner GUI v1.0"))
@@ -296,6 +307,7 @@ class Ui_MainWindow(object):
         self.Tighten_Button.setText(_translate("MainWindow", "Tighten"))
         self.Tune_Button.setText(_translate("MainWindow", "Tune"))
         self.Input_Label.setText(_translate("MainWindow", "Input"))
+        self.Zoom_Value_Label.setNum(self.Zoom_Sensitivity_Slider.value())
         self.Zoom_Sensitivity_Label.setText(_translate("MainWindow", "Zoom Detection Sensitivity"))
         self.Screw_Type_List.setItemText(0, _translate("MainWindow", "#10-32 Phillips"))
         self.Screw_Type_List.setItemText(1, _translate("MainWindow", "#10-24 Phillips"))
@@ -342,12 +354,14 @@ class Ui_MainWindow(object):
     def wideSlider(self):
         print('test5')
         wideSens = int(self.Wide_Sensitivity_Slider.value())
+        self.Wide_Value_Label.setNum(wideSens)
         print(wideSens)
 
     #ZOOM SLIDER
     def zoomSlider(self):
         print('test6')
         zoomSens = int(self.Zoom_Sensitivity_Slider.value())
+        self.Zoom_Value_Label.setNum(zoomSens)
         print(zoomSens)
 
     #WIDE SPINBOX
