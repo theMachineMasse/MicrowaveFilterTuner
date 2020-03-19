@@ -1,4 +1,6 @@
 import serial
+import os
+import time
 from OpenCVWide import *
 from OpenCVZoom import *
 
@@ -8,6 +10,7 @@ global ser
 global screwLocationsList
 screwLocationsList = []
 global rotationPosition
+fileName = 'SharedTuningFile.txt'
 
 
 def initAutomaticTune():
@@ -73,7 +76,7 @@ def initAutomaticTune():
     print('k')
 
     # read tuning file
-    file = open('SharedTuningFile.txt')
+    file = open(fileName)
     text = file.read()
     file.close()
     text = text.splitlines()  # split up text file by lines
@@ -91,8 +94,12 @@ def initAutomaticTune():
 
 
 def automaticTune():
+    # wait for file to exist
+    while not os.path.isfile(fileName):
+        time.sleep(0.5)
+
     # read tuning file
-    file = open('SharedTuningFile.txt')
+    file = open(fileName)
     text = file.read()
     file.close()
     text = text.splitlines()    # split up text file by lines
@@ -227,6 +234,12 @@ def automaticTune():
                     while b'k' not in line:
                         line = ser.readline()
                     print('k')
+
+                    # remove tuning list file
+                    if os.path.exists(fileName):
+                        os.remove(fileName)
+                    else:
+                        print("The file does not exist")
 
 
 def stopAutomaticTune():
