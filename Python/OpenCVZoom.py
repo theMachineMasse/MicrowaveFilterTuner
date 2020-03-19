@@ -210,9 +210,9 @@ def zoomCamera(sensitivityVal):
     cv2.imshow('crop', cropImg)
 
     crop_gray = cv2.cvtColor(cropImg, cv2.COLOR_BGR2GRAY)  # change to greyscale image
-    cannyEdges = cv2.Canny(crop_gray, 100, 250, None, 3)
+    cannyEdges = cv2.Canny(crop_gray, 80, 200, None, 3)
 
-    linesP = cv2.HoughLinesP(cannyEdges, 3, np.pi / 180, 30, None, 25, 8)
+    linesP = cv2.HoughLinesP(cannyEdges, 3, np.pi / 180, 30, None, 20, 5)
     imageCutOff = 20
     angleAllowance = 5
     similarAngles = []

@@ -4,13 +4,18 @@ from OpenCVZoom import *
 
 
 comPort = 'COM7'
+global ser
+global screwLocationsList
+screwLocationsList = []
+global rotationPosition
 
 
-def automaticTune():
+def initAutomaticTune():
+    global ser
+    global screwLocationsList
     ser = serial.Serial(comPort, 9600, timeout=0.01)
     ser.flushInput()
     line = b''
-
 
     # enable motors
     ser.write(b'm17')
@@ -18,8 +23,6 @@ def automaticTune():
     while b'k' not in line :
         line = ser.readline()
     print('k')
-
-
 
     # home machine
     line = b''
@@ -36,7 +39,6 @@ def automaticTune():
     while b'k' not in line :
         line = ser.readline()
     print('k')
-
 
     # turn on overall light
     line = b''
@@ -55,14 +57,12 @@ def automaticTune():
     #print('k')
 
 
-
     # take wide angle photos
     screwsDetected = wideAngleCamera(30)  # testing
 
     print(screwsDetected)
     if screwsDetected != 0:
         screwLocationsList = screwAssignment()  # testing
-
 
     # turn off ring light
     line = b''
@@ -72,7 +72,25 @@ def automaticTune():
         line = ser.readline()
     print('k')
 
+    # read tuning file
+    file = open('SharedTuningFile.txt')
+    text = file.read()
+    file.close()
+    text = text.splitlines()  # split up text file by lines
+    text = list(filter(None, text))  # remove blank lines
+    GUIString = text[0]
+    del text[0]
+    for i in range(len(text)):
+        text[i] = text[i].split()  # split up by white space
 
+    # create list of turned amounts of each screw
+    global rotationPosition
+    rotationPosition = []
+    for i in range(len(text)):
+        rotationPosition.append(float(0))
+
+
+def automaticTune():
     # read tuning file
     file = open('SharedTuningFile.txt')
     text = file.read()
@@ -86,6 +104,8 @@ def automaticTune():
 
     print(GUIString)
     print(text)
+
+
 
     # move to all locations in tuning file (for loop)
     for i in range(len(text)):
@@ -132,7 +152,7 @@ def automaticTune():
                     print('k')
 
                     # zoomCamera(30)  # for testing only
-                    '''
+
                     # home phi axis
                     line = b''
                     ser.write(b'g15')
@@ -140,7 +160,29 @@ def automaticTune():
                     while b'k' not in line:
                         line = ser.readline()
                     print('k')
-                    '''
+
+                    # rotate to align with screw
+                    if rotationPosition[i] > 0:
+                        rotateDirection = 'p'
+                    else:
+                        rotateDirection = 'n'
+                    rotationPosition[i] = abs(rotationPosition[i])
+                    print(rotationPosition[i])
+                    while rotationPosition[i] >= 90:
+                        rotationPosition[i] = rotationPosition[i] - 90
+                    print(rotationPosition[i])
+
+                    rotateAmount = round(rotationPosition[i], 1)
+                    rotateAmount = str(rotateAmount)
+                    gCode = 'g16 ' + rotateDirection + rotateAmount
+                    print(gCode)
+                    line = b''
+                    ser.write(gCode.encode('UTF-8'))
+                    ser.write(b'\r')
+                    while b'k' not in line:
+                        line = ser.readline()
+                    print('k')
+
                     # move down to screw
                     zPos = zoomOffsetsAngles[2]
                     print(zPos)
@@ -157,21 +199,28 @@ def automaticTune():
                         line = ser.readline()
                     print('k')
 
-                    '''
+                    # convert string from file to float
+                    rotateAmount = float(text[i][1])
+                    if rotateAmount > 0:
+                        rotateDirection = 'p'
+                    else:
+                        rotateDirection = 'n'
+
                     # rotate desired amount
-                    phiPos = text[i][1]
-                    phiPos = round(phiPos, 1)
-                    phiPos = str(phiPos)
-                    gCode = 'g16 p' + phiPos
+                    moveAmount = abs(rotateAmount)
+                    moveAmount = round(moveAmount, 1)
+                    moveAmount = str(moveAmount)
+                    gCode = 'g16 ' + rotateDirection + moveAmount
+                    print(gCode)
                     line = b''
                     ser.write(gCode.encode('UTF-8'))
                     ser.write(b'\r')
                     while b'k' not in line:
                         line = ser.readline()
                     print('k')
-                    '''
+                    rotationPosition[i] = rotationPosition[i] + rotateAmount
 
-                    # move to center position
+                    # move back to upper Z position
                     line = b''
                     ser.write(b'g0 z0')
                     ser.write(b'\r')
@@ -180,6 +229,7 @@ def automaticTune():
                     print('k')
 
 
+def stopAutomaticTune():
     # disable motors
     line = b''
     ser.write(b'm18')
@@ -196,12 +246,13 @@ def automaticTune():
         line = ser.readline()
     print('k')
 
-
     ser.close()
 
 
-
-#automaticTune()
-zoomCamera(30)
+initAutomaticTune()
+automaticTune()
+automaticTune()
+stopAutomaticTune()
+#zoomCamera(30)
 #wideAngleCamera(30)
 #screwAssignment()
