@@ -37,8 +37,8 @@ def zoomCamera(sensitivityVal):
     global upCannyThreshold
     global centerThreshold
     minDist = 80       # minimum distance between scerws
-    upCannyThreshold = 85  # sensitivity for detecting circles
-    centerThreshold = 40    # sensitivity for detecting circle centers
+    upCannyThreshold = sensitivityVal * 2  # sensitivity for detecting circles
+    centerThreshold = sensitivityVal    # sensitivity for detecting circle centers
     maxR = 145  # max radius of screw, update based on GUI selection, needs to depend on screw selected
     minR = 70  # min radius of screw, update based on GUI selection, needs to depend on screw selected
     screwCount = 0
@@ -51,6 +51,7 @@ def zoomCamera(sensitivityVal):
     screwZOffset = 97 # distance between camera and screw driver bit in mm
     screwXoffset = 42
     screwYoffset = 9.8
+    screwAngle = 0
 
     circles = None
 
@@ -116,22 +117,6 @@ def zoomCamera(sensitivityVal):
 
 
     x, y, r = detected_circles[0][closestCenter]
-    '''
-    xScrewOffset = 37.82
-    yScrewOffset = 3.4
-    calculatedDepth = 185
-    new_pixelsPerMM = g_pixelsPerMM * (g_height1 / calculatedDepth)
-    print(x)
-    print(y)
-    print(verticalCenter)
-    print(horizontalCenter)
-
-    newY = y - verticalCenter
-    newX = x - horizontalCenter
-
-    xOffset = (newX / new_pixelsPerMM) + xScrewOffset
-    yOffset = (newY / new_pixelsPerMM) + yScrewOffset
-'''
 
     #################################
     # determine the depth of the screw
@@ -161,34 +146,18 @@ def zoomCamera(sensitivityVal):
     print('x error mm', xMMError)
     print('y error mm', yMMError)
 
+    cv2.circle(offsetImage, (x, y), r, (0, 255, 0), 2)  # draw circles on detected screws
+
     offsetImage = cv2.line(offsetImage, (0, int(y)), (2592, int(y)), (0, 0, 255), 2)
     offsetImage = cv2.line(offsetImage, (int(x), 0), (int(x), 1944), (0, 0, 255), 2)
 
     offsetImage = cv2.line(offsetImage, (0,int(verticalCenter)), (2592, int(verticalCenter)), (0,0,0), 2)
     offsetImage = cv2.line(offsetImage, (int(horizontalCenter), 0), (int(horizontalCenter), 1944), (0, 0, 0), 2)
+
+
+
     cv2.imshow("offset", offsetImage)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    cv2.imwrite('zoomOutput.png', offsetImage)
 
 
     print(closestCenter)
@@ -232,21 +201,23 @@ def zoomCamera(sensitivityVal):
 
         cv2.imshow("Detected Lines (in red) - Probabilistic Line Transform", cropCopy)
 
-    # try to average out all angels and find angle of screw
-    for i in range(len(angles)):
-        if angles[i] > 90:
-            angles[i] = angles[i] - 90
+        # try to average out all angels and find angle of screw
+        for i in range(len(angles)):
+            if angles[i] > 90:
+                angles[i] = angles[i] - 90
 
-    for i in range(len(angles)):
-        for j in range(len(angles)):
-            if abs(angles[i] - angles[j]) < angleAllowance:
-                similarAngle.append(angles[j])
-        similarAngles.append(similarAngle)
-        similarAngle = []
+        for i in range(len(angles)):
+            for j in range(len(angles)):
+                if abs(angles[i] - angles[j]) < angleAllowance:
+                    similarAngle.append(angles[j])
+            similarAngles.append(similarAngle)
+            similarAngle = []
 
-    mostSimilarAngles = max(similarAngles,key=len)
-    screwAngle = statistics.mean(mostSimilarAngles)
+        mostSimilarAngles = max(similarAngles,key=len)
+        screwAngle = statistics.mean(mostSimilarAngles)
 
+    else:
+        screwAngle = -1
     #screwOutputs = [offsetmm, screwAngle, calculatedDepth]
 
     # End of Function Clean-Up *
@@ -255,25 +226,7 @@ def zoomCamera(sensitivityVal):
     print(screwAngle)
 
     ZoomOffsetsAngles = [xMMError + screwXoffset, yMMError + screwYoffset, calculatedDepth - screwZOffset, screwAngle]
-    print('depth', ZoomOffsetsAngles[2])
     return ZoomOffsetsAngles
 
-# global list
-# screw number, X pos, Y pos, Z pos, flag
-
-#screwLocationsGList = []
-
-
-#zoomScrewOutputs = zoomCamera(30)
-
-'''
-screwOffset = zoomScrewOutputs[0]
-screwAngle = zoomScrewOutputs[1]
-zoomScrewDepth = zoomScrewOutputs[2]
-
-print(screwOffset)
-print(screwAngle)
-print(zoomScrewDepth)
-'''
 
 

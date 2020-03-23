@@ -139,7 +139,7 @@ def automaticTune():
                     print('k')
 
                     # take zoom photo
-                    zoomOffsetsAngles = zoomCamera(30)
+                    zoomOffsetsAngles = zoomCamera(40)
                     xPos = screwLocationsList[j][2]
                     yPos = screwLocationsList[j][3]
                     xPos = xPos + zoomOffsetsAngles[0]
@@ -173,13 +173,13 @@ def automaticTune():
                         rotateDirection = 'p'
                     else:
                         rotateDirection = 'n'
-                    rotationPosition[i] = abs(rotationPosition[i])
-                    print(rotationPosition[i])
-                    while rotationPosition[i] >= 90:
-                        rotationPosition[i] = rotationPosition[i] - 90
-                    print(rotationPosition[i])
 
-                    rotateAmount = round(rotationPosition[i], 1)
+                    rotateAmount = abs(rotationPosition[i])
+
+                    while rotateAmount >= 90:
+                        rotateAmount = rotateAmount - 90
+
+                    rotateAmount = round(rotateAmount, 1)
                     rotateAmount = str(rotateAmount)
                     gCode = 'g16 ' + rotateDirection + rotateAmount
                     print(gCode)
@@ -235,11 +235,11 @@ def automaticTune():
                         line = ser.readline()
                     print('k')
 
-                    # remove tuning list file
-                    if os.path.exists(fileName):
-                        os.remove(fileName)
-                    else:
-                        print("The file does not exist")
+    # remove tuning list file
+    if os.path.exists(fileName):
+        os.remove(fileName)
+    else:
+        print("The file does not exist")
 
 
 def stopAutomaticTune():
@@ -266,6 +266,6 @@ initAutomaticTune()
 automaticTune()
 automaticTune()
 stopAutomaticTune()
-#zoomCamera(30)
+#zoomCamera(40)
 #wideAngleCamera(30)
 #screwAssignment()
