@@ -18,8 +18,6 @@ global screwLocationsPixelsGList
 screwLocationsPixelsGList = []  # (screwNum, assignedNum, x, y, z, r, locatedFlag)
 global g_minDepth
 g_minDepth = 260  # the distance from the tallest tuning screw (mm)
-global g_wideCamPort
-g_wideCamPort = 0  # COM port for the wide angle camera
 global g_screwNum
 g_screwNum = 0  # counter for screw assignment
 global g_screwsDetected
@@ -38,7 +36,13 @@ g_pixelsPerMM = 5.85    # pixels per milimeter at the bed height
 # Arguments: sensitivityVal
 # Outputs: N/A
 ##############################################
-def wideAngleCamera(sensitivityVal):
+def wideAngleCamera(tuningSettings):
+    screwType = tuningSettings[0]
+    sensitivityVal = tuningSettings[1]
+    zoomSens = tuningSettings[2]
+    g_wideCamPort = tuningSettings[3]
+    ZoomPort = tuningSettings[4]
+    comPort = tuningSettings[5]
 
     # Globals #
     global g_minDepth
@@ -224,6 +228,8 @@ def clickEvent(event, x, y, flags, param):
 # Arguments: N/A
 # Outputs: N/A
 ##############################################
+
+
 def screwAssignment():
     # Globals #
     global screwLocationsGList

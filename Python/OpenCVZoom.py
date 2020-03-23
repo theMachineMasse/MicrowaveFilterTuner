@@ -15,7 +15,6 @@ import statistics
 from numpy import array
 
 # Globals #
-g_zoomCamPort = 1  # COM port for the zoom camera
 g_height1 = 260  # height from the bed to the zoom camera
 g_pixelsPerMM = 16.2    # pixels per milimeter at the bed height
 
@@ -29,7 +28,14 @@ g_pixelsPerMM = 16.2    # pixels per milimeter at the bed height
 # Outputs: N/A
 ##############################################
 
-def zoomCamera(sensitivityVal):
+def zoomCamera(tuningSettings):
+    screwType = tuningSettings[0]
+    wideSens = tuningSettings[1]
+    sensitivityVal = tuningSettings[2]
+    widePort = tuningSettings[3]
+    g_zoomCamPort = tuningSettings[4]
+    comPort = tuningSettings[5]
+
     # values to be outputed
     screwDepth = 0
 

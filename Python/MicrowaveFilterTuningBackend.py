@@ -5,7 +5,6 @@ from OpenCVWide import *
 from OpenCVZoom import *
 
 
-comPort = 'COM7'
 global ser
 global screwLocationsList
 screwLocationsList = []
@@ -13,20 +12,25 @@ global rotationPosition
 fileName = 'SharedTuningFile.txt'
 
 
-def initAutomaticTune():
+def initAutomaticTune(tuningSettings):
+    screwType = tuningSettings[0]
+    wideSens = tuningSettings[1]
+    zoomSens = tuningSettings[2]
+    widePort = tuningSettings[3]
+    ZoomPort = tuningSettings[4]
+    comPort = 'COM' + str(tuningSettings[5])
     global ser
     global screwLocationsList
     ser = serial.Serial(comPort, 9600, timeout=0.01)
     ser.flushInput()
     line = b''
-
     # enable motors
     ser.write(b'm17')
     ser.write(b'\r')
     while b'k' not in line :
         line = ser.readline()
     print('k')
-
+    '''
     # home machine
     line = b''
     ser.write(b'g28')
@@ -34,7 +38,7 @@ def initAutomaticTune():
     while b'k' not in line :
         line = ser.readline()
     print('k')
-
+    '''
     # move to center position
     line = b''
     ser.write(b'g0 y200 x135 z0')
@@ -61,7 +65,7 @@ def initAutomaticTune():
 
 
     # take wide angle photos
-    screwsDetected = wideAngleCamera(30)  # testing
+    screwsDetected = wideAngleCamera(tuningSettings)  # testing
 
     print(screwsDetected)
     if screwsDetected != 0:
@@ -93,7 +97,14 @@ def initAutomaticTune():
         rotationPosition.append(float(0))
 
 
-def automaticTune():
+def automaticTune(tuningSettings):
+    screwType = tuningSettings[0]
+    wideSens = tuningSettings[1]
+    zoomSens = tuningSettings[2]
+    widePort = tuningSettings[3]
+    ZoomPort = tuningSettings[4]
+    comPort = 'COM' + str(tuningSettings[5])
+
     # wait for file to exist
     while not os.path.isfile(fileName):
         time.sleep(0.5)
@@ -139,7 +150,7 @@ def automaticTune():
                     print('k')
 
                     # take zoom photo
-                    zoomOffsetsAngles = zoomCamera(40)
+                    zoomOffsetsAngles = zoomCamera(tuningSettings)
                     xPos = screwLocationsList[j][2]
                     yPos = screwLocationsList[j][3]
                     xPos = xPos + zoomOffsetsAngles[0]
@@ -262,10 +273,39 @@ def stopAutomaticTune():
     ser.close()
 
 
-initAutomaticTune()
-automaticTune()
-automaticTune()
-stopAutomaticTune()
-#zoomCamera(40)
-#wideAngleCamera(30)
+def AutomaticModeLoop(tuningSettings):
+    initAutomaticTune(tuningSettings)
+
+    tuningTrue = 1
+    while tuningTrue == 1:
+        # wait for file to exist
+        while not os.path.isfile(fileName):
+            time.sleep(0.5)
+        # read tuning file
+        file = open(fileName)
+        text = file.read()
+        file.close()
+        text = text.splitlines()  # split up text file by lines
+        text = list(filter(None, text))  # remove blank lines
+        GUIString = text[0]
+        del text[0]
+        for i in range(len(text)):
+            text[i] = text[i].split()  # split up by white space
+
+        tuningTrue = 0
+        for i in range(len(text)):
+            if text[i][1] != '0':
+                tuningTrue = 1
+
+        if tuningTrue == 1:
+            automaticTune(tuningSettings)
+
+    stopAutomaticTune()
+
+
+#initAutomaticTune()
+#automaticTune()
+#automaticTune()
+#stopAutomaticTune()
 #screwAssignment()
+

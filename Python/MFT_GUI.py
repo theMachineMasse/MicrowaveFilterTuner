@@ -8,6 +8,7 @@
 ##############################################
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from MicrowaveFilterTuningBackend import *
 
 
 class Ui_MainWindow(object):
@@ -198,7 +199,7 @@ class Ui_MainWindow(object):
         self.Zoom_spinBox.setObjectName("Zoom_spinBox")
         self.Zoom_spinBox.setMinimum(0)
         self.Zoom_spinBox.setMaximum(100)
-        self.Zoom_spinBox.setValue(0)
+        self.Zoom_spinBox.setValue(1)
         self.Zoom_spinBox.valueChanged.connect(self.zoomSpin)
 
         #Serial SpinBox
@@ -207,7 +208,7 @@ class Ui_MainWindow(object):
         self.Serial_spinBox.setObjectName("Serial_spinBox")
         self.Serial_spinBox.setMinimum(0)
         self.Serial_spinBox.setMaximum(100)
-        self.Serial_spinBox.setValue(0)
+        self.Serial_spinBox.setValue(7)
         self.Serial_spinBox.valueChanged.connect(self.serialSpin)
 
         #Zoom Camera Slider
@@ -217,7 +218,7 @@ class Ui_MainWindow(object):
         self.Zoom_Sensitivity_Slider.setObjectName("Zoom_Sensitivity_Slider")
         self.Zoom_Sensitivity_Slider.setMinimum(10)
         self.Zoom_Sensitivity_Slider.setMaximum(60)
-        self.Zoom_Sensitivity_Slider.setValue(35)
+        self.Zoom_Sensitivity_Slider.setValue(40)
         self.Zoom_Sensitivity_Slider.setTickInterval(5)
         self.Zoom_Sensitivity_Slider.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.Zoom_Sensitivity_Slider.valueChanged.connect(self.zoomSlider)
@@ -317,7 +318,17 @@ class Ui_MainWindow(object):
     def tuneButton(self):
         print('test')
         screwType = int(self.Screw_Type_List.currentIndex())
+        wideSens = int(self.Wide_Sensitivity_Slider.value())
+        zoomSens = int(self.Zoom_Sensitivity_Slider.value())
+        widePort = int(self.Wide_spinBox.value())
+        ZoomPort = int(self.Zoom_spinBox.value())
+        SerialPort = int(self.Serial_spinBox.value())
+
         print(screwType)
+
+        tuningSettings = [screwType, wideSens, zoomSens, widePort, ZoomPort, SerialPort]
+
+        AutomaticModeLoop(tuningSettings)
      
     #TIGHTEN BUTTON
     def tightenButton(self):
