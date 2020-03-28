@@ -555,5 +555,5 @@ void commandM18(void){
 *	Return value: N/A
 *******************************************/
 void commandA(void){
-	lcdDisplayStatus(3);
+	lcdDisplayStatus(1);
 }
