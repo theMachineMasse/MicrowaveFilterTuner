@@ -54,8 +54,8 @@ def zoomCamera(tuningSettings):
     measuredDepth = 195  # units are mm
     screwDiameter = 10  # units are mm
     referenceRadius = 102  # units are pixels
-    screwZOffset = 97 # distance between camera and screw driver bit in mm
-    screwXoffset = 42
+    screwZOffset = 100 # distance between camera and screw driver bit in mm
+    screwXoffset = 40.2
     screwYoffset = 9.8
     screwAngle = 0
 
@@ -154,16 +154,16 @@ def zoomCamera(tuningSettings):
 
     cv2.circle(offsetImage, (x, y), r, (0, 255, 0), 2)  # draw circles on detected screws
 
-    offsetImage = cv2.line(offsetImage, (0, int(y)), (2592, int(y)), (0, 0, 255), 2)
-    offsetImage = cv2.line(offsetImage, (int(x), 0), (int(x), 1944), (0, 0, 255), 2)
+    offsetImage = cv2.line(offsetImage, (0, int(y)), (2592, int(y)), (0, 0, 255), 4)
+    offsetImage = cv2.line(offsetImage, (int(x), 0), (int(x), 1944), (0, 0, 255), 4)
 
-    offsetImage = cv2.line(offsetImage, (0,int(verticalCenter)), (2592, int(verticalCenter)), (0,0,0), 2)
-    offsetImage = cv2.line(offsetImage, (int(horizontalCenter), 0), (int(horizontalCenter), 1944), (0, 0, 0), 2)
+    offsetImage = cv2.line(offsetImage, (0,int(verticalCenter)), (2592, int(verticalCenter)), (0,0,0), 4)
+    offsetImage = cv2.line(offsetImage, (int(horizontalCenter), 0), (int(horizontalCenter), 1944), (0, 0, 0), 4)
 
 
 
     cv2.imshow("offset", offsetImage)
-    cv2.imwrite('zoomOutput.png', offsetImage)
+    cv2.imwrite('Images/zoomOutput.png', offsetImage)
 
 
     print(closestCenter)
@@ -174,7 +174,7 @@ def zoomCamera(tuningSettings):
     cv2.circle(output, (x, y), r, (0, 255, 0), 3)  # draw circles on detected screws
     print("Circle ", screwCount, "at", x, y, " with radius of", r, )  # testing
     cv2.circle(output, (x, y), 2, (0, 255, 0), 3)  # draw dot on center of detected screws
-    cv2.imshow('output', output)  # display output with screws identified, needs to be integrated into GUI
+    #cv2.imshow('output', output)  # display output with screws identified, needs to be integrated into GUI
 
     #########################################
     # find screw angle
@@ -182,7 +182,7 @@ def zoomCamera(tuningSettings):
     cropImg = img[(y-r+30):(y+r-30), (x-r+30):(x+r-30 )]
     imageSize = r*2
     cropCopy = cropImg.copy()
-    cv2.imshow('crop', cropImg)
+    #cv2.imshow('crop', cropImg)
 
     crop_gray = cv2.cvtColor(cropImg, cv2.COLOR_BGR2GRAY)  # change to greyscale image
     cannyEdges = cv2.Canny(crop_gray, 80, 200, None, 3)
@@ -205,7 +205,7 @@ def zoomCamera(tuningSettings):
                 angle = math.atan2(linesP[i][0][2] - linesP[i][0][0], linesP[i][0][3] - linesP[i][0][1])
                 angles.append(math.degrees(angle))
 
-        cv2.imshow("Detected Lines (in red) - Probabilistic Line Transform", cropCopy)
+        #cv2.imshow("Detected Lines (in red) - Probabilistic Line Transform", cropCopy)
 
         # try to average out all angels and find angle of screw
         for i in range(len(angles)):

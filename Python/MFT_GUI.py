@@ -2,7 +2,7 @@
 # Project: Microwave Filter Tuner
 # File: MFT_GUI.py
 # Date: March 04, 2020
-# Programmer(s): Jarett Tremblay
+# Programmer(s): Jarett Tremblay, Matthew Rostad
 # Sub-Systems: Graphical User Interface Sub-System
 # Version: 1.11
 ##############################################
@@ -172,7 +172,7 @@ class Ui_MainWindow(object):
         self.Zoom_View = QtWidgets.QLabel(self.centralwidget)
         self.Zoom_View.setGeometry(QtCore.QRect(570, 30, 471, 341))
         self.Zoom_View.setText("")
-        self.Zoom_View.setPixmap(QtGui.QPixmap("Images/temp.png"))
+        self.Zoom_View.setPixmap(QtGui.QPixmap("Images/zoomOutput.png"))
         self.Zoom_View.setScaledContents(True)
         self.Zoom_View.setObjectName("Zoom_View")
 
@@ -180,7 +180,7 @@ class Ui_MainWindow(object):
         self.Wide_View = QtWidgets.QLabel(self.centralwidget)
         self.Wide_View.setGeometry(QtCore.QRect(60, 30, 471, 341))
         self.Wide_View.setText("")
-        self.Wide_View.setPixmap(QtGui.QPixmap("Images/temp.png"))
+        self.Wide_View.setPixmap(QtGui.QPixmap("Images/output.png"))
         self.Wide_View.setScaledContents(True)
         self.Wide_View.setObjectName("Wide_View")
 
@@ -329,6 +329,8 @@ class Ui_MainWindow(object):
         tuningSettings = [screwType, wideSens, zoomSens, widePort, ZoomPort, SerialPort]
 
         AutomaticModeLoop(tuningSettings)
+
+        self.refreshButton()
      
     #TIGHTEN BUTTON
     def tightenButton(self):
@@ -336,14 +338,15 @@ class Ui_MainWindow(object):
 
     #CANCEL BUTTON
     def cancelButton(self):
-        print('test2')   
+        print('test2')
 
-    #REFRESH BUTTON
+    # REFRESH BUTTON
     def refreshButton(self):
         print('test3')
         self.Output_View.setPixmap(QtGui.QPixmap("Images/Filter_Response.png"))
-        self.Wide_View.setPixmap(QtGui.QPixmap("Images/temp.png"))
-        self.Zoom_View.setPixmap(QtGui.QPixmap("Images/temp.png"))
+        self.Wide_View.setPixmap(QtGui.QPixmap("Images/output.png"))
+        self.Zoom_View.setPixmap(QtGui.QPixmap("Images/zoomOutput.png"))
+
 
     #SEND COMMAND BUTTON  
     def cmdButton(self):
@@ -351,13 +354,21 @@ class Ui_MainWindow(object):
         Command = self.Enter_Cmd_Line.text()
         print(Command)
         self.Enter_Cmd_Line.clear()
+        comPort = 'COM' + str(self.Serial_spinBox.value())
+        ser = serial.Serial(comPort, 9600, timeout=0.01)
+        ser.flushInput()
+        ser.write(ser.write(Command.encode('UTF-8')))
+        ser.write(b'\r')
+        ser.close()
 
+        '''
         f = open("SharedTuningFile.txt", "r")
         #print(f.read(100))
         g = f.read(100)
         self.Input_TextEdit.appendPlainText(g)
         f.close()
-        
+        '''
+
         self.Input_TextEdit.setReadOnly(True)
         print(self.Input_TextEdit.isReadOnly())
 
@@ -393,9 +404,7 @@ class Ui_MainWindow(object):
         serialPort = int(self.Serial_spinBox.value())
         print(serialPort)
 
-       
-        
-        
+
 
 if __name__ == "__main__":
     import sys

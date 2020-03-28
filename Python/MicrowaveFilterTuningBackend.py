@@ -4,11 +4,11 @@ import time
 from OpenCVWide import *
 from OpenCVZoom import *
 
-
 global ser
 global screwLocationsList
 screwLocationsList = []
 global rotationPosition
+rotationPosition = []
 fileName = 'SharedTuningFile.txt'
 
 
@@ -30,7 +30,7 @@ def initAutomaticTune(tuningSettings):
     while b'k' not in line :
         line = ser.readline()
     print('k')
-    '''
+
     # home machine
     line = b''
     ser.write(b'g28')
@@ -38,7 +38,7 @@ def initAutomaticTune(tuningSettings):
     while b'k' not in line :
         line = ser.readline()
     print('k')
-    '''
+
     # move to center position
     line = b''
     ser.write(b'g0 y200 x135 z0')
@@ -169,8 +169,6 @@ def automaticTune(tuningSettings):
                         line = ser.readline()
                     print('k')
 
-                    # zoomCamera(30)  # for testing only
-
                     # home phi axis
                     line = b''
                     ser.write(b'g15')
@@ -180,6 +178,7 @@ def automaticTune(tuningSettings):
                     print('k')
 
                     # rotate to align with screw
+                    print(rotationPosition)
                     if rotationPosition[i] > 0:
                         rotateDirection = 'p'
                     else:
@@ -308,4 +307,6 @@ def AutomaticModeLoop(tuningSettings):
 #automaticTune()
 #stopAutomaticTune()
 #screwAssignment()
+
+
 

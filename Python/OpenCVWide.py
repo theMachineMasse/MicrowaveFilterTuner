@@ -264,7 +264,7 @@ def screwAssignment():
     print("New List Length is", len(screwLocationsGList))  # testing
 
     temp = cv2.imread('temp.png')
-    cv2.imwrite('output.png', temp)  # use for displaying image on GUI
+    cv2.imwrite('Images/output.png', temp)  # use for displaying image on GUI
     cv2.imshow('Screw Assignment', temp)  # testing
 
     # Close Window #

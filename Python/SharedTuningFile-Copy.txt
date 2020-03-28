@@ -1,9 +1,9 @@
 String passed from algorithm to be displayed in GUI
 
 
-1 0
-2 0
-3 0
-4 0
-5 0
-6 0
+1 360
+2 -360
+3 45
+4 60
+5 -20
+6 10
